@@ -1,6 +1,17 @@
 :root {
   --colors-white     : #FFFFFF;
+  --colors-white-transparent-1: rgba(255, 255, 255, 0.1);
+  --colors-white-transparent-2: rgba(255, 255, 255, 0.2);
+  --colors-white-transparent-3: rgba(255, 255, 255, 0.5);
+  --colors-white-transparent-4: rgba(255, 255, 255, 0.8);
+  --colors-white-transparent-5: rgba(255, 255, 255, 0.95);
+
   --colors-black     : #000000;
+  --colors-black-transparent-1: rgba(0, 0, 0, 0.1);
+  --colors-black-transparent-2: rgba(0, 0, 0, 0.2);
+  --colors-black-transparent-3: rgba(0, 0, 0, 0.5);
+  --colors-black-transparent-4: rgba(0, 0, 0, 0.8);
+  --colors-black-transparent-5: rgba(0, 0, 0, 0.95);
 
   --colors-yellow-1  : #f6dfae;
   --colors-yellow-2  : #e3bc69;
@@ -61,9 +72,11 @@
   --q-warning          : #F2C037;
 
 
-  --bg-transparent-1: rgba(255, 255, 255, 0.2);
-  --bg-transparent-2: rgba(255, 255, 255, 0.5);
-  --bg-transparent-3: rgba(255, 255, 255, 0.8);
+  --bg-transparent-1: rgba(255, 255, 255, 0.1);
+  --bg-transparent-2: rgba(255, 255, 255, 0.2);
+  --bg-transparent-3: rgba(255, 255, 255, 0.5);
+  --bg-transparent-4: rgba(255, 255, 255, 0.8);
+  --bg-transparent-5: rgba(255, 255, 255, 0.95);
 }
 .body--dark {
   --q-primary          : #58076b;
@@ -80,7 +93,9 @@
   --q-warning          : #F2C037;
 
 
-  --bg-transparent-1: rgba(0, 0, 0, 0.2);
-  --bg-transparent-2: rgba(0, 0, 0, 0.5);
-  --bg-transparent-3: rgba(0, 0, 0, 0.8);
+  --bg-transparent-1: rgba(0, 0, 0, 0.1);
+  --bg-transparent-2: rgba(0, 0, 0, 0.2);
+  --bg-transparent-3: rgba(0, 0, 0, 0.5);
+  --bg-transparent-4: rgba(0, 0, 0, 0.8);
+  --bg-transparent-5: rgba(0, 0, 0, 0.95);
 }

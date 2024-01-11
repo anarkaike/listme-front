@@ -73,17 +73,19 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-// import useNotify from '@/composables/useNotify'
 import { useFullscreen } from '@vueuse/core'
-// import { $api } from '../services/api'
 import { authStore } from '@/stores/auth-store'
-
+import { useRouter } from 'vue-router'
+import useLoading from '@/composables/useLoading'
+// import useNotify from '@/composables/useNotify'
+// import { $api } from '../services/api'
 // import useAuthUser from 'src/composables/UseAuthUser'
 // import apiAuth from 'src/composables/api/ApiAuth'
-import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const { isFullscreen, enter } = useFullscreen()
+const loading = ref<boolean>(false)
+const { showLoading, hideLoading } = useLoading()
 // const { isLoggedIn } = useAuthUser()
 // const { login, isLoggedIn } = useAuthUser()
 // const { listAll } = apiAuth()
@@ -108,7 +110,9 @@ const handlerOpenRegister = () => {
 }
 
 const handleLogin = async () => {
+  showLoading('Entrando...')
   authStore().login(form.value.email, form.value.password).then(() => {
+    hideLoading()
     router.push({ name: 'me' })
   })
 }

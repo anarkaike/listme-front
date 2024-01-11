@@ -9,3 +9,30 @@
   transition: margin-bottom 0.1s linear;
     margin-bottom: 12px;
 }
+
+.box-loading {
+//   background-color: var(--colors-black-transparent-3);
+  font-weight: bold;
+  color: var(--colors-yellow-3) !important;
+  .q-loading__backdrop {
+    background-color: var(--colors-purple-5);
+    opacity: 0.7;
+  }
+  .box-loading-inner {
+    background-color: var(--colors-purple-5);
+  }
+}
+
+
+.icon-list-item-section {
+  flex: none !important;
+}
+
+.q-item__section.q-item__section--avatar {
+  flex: none !important;
+  min-width: 0 !important;
+}
+
+.q-menu{
+  background-color: var(--bg-transparent-5) !important;
+}

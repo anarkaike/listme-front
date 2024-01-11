@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import { LocalStorage } from 'quasar'
 import { $api } from '@/services/api'
 import { IAuthResponse, IUser } from '@/interfaces'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import useNotify from '@/composables/useNotify'
 const { notifySuccess, notifyError } = useNotify()
 

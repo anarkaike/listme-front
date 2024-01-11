@@ -46,11 +46,24 @@
         </q-toolbar-title>
 
         <q-btn-dropdown flat rounded icon="person" class="btn-left-top-menu">
-          <q-list>
-            <q-item clickable v-close-popup @click="handleLogout">
-              <q-item-section>
-                <q-item-label>Logout</q-item-label>
+          <q-list class="list-left-top-menu" dense>
+            <q-item clickable>
+              <q-item-section avatar>
+                <q-icon name="alternate_email" />
               </q-item-section>
+              <q-item-section>Meu Perfil</q-item-section>
+            </q-item>
+            <q-item clickable v-close-popup @click="handleFullscren">
+              <q-item-section avatar>
+                <q-icon name="fullscreen" />
+              </q-item-section>
+              <q-item-section>Fullscreen</q-item-section>
+            </q-item>
+            <q-item clickable v-close-popup @click="handleLogout">
+              <q-item-section avatar>
+                <q-icon name="door_front" />
+              </q-item-section>
+              <q-item-section>Sair</q-item-section>
             </q-item>
           </q-list>
         </q-btn-dropdown>
@@ -91,6 +104,7 @@
 // import EssentialLink from 'components/EssentialLink.vue'
 import DarkModeToogle from 'components/DarkModeToggle.vue'
 import { CircularLogo } from '@/components'
+import { useFullscreen } from '@vueuse/core'
 
 // const linksList = [
 //   {
@@ -102,14 +116,17 @@ import { CircularLogo } from '@/components'
 // ]
 
 import { ref, onMounted } from 'vue'
-// import useAuthUser from 'src/composables/UseAuthUser'
-// import useApi from 'src/composables/UseApi'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { authStore } from '@/stores/auth-store'
+import useLoading from '@/composables/useLoading'
+const { toggle } = useFullscreen()
+// import useAuthUser from 'src/composables/UseAuthUser'
+// import useApi from 'src/composables/UseApi'
 
 const leftDrawerOpen = ref(false)
 const rightDrawerOpen = ref(false)
+const { showLoading, hideLoading } = useLoading()
 
 const $q = useQuasar()
 const router = useRouter()
@@ -127,12 +144,11 @@ const handleLogout = async () => {
     cancel: true,
     persistent: true
   }).onOk(async () => {
-    // await logout()
-    // router.replace({ name: 'login' })
+    showLoading('Saindo...')
     authStore().logout().then(() => {
+      hideLoading()
       router.push({ name: 'login' })
     })
-    router.replace({ name: 'login' })
   })
 }
 
@@ -141,6 +157,9 @@ const toggleLeftDrawer = () => {
 }
 const toggleRightDrawer = () => {
   rightDrawerOpen.value = !rightDrawerOpen.value
+}
+const handleFullscren = () => {
+  toggle()
 }
 </script>
 <style lang="scss">
@@ -168,7 +187,6 @@ const toggleRightDrawer = () => {
     -moz-border-radius-bottomleft: $border-radius;
     border-bottom-right-radius: $border-radius;
     border-bottom-left-radius: $border-radius;
-
     .q-toolbar {
       margin-bottom: 15px;
       margin-top: -5px;
@@ -282,5 +300,8 @@ const toggleRightDrawer = () => {
       margin-bottom: -5px;
     }
   }
+}
+.list-left-top-menu {
+  color: var(--colors-purple-4);
 }
 </style>
