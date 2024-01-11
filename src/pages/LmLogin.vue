@@ -1,7 +1,7 @@
 <template>
+  <div class="page-title no-bg">Acesse o Sistema</div>
   <q-page style="min-height: auto;">
     <q-form class="row justify-center" @submit.prevent="handleLogin">
-      <p class=" text-h5 text-center text-bold page-title">Acesse o Sistema </p>
       <div class="col-11 q-gutter-y-sm">
         <q-input
           label="Email"
@@ -71,61 +71,45 @@
   </q-page>
 </template>
 
-<script>
-import { defineComponent, ref, onMounted } from 'vue'
-// import useAuthUser from 'src/composables/UseAuthUser'
-import useNotify from 'src/composables/UseNotify'
-// import apiAuth from 'src/composables/api/ApiAuth'
-// import { useRouter } from 'vue-router'
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+// import useNotify from '@/composables/useNotify'
 import { useFullscreen } from '@vueuse/core'
+// import { $api } from '../services/api'
+import { authStore } from '@/stores/auth-store'
 
-export default defineComponent({
-  name: 'PageLogin',
+// import useAuthUser from 'src/composables/UseAuthUser'
+// import apiAuth from 'src/composables/api/ApiAuth'
+import { useRouter } from 'vue-router'
 
-  setup () {
-    // const router = useRouter()
-    const { isFullscreen, enter } = useFullscreen()
-    // const { isLoggedIn } = useAuthUser()
-    // const { login, isLoggedIn } = useAuthUser()
-    const { notifyError, notifySuccess } = useNotify()
-    // const { listAll } = apiAuth()
+const router = useRouter()
+const { isFullscreen, enter } = useFullscreen()
+// const { isLoggedIn } = useAuthUser()
+// const { login, isLoggedIn } = useAuthUser()
+// const { listAll } = apiAuth()
+// const { notifySuccess, notifyError } = useNotify()
 
-    const form = ref({
-      email: 'anarkaike@gmail.com',
-      password: '123456'
-    })
-
-    onMounted(() => {
-      console.log('process.env. ', process.env)
-      // if (isLoggedIn) {
-      // router.push({ name: 'me' })
-      // }
-    })
-
-    const handlerOpenRegister = () => {
-      if (!isFullscreen.value) {
-        enter()
-      }
-    }
-
-    const handleLogin = async () => {
-      try {
-        // await login(form.value)
-        // router.push('/me')
-        // listAll().then((data) => {
-        //   console.log('Junio listAll', data)
-        // })
-        notifySuccess('Login successfully!')
-      } catch (error) {
-        notifyError(error.message)
-      }
-    }
-
-    return {
-      form,
-      handleLogin,
-      handlerOpenRegister
-    }
-  }
+const form = ref({
+  email: 'anarkaike@gmail.com',
+  password: '123456'
 })
+
+onMounted(() => {
+  // console.log('process.env. ', process.env)
+  // if (isLoggedIn) {
+  // router.push({ name: 'me' })
+  // }
+})
+
+const handlerOpenRegister = () => {
+  if (!isFullscreen.value) {
+    enter()
+  }
+}
+
+const handleLogin = async () => {
+  authStore().login(form.value.email, form.value.password).then(() => {
+    router.push({ name: 'me' })
+  })
+}
 </script>

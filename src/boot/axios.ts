@@ -1,5 +1,6 @@
 import { boot } from 'quasar/wrappers'
 import axios, { AxiosInstance } from 'axios'
+import { LocalStorage } from 'quasar'
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -14,7 +15,7 @@ declare module '@vue/runtime-core' {
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
 // for each client)
-const api = axios.create({ baseURL: 'https://api.listme.local/api/v1' })
+const api = axios.create({ baseURL: process.env.API_URL_BASE })
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
@@ -22,6 +23,14 @@ export default boot(({ app }) => {
   app.config.globalProperties.$axios = axios
   // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
   //       so you won't necessarily have to import axios in each vue file
+
+  api.defaults.baseURL = process.env.API_URL_BASE
+  api.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
+
+  const token: string | null = LocalStorage.getItem('LmToken')
+  if (token) {
+    api.defaults.headers.common.Authorization = 'Bearer ' + token
+  }
 
   app.config.globalProperties.$api = api
   // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)

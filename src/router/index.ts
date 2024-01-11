@@ -1,6 +1,7 @@
 import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
+import { authStore } from '@/stores/auth-store'
 // import { useAuthUser } from 'src/composables'
 
 /*
@@ -28,22 +29,20 @@ export default route(function (/* { store, ssrContext } */) {
   })
 
   Router.beforeEach((to) => {
-    // const { isLoggedIn } = useAuthUser()
-
-    if (
-      to.hash.includes('type=recovery') &&
-      to.name !== 'reset-password'
-    ) {
-      const accessToken = to.hash.split('&')[0]
-      const token = accessToken.replace('#access_token=', '')
-      return { name: 'reset-password', query: { token } }
-    }
-    if (
-      // !isLoggedIn() &&
-      to.meta.requiresAuth &&
-      !Object.keys(to.query).includes('fromEmail')
-    ) {
+    // if (
+    //   authStore().isLoggedIn &&
+    //   to.hash.includes('type=recovery') &&
+    //   to.name !== 'reset-password'
+    // ) {
+    //   const accessToken = to.hash.split('&')[0]
+    //   const token = accessToken.replace('#access_token=', '')
+    //   return { name: 'reset-password', query: { token } }
+    // }
+    if (!authStore().isLoggedIn && to.meta.requiresAuth) {
       return { name: 'login' }
+    }
+    if (authStore().isLoggedIn && !to.meta.requiresAuth) {
+      return { name: 'me' }
     }
   })
 

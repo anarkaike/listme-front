@@ -3,40 +3,38 @@
     <q-header>
       <q-toolbar>
         <q-toolbar-title class="text-center">
-          <q-container class="inline-block ctn-logo">
+          <div class="inline-block ctn-logo">
             <CircularLogo />
-          </q-container>
+          </div>
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
 
     <q-page-container class="q-pa-md">
-      <q-card class="card-page-content q-pa-md" flat>
+      <q-card class="card-page-content" flat>
         <router-view />
       </q-card>
     </q-page-container>
   </q-layout>
 </template>
-
-<script>
-import { defineComponent } from 'vue'//, onMounted
+<script lang="ts" setup>
+// import { defineComponent } from 'vue'//, onMounted
 // import { useApi } from '@composables'
-import { CircularLogo } from '@components'
-
-export default defineComponent({
-  name: 'LoginLayout',
-  components: { CircularLogo },
-  setup () {
-    // const { getBrand } = useApi()
-    // onMounted(() => {
-    //   // getBrand()
-    // })
-    return {
-    }
-  }
-})
+import { CircularLogo } from '@/components'
+//
+// export default defineComponent({
+//   name: 'LoginLayout',
+//   components: { CircularLogo },
+//   setup () {
+//     // const { getBrand } = useApi()
+//     // onMounted(() => {
+//     //   // getBrand()
+//     // })
+//     return {
+//     }
+//   }
+// })
 </script>
-
 <style scoped lang="scss">
 .ctn-login-layout {
   background-image: url('./src/assets/bg.jpg');
@@ -63,7 +61,7 @@ export default defineComponent({
       max-width: 400px;
       margin: auto;
       height: auto;
-      background-color: $bg-white-light;
+      background-color: var(--bg-transparent-2);
     }
   }
 }

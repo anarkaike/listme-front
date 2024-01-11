@@ -1,0 +1,9 @@
+{
+  "appId": "org.capacitor.quasar.app",
+  "appName": "Listme",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https",
+    "url": "http://192.168.100.89:9500"
+  }
+}

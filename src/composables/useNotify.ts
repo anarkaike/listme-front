@@ -1,10 +1,11 @@
-import { useQuasar } from 'quasar'
+import { Notify } from 'quasar'
+
 export default function useNotify () {
-  const $q = useQuasar()
+  // const $q = useQuasar()
   const position = 'top'
 
   const notifySuccess = (message: string) => {
-    $q.notify({
+    Notify.create({
       icon: 'check_circle',
       position,
       type: 'positive',
@@ -16,7 +17,7 @@ export default function useNotify () {
   }
 
   const notifyError = (message: string) => {
-    $q.notify({
+    Notify.create({
       icon: 'report',
       position,
       color: 'negative',

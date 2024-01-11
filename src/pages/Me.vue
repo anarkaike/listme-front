@@ -1,8 +1,8 @@
 <template>
-  <q-page padding>
-    <div class="row q-col-gutter-md">
-      Dashboard
-    </div>
+  <div class="page-title">
+    Dashboard
+  </div>
+  <q-page>
     <!-- <div v-if="user">
       <div>Hello {{ user.user_metadata.name }}</div>
     </div> -->

@@ -12,67 +12,26 @@
 // to match your app's branding.
 // Tip: Use the "Theme Builder" on Quasar's documentation website.
 
-$primary          : #1976D2;
-$secondary        : #26A69A;
-$accent           : #9C27B0;
+@import './variables.css';
 
-$dark             : #1D1D1D;
-$dark-page        : #121212;
-
-$positive         : #21BA45;
-$negative         : #C10015;
-$info             : #31CCEC;
-$warning          : #F2C037;
-
-$bg-white-light   : rgba(255, 255, 255, 0.6);
-$bg-black-light   : rgba(0, 0, 0, 0.6);
-
-$colors-white     : #FFFFFF;
-$colors-black     : #000000;
-
-$colors-yellow-1  : #F0C860;
-$colors-yellow-2  : #B68300;
-$colors-yellow-3  : #FFB800;
-$colors-yellow-4  : #F6E6BE;
-$colors-yellow-5  : #644800;
-
-$colors-blue-1    : #407DCA;
-$colors-blue-2    : #0A356B;
-$colors-blue-3    : #0E4589;
-$colors-blue-4    : #B1D1F9;
-$colors-blue-5    : #05244C;
-
-$colors-gray-1    : #C8C8C8;
-$colors-gray-2    : #595959;
-$colors-gray-3    : #808080;
-$colors-gray-4    : #EFEFEF;
-$colors-gray-5    : #262626;
-
-$colors-orange-1  : #FFAC58;
-$colors-orange-2  : #974B00;
-$colors-orange-3  : #ff7b00;
-$colors-orange-4  : #FFD7AF;
-$colors-orange-5  : #5A2E02;
-
-$colors-purple-1  : #8D4FDE;
-$colors-purple-2  : #500E79;
-$colors-purple-3  : #7400BC;
-$colors-purple-4  : #CAA2FF;
-$colors-purple-5  : #3F0960;
-
-$colors-green-1   : #91C069;
-$colors-green-2   : #365C14;
-$colors-green-3   : #587D38;
-$colors-green-4   : #D1F2B5;
-$colors-green-5   : #1D3B04;
-
-$colors-red-1     : #F04849;
-$colors-red-2     : #9E090A;
-$colors-red-3     : #C11E1F;
-$colors-red-4     : #FA9191;
-$colors-red-5     : #5D0304;
 
 
 .page-title {
-  color: $colors-orange-2;
+  color: var(--colors-orange-3);
+  font-size: 16px;
+  margin: -16px;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  font-weight: bold;
+  text-align: center;
+  &:not(.no-bg) {
+    background-color: var(--bg-transparent-2);
+  }
+
+  -webkit-border-top-left-radius: 10px;
+  -webkit-border-top-right-radius: 10px;
+  -moz-border-radius-topleft: 10px;
+  -moz-border-radius-topright: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }

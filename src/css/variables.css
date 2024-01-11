@@ -1,0 +1,86 @@
+:root {
+  --colors-white     : #FFFFFF;
+  --colors-black     : #000000;
+
+  --colors-yellow-1  : #f6dfae;
+  --colors-yellow-2  : #e3bc69;
+  --colors-yellow-3  : #c9991c;
+  --colors-yellow-4  : #9a7201;
+  --colors-yellow-5  : #442c00;
+
+  --colors-blue-1    : #a5b9d5;
+  --colors-blue-2    : #699ee5;
+  --colors-blue-3    : #175bb0;
+  --colors-blue-4    : #042d62;
+  --colors-blue-5    : #021c41;
+
+  --colors-gray-1    : #e7e7e7;
+  --colors-gray-2    : #a4a4a4;
+  --colors-gray-3    : #6e6e6e;
+  --colors-gray-4    : #2a2a2a;
+  --colors-gray-5    : #151515;
+
+  --colors-orange-1  : #e0ba95;
+  --colors-orange-2  : #cc8e54;
+  --colors-orange-3  : #ce7117;
+  --colors-orange-4  : #8c4905;
+  --colors-orange-5  : #3f2000;
+
+  --colors-purple-1  : #c7a7f1;
+  --colors-purple-2  : #a058cb;
+  --colors-purple-3  : #701a9d;
+  --colors-purple-4  : #4c0a79;
+  --colors-purple-5  : #310250;
+
+  --colors-green-1   : #e0ffc2;
+  --colors-green-2   : #9ddc68;
+  --colors-green-3   : #5d9f20;
+  --colors-green-4   : #3f7e0c;
+  --colors-green-5   : #1d3d00;
+
+  --colors-red-1     : #e39394;
+  --colors-red-2     : #d24c4c;
+  --colors-red-3     : #ab1818;
+  --colors-red-4     : #a20202;
+  --colors-red-5     : #480102;
+}
+
+
+.body--light {
+  --q-primary          : #6e0084;
+
+  --q-secondary        : #26A69A;
+  --q-accent           : #9C27B0;
+
+  --q-dark             : #1D1D1D;
+  --q-dark-page        : #121212;
+
+  --q-positive         : #21BA45;
+  --q-negative         : #C10015;
+  --q-info             : #31CCEC;
+  --q-warning          : #F2C037;
+
+
+  --bg-transparent-1: rgba(255, 255, 255, 0.2);
+  --bg-transparent-2: rgba(255, 255, 255, 0.5);
+  --bg-transparent-3: rgba(255, 255, 255, 0.8);
+}
+.body--dark {
+  --q-primary          : #58076b;
+
+  --q-secondary        : #26A69A;
+  --q-accent           : #9C27B0;
+
+  --q-dark             : #1D1D1D;
+  --q-dark-page        : #121212;
+
+  --q-positive         : #21BA45;
+  --q-negative         : #C10015;
+  --q-info             : #31CCEC;
+  --q-warning          : #F2C037;
+
+
+  --bg-transparent-1: rgba(0, 0, 0, 0.2);
+  --bg-transparent-2: rgba(0, 0, 0, 0.5);
+  --bg-transparent-3: rgba(0, 0, 0, 0.8);
+}

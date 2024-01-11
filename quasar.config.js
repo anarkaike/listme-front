@@ -80,7 +80,9 @@ module.exports = configure(function (/* ctx */) {
       // polyfillModulePreload: true,
       // distDir
 
-      // extendViteConf (viteConf) {},
+      extendViteConf (viteConf) {
+        viteConf.define.__VUE_PROD_HYDRATION_MISMATCH_DETAILS__ = false
+      },
       // viteVuePluginOptions: {},
 
       vitePlugins: [
@@ -97,8 +99,10 @@ module.exports = configure(function (/* ctx */) {
         }]
       ],
       alias: {
+        '@': path.join(__dirname, './src'),
         '@composables': path.join(__dirname, './src/composables'),
-        '@components': path.join(__dirname, './src/components')
+        '@components': path.join(__dirname, './src/components'),
+        '@store': path.join(__dirname, './src/store')
       }
     },
 
@@ -111,19 +115,19 @@ module.exports = configure(function (/* ctx */) {
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
     framework: {
       config: {
-        brand: {
-          primary: '#5c0969',
-          secondary: '#8c7e8f',
-          accent: '#9b17b3',
-
-          dark: '#404040',
-          'dark-page': '#121212',
-
-          positive: '#128a2e',
-          negative: '#b7091e',
-          info: '#16cef2',
-          warning: '#f2b611'
-        }
+        // brand: {
+          // primary: '#5c0969',
+          // secondary: '#8c7e8f',
+          // accent: '#9b17b3',
+          //
+          // dark: '#404040',
+          // 'dark-page': '#121212',
+          //
+          // positive: '#128a2e',
+          // negative: '#b7091e',
+          // info: '#16cef2',
+          // warning: '#f2b611'
+        // }
       },
 
       // iconSet: 'material-icons', // Quasar icon set
