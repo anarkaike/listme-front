@@ -61,7 +61,7 @@ import { CircularLogo } from '@/components'
       max-width: 400px;
       margin: auto;
       height: auto;
-      background-color: var(--bg-transparent-2);
+      background-color: var(--bg-transparent-4);
     }
   }
 }

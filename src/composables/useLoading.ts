@@ -1,4 +1,4 @@
-import { Loading, QSpinnerFacebook } from 'quasar'
+import { Loading, QSpinnerFacebook, QSpinnerHearts } from 'quasar'
 
 export default function useLoading () {
   const hideLoading = () => {
@@ -6,13 +6,13 @@ export default function useLoading () {
   }
   const showLoading = (message = 'Carregando...') => {
     Loading.show({
-      spinner: QSpinnerFacebook,
+      spinner: QSpinnerHearts,
       spinnerColor: 'yellow',
       messageColor: 'yellow',
       spinnerSize: 140,
       // backgroundColor: 'purple',
       customClass: 'box-loading',
-      message: message,
+      message,
       boxClass: 'box-loading-inner'
       // messageColor: 'black'
     })

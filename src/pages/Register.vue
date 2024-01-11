@@ -190,7 +190,7 @@ import { defineComponent, ref } from 'vue'
 // import useAuthUser from 'src/composables/UseAuthUser'
 import useNotify from 'src/composables/UseNotify'
 import { useRouter } from 'vue-router'
-import useVibratePhone from '../composables/UseVibratePhone'
+import useVibratePhone from '../composables/useVibratePhone'
 
 export default defineComponent({
   name: 'PageRegister',

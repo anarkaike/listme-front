@@ -218,7 +218,7 @@ const handleFullscren = () => {
   // MENU
   .q-drawer {
     //border: 5px solid red !important;
-    background-color: var(--bg-transparent-2) !important;
+    background-color: var(--bg-transparent-3) !important;
     .title {
       background-color: var(--title-bg-drawer);
       border-bottom: 1px solid rgba(110, 0, 132, 0.3);
@@ -274,7 +274,7 @@ const handleFullscren = () => {
     > div {
       margin: 10px 10px;
       padding: 16px;
-      background-color: var(--bg-transparent-2) !important;
+      background-color: var(--bg-transparent-4) !important;
       -webkit-border-radius: 10px;
       -moz-border-radius: 10px;
       border-radius: 10px;
