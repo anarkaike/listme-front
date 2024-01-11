@@ -1,0 +1,11 @@
+// app global css in SCSS form
+.q-field__bottom {
+  text-align: right;
+  padding-right: 0px;
+  padding-top: 3px;
+}
+
+.q-field--error.q-field--dense {
+  transition: margin-bottom 0.1s linear;
+    margin-bottom: 12px;
+}
