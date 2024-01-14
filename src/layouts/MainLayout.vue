@@ -12,11 +12,34 @@
         >
           Menu
         </q-item-label>
+        <q-item clickable :to="{ name: 'admin' }">
+          <q-item-section avatar>
+            <q-icon name="admin_panel_settings" />
+          </q-item-section>
+          <q-item-section>Administradores</q-item-section>
+        </q-item>
+        <q-item clickable v-close-popup @click="handleFullscren">
+          <q-item-section avatar>
+            <q-icon name="people" />
+          </q-item-section>
+          <q-item-section>Usuários</q-item-section>
+        </q-item>
+        <q-item clickable v-close-popup @click="handleFullscren">
+          <q-item-section avatar>
+            <q-icon name="calendar_month" />
+          </q-item-section>
+          <q-item-section>Eventos</q-item-section>
+        </q-item>
+        <q-item clickable v-close-popup @click="handleLogout">
+          <q-item-section avatar>
+            <q-icon name="door_front" />
+          </q-item-section>
+          <q-item-section>Sair</q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
     <q-drawer
       v-model="rightDrawerOpen"
-      show-if-above
       bordered
       :width="250"
       side="right"
@@ -45,7 +68,7 @@
           <CircularLogo />
         </q-toolbar-title>
 
-        <q-btn-dropdown flat rounded icon="person" class="btn-left-top-menu">
+        <q-btn-dropdown :label="authStore().$state.user.name" flat rounded icon="person" class="btn-left-top-menu" style="text-transform: none;">
           <q-list class="list-left-top-menu" dense>
             <q-item clickable>
               <q-item-section avatar>
@@ -93,7 +116,7 @@
 
     <q-footer>
       <q-toolbar>
-        <q-toolbar-title></q-toolbar-title>
+        <q-toolbar-title>{{rightDrawerOpen}}</q-toolbar-title>
       </q-toolbar>
     </q-footer>
 

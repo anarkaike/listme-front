@@ -100,15 +100,43 @@ module.exports = configure(function (/* ctx */) {
       ],
       alias: {
         '@': path.join(__dirname, './src'),
-        '@composables': path.join(__dirname, './src/composables'),
-        '@components': path.join(__dirname, './src/components'),
-        '@store': path.join(__dirname, './src/store')
+        // '@composables': path.join(__dirname, './src/composables'),
+        // '@components': path.join(__dirname, './src/components'),
+        // '@store': path.join(__dirname, './src/store')
       }
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
       // https: true
+      // host: 'localhost',
+      server: {
+        type: 'https'
+      },
+      // port: 9000,
+      // proxy: {
+      //   '/': {
+      //     target: '',
+      //     changeOrigin: true,
+      //     pathRewrite: {
+      //       '^/': ''
+      //     }
+      //   }
+      // },
+      // headers: {
+      //   'access-control-allow-origin': '*',
+      //   'access-control-allow-methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+      // },
+      // proxy: {
+      //   // proxy all requests starting with /api to jsonplaceholder
+      //   '/v1/api': {
+      //     target: 'https://api.listme.local:8890/v1/api',
+      //     changeOrigin: true,
+      //     pathRewrite: {
+      //       '^/v1/api': '/v1/api'
+      //     }
+      //   }
+      // },
       open: true // opens browser window automatically
     },
 
@@ -130,6 +158,7 @@ module.exports = configure(function (/* ctx */) {
         // }
       },
 
+      cssAddon: true,
       // iconSet: 'material-icons', // Quasar icon set
       lang: 'pt-BR', // Quasar language pack
 

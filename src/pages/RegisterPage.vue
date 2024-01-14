@@ -1,7 +1,7 @@
 <template>
   <q-page style="min-height: auto !important;">
     <q-form ref="myForm" class="row justify-center" @submit.prevent="handleRegister">
-      <p class="col-12 text-h5 text-bold text-center page-title">Criar nova conta</p>
+      <p class="col-12 text-h5 text-bold text-center box-title">Criar nova conta</p>
         <q-stepper
           v-model="step"
           vertical
@@ -126,6 +126,7 @@
               dense
               class="q-pb-sm"
               lazy-rules
+              :type="pwsVisible?'text':'password'"
               :rules="[
                 (val) => (val.length !== 0) || 'Digite uma senha',
                 (val) => (val.length >= 6) || 'A senha deve conter pelo menos 6 caracteres'
@@ -133,6 +134,13 @@
             >
               <template #prepend>
                 <q-icon name="lock" />
+              </template>
+              <template #append>
+                <q-icon
+                  :name="pwsVisible ? 'visibility' : 'visibility_off'"
+                  class="cursor-pointer"
+                  @click="pwsVisible = !pwsVisible"
+                />
               </template>
             </q-input>
 
@@ -143,6 +151,7 @@
               dense
               class="q-pb-sm"
               lazy-rules
+              :type="pwsVisible?'text':'password'"
               :rules="[
                 (val) => (val.length !== 0) || 'Digite novamente a senha',
                 (val) => (val.length >= 6) || 'A senha deve conter pelo menos 6 caracteres',
@@ -151,6 +160,13 @@
             >
               <template #prepend>
                 <q-icon name="lock_reset" />
+              </template>
+              <template #append>
+                <q-icon
+                  :name="pwsVisible ? 'visibility' : 'visibility_off'"
+                  class="cursor-pointer"
+                  @click="pwsVisible = !pwsVisible"
+                />
               </template>
             </q-input>
 
@@ -185,72 +201,63 @@
   </q-page>
 </template>
 
-<script>
-import { defineComponent, ref } from 'vue'
-// import useAuthUser from 'src/composables/UseAuthUser'
+<script lang="ts" setup>
+import { ref } from 'vue'
 import useNotify from 'src/composables/UseNotify'
-import { useRouter } from 'vue-router'
 import useVibratePhone from '../composables/useVibratePhone'
+import useLoading from '@/composables/useLoading'
+import { QForm } from 'quasar'
+// import { authStore } from '@/stores/auth-store'
 
-export default defineComponent({
-  name: 'PageRegister',
-
-  setup () {
-    const { router } = useRouter()
-    // const { register } = useAuthUser()
-    const { notifyError, notifySuccess } = useNotify()
-    const { vibrateForAction, vibrateForError, vibrateForSuccess } = useVibratePhone()
-    const step = ref(1)
-    const myForm = ref(null)
-    const form = ref({
-      name: '',
-      email: '',
-      password: '',
-      contact_name: '',
-      business_sector: '',
-      phone: '',
-      password2: ''
-    })
-
-    const nextStep = () => {
-      myForm.value.validate().then(success => {
-        if (success) {
-          step.value++
-          vibrateForAction()
-        } else {
-          notifyError('Complete os campos antes de continuar.')
-        }
-      })
-    }
-    const prevStep = () => {
-      step.value--
-      vibrateForAction()
-    }
-    const handleRegister = async () => {
-      try {
-        // await register(form.value)
-        notifySuccess()
-        vibrateForSuccess()
-        router.push({
-          name: 'email-confirmation',
-          query: { email: form.value.email }
-        })
-      } catch (error) {
-        vibrateForError()
-        notifyError(error.message)
-      }
-    }
-
-    return {
-      form,
-      myForm,
-      step,
-      handleRegister,
-      prevStep,
-      nextStep
-    }
-  }
+const { showLoading } = useLoading()
+const pwsVisible = ref(false)
+const { notifyError, notifySuccess } = useNotify()
+const { vibrateForAction, vibrateForError, vibrateForSuccess } = useVibratePhone()
+const step = ref(1)
+const myForm = ref<QForm|null>(null)
+const form = ref({
+  name: '',
+  email: '',
+  password: '',
+  contact_name: '',
+  business_sector: '',
+  phone: '',
+  password2: ''
 })
+const nextStep = () => {
+  if (myForm.value === null) return
+  myForm.value.validate().then((success: boolean) => {
+    if (success) {
+      step.value++
+      vibrateForAction()
+    } else {
+      notifyError('Complete os campos antes de continuar.')
+    }
+  })
+}
+const prevStep = () => {
+  step.value--
+  vibrateForAction()
+}
+const handleRegister = async () => {
+  try {
+    showLoading()
+    // authStore().autoRegister(form.value).then(() => {
+    //   hideLoading()
+    //   // router.push({ name: 'me' })
+    // })
+
+    // notifySuccess()
+    vibrateForSuccess()
+    // router.push({
+    //   name: 'email-confirmation',
+    //   query: { email: form.value.email }
+    // })
+  } catch (error) {
+    vibrateForError()
+    // notifyError(error.message)
+  }
+}
 </script>
 <style scoped lang="scss">
 .page-title {

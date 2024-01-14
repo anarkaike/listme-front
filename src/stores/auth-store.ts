@@ -39,18 +39,38 @@ export const authStore = defineStore('authStore', {
         throw err
       }
     },
+    async autoRegister (email: string, user: IUser): Promise<IAuthResponse> {
+      try {
+        const res = await $api.auth.autoRegister(user)
+        if (!res.success) {
+          throw new Error('Erro ao tentar realizar o cadastro.')
+        }
+        LocalStorage.set('LmToken', res.data.token.plainTextToken)
+        this.$patch({
+          user: res.data.user,
+          token: res.data.token.plainTextToken
+        })
+        notifySuccess('Cadastro realizado com sucesso')
+        return res
+      } catch (err) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        notifyError(JSON.stringify(err).substring(650))
+        throw err
+      }
+    },
     async logout (): Promise<boolean> {
       try {
-        const res = await $api.auth.logout()
-        if (!res.success) {
-          throw new Error('Erro ao tentar encerrar o acesso.')
-        }
         this.$patch({
           user: null,
           user_impersonation: null,
           token: null
         })
+        const res = await $api.auth.logout()
         LocalStorage.set('LmToken', null)
+        if (!res.success) {
+          throw new Error('Erro ao tentar encerrar o acesso.')
+        }
         notifySuccess('Acesso encerrado com sucesso')
         return true
       } catch (err) {

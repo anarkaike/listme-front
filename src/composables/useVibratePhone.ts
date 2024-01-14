@@ -33,3 +33,11 @@ export default function useVibratePhone () {
     vibrate
   }
 }
+
+export const $vibrate = {
+  action: useVibratePhone().vibrateForAction,
+  alert: useVibratePhone().vibrateForAlert,
+  warning: useVibratePhone().vibrateForWarning,
+  error: useVibratePhone().vibrateForError,
+  success: useVibratePhone().vibrateForSuccess
+}

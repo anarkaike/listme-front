@@ -13,25 +13,3 @@
 // Tip: Use the "Theme Builder" on Quasar's documentation website.
 
 @import './variables.css';
-
-
-
-.page-title {
-  color: var(--colors-orange-3);
-  font-size: 16px;
-  margin: -16px;
-  margin-bottom: 20px;
-  padding: 10px 20px;
-  font-weight: bold;
-  text-align: center;
-  &:not(.no-bg) {
-    background-color: var(--bg-transparent-2);
-  }
-
-  -webkit-border-top-left-radius: 10px;
-  -webkit-border-top-right-radius: 10px;
-  -moz-border-radius-topleft: 10px;
-  -moz-border-radius-topright: 10px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-}

@@ -1,6 +1,6 @@
 <template>
-  <div class="page-title no-bg">Acesse o Sistema</div>
-  <q-page style="min-height: auto;">
+  <div class="box-title no-bg">Acesse o Sistema</div>
+  <q-page style="min-height: auto;" view="lHh Lpr lFf">
     <q-form class="row justify-center" @submit.prevent="handleLogin">
       <div class="col-11 q-gutter-y-sm">
         <q-input
@@ -25,6 +25,7 @@
           v-model="form.password"
           filled
           lazy-rules
+          :type="pwsVisible ? 'text' : 'password'"
           :rules="[
             (val) => (val.length !== 0) || 'Digite sua senha',
             (val) => (val.length >= 6) || 'Digite pelo menos 6 caracter!'
@@ -32,6 +33,13 @@
         >
           <template #prepend>
             <q-icon name="lock" />
+          </template>
+          <template #append>
+            <q-icon
+              :name="pwsVisible ? 'visibility' : 'visibility_off'"
+              class="cursor-pointer"
+              @click="pwsVisible = !pwsVisible"
+            />
           </template>
         </q-input>
 
@@ -45,7 +53,7 @@
             type="submit"
           />
         </div>
-        <div class="full-width q-gutter-y-sm">
+        <div class="full-width q-gutter-y-sm q-py-lg">
           <q-btn
             label="Criar nova conta"
             color="secondary"
@@ -64,6 +72,7 @@
             flat
             :to="{ name: 'forgot-password'}"
             size="md"
+            style="display: none;"
           />
         </div>
       </div>
@@ -72,35 +81,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useFullscreen } from '@vueuse/core'
-import { authStore } from '@/stores/auth-store'
 import { useRouter } from 'vue-router'
+import { authStore } from '@/stores/auth-store'
 import useLoading from '@/composables/useLoading'
-// import useNotify from '@/composables/useNotify'
-// import { $api } from '../services/api'
-// import useAuthUser from 'src/composables/UseAuthUser'
-// import apiAuth from 'src/composables/api/ApiAuth'
 
+const { showLoading, hideLoading } = useLoading()
 const router = useRouter()
 const { isFullscreen, enter } = useFullscreen()
 const loading = ref<boolean>(false)
-const { showLoading, hideLoading } = useLoading()
-// const { isLoggedIn } = useAuthUser()
-// const { login, isLoggedIn } = useAuthUser()
-// const { listAll } = apiAuth()
-// const { notifySuccess, notifyError } = useNotify()
-
+const pwsVisible = ref(false)
 const form = ref({
   email: 'anarkaike@gmail.com',
   password: '123456'
-})
-
-onMounted(() => {
-  // console.log('process.env. ', process.env)
-  // if (isLoggedIn) {
-  // router.push({ name: 'me' })
-  // }
 })
 
 const handlerOpenRegister = () => {

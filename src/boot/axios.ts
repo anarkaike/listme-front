@@ -1,6 +1,7 @@
 import { boot } from 'quasar/wrappers'
 import axios, { AxiosInstance } from 'axios'
 import { LocalStorage } from 'quasar'
+// import cors from 'cors'
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -20,12 +21,18 @@ const api = axios.create({ baseURL: process.env.API_URL_BASE })
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
 
+  // app.use(cors)
   app.config.globalProperties.$axios = axios
   // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
   //       so you won't necessarily have to import axios in each vue file
 
-  api.defaults.baseURL = process.env.API_URL_BASE
+  // api.defaults.baseURL = process.env.API_URL_BASE
   api.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
+  // api.defaults.headers.common['Content-Type'] = 'multipart/form-data'
+  // api.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
+  api.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
+  api.defaults.headers.common['Access-Control-Allow-Headers'] = 'Content-Type'
+  api.defaults.headers.common['Access-Control-Allow-Methods'] = 'GET, POST, PUT, PATCH, DELETE, OPTIONS'
 
   const token: string | null = LocalStorage.getItem('LmToken')
   if (token) {

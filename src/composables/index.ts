@@ -1,5 +1,12 @@
-import useNotify from './UseNotify'
+import useNotify, { $notify } from './useNotify'
+import useLoading, { $loading } from './useLoading'
+import useVibratePhone, { $vibrate } from './useVibratePhone'
 
 export {
-  useNotify
+  useNotify,
+  $notify,
+  useLoading,
+  $loading,
+  useVibratePhone,
+  $vibrate
 }

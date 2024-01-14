@@ -2,6 +2,8 @@ import { store } from 'quasar/wrappers'
 import { createPinia } from 'pinia'
 import { Router } from 'vue-router'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+// import { authStore } from '@/stores/auth-store'
+// import { usersStore } from '@/stores/users-store'
 
 /*
  * When adding new properties to stores, you should also

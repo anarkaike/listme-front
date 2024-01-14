@@ -3,9 +3,6 @@
     Dashboard
   </div>
   <q-page>
-    <!-- <div v-if="user">
-      <div>Hello {{ user.user_metadata.name }}</div>
-    </div> -->
   </q-page>
 </template>
 

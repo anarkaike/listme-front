@@ -33,3 +33,8 @@ export default function useNotify () {
     notifyError
   }
 }
+
+export const $notify = {
+  success: useNotify().notifySuccess,
+  error: useNotify().notifyError
+}
