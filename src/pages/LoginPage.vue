@@ -90,7 +90,6 @@ import useLoading from '@/composables/useLoading'
 const { showLoading, hideLoading } = useLoading()
 const router = useRouter()
 const { isFullscreen, enter } = useFullscreen()
-const loading = ref<boolean>(false)
 const pwsVisible = ref(false)
 const form = ref({
   email: 'anarkaike@gmail.com',

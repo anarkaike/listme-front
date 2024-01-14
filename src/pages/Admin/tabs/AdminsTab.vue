@@ -150,13 +150,15 @@ const methods = {
 
 onBeforeMount(() => {
   $stores.users.listAll().then((data: IUser[]) => {
-    users.value = data.filter(user => {
-      return (user.profile_ids && (
-        user.profile_ids.includes(1) ||
-        user.profile_ids.includes(4) ||
-        user.profile_ids.includes(5) ||
-        user.profile_ids.includes(6)))
-    })
+    console.log('Junio users', data)
+    users.value = data
+    // users.value = data.filter(user => {
+    //   return (user.profile_ids && (
+    //     user.profile_ids.includes(1) ||
+    //     user.profile_ids.includes(4) ||
+    //     user.profile_ids.includes(5) ||
+    //     user.profile_ids.includes(6)))
+    // })
   })
 })
 </script>

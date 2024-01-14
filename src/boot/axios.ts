@@ -26,7 +26,7 @@ export default boot(({ app }) => {
   // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
   //       so you won't necessarily have to import axios in each vue file
 
-  // api.defaults.baseURL = process.env.API_URL_BASE
+  api.defaults.baseURL = process.env.API_URL_BASE
   api.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
   // api.defaults.headers.common['Content-Type'] = 'multipart/form-data'
   // api.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'

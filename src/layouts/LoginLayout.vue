@@ -37,7 +37,7 @@ import { CircularLogo } from '@/components'
 </script>
 <style scoped lang="scss">
 .ctn-login-layout {
-  background-image: url('./src/assets/bg.jpg');
+  background-image: url('~assets/bg.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: top center;

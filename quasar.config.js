@@ -59,6 +59,10 @@ module.exports = configure(function (/* ctx */) {
       env: {
         ...require('dotenv').config().parsed
       },
+      publicPath: "",
+      // extendViteConf(viteConf, { isServer, isClient }) {
+      //   viteConf.base = "";
+      // },
       target: {
         browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
         node: 'node16'
@@ -82,6 +86,7 @@ module.exports = configure(function (/* ctx */) {
 
       extendViteConf (viteConf) {
         viteConf.define.__VUE_PROD_HYDRATION_MISMATCH_DETAILS__ = false
+        viteConf.base = "";
       },
       // viteVuePluginOptions: {},
 

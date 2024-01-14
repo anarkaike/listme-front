@@ -193,7 +193,7 @@ const handleFullscren = () => {
   --title-bg-drawer: rgba(0, 0, 0, 0.4);
 }
 .ctn-main-layout {
-  background-image: url('./src/assets/bg.jpg');
+  background-image: url('~assets/bg.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: top center;
