@@ -47,7 +47,7 @@
 <script>
 import { defineComponent, ref } from 'vue'
 // import useAuthUser from 'src/composables/UseAuthUser'
-import useNotify from 'src/composables/UseNotify'
+import useNotify from 'src/composables/useNotify'
 
 export default defineComponent({
   setup () {

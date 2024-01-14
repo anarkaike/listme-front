@@ -203,7 +203,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import useNotify from 'src/composables/UseNotify'
+import useNotify from 'src/composables/useNotify'
 import useVibratePhone from '../composables/useVibratePhone'
 import useLoading from '@/composables/useLoading'
 import { QForm } from 'quasar'
