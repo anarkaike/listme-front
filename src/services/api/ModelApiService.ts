@@ -42,7 +42,9 @@ export default class ModelApiService extends ReadOnlyApiService {
         headers: {
           'Content-Type': 'multipart/form-data',
           'access-control-allow-origin': '*',
-          'access-control-allow-methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+          'access-control-allow-methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+          'X-Requested-With': 'XMLHttpRequest',
+          'Access-Control-Allow-Credentials': 'true'
         }//,
         // withCredentials: true
       })
@@ -63,7 +65,13 @@ export default class ModelApiService extends ReadOnlyApiService {
         headers: {
           'Content-Type': 'multipart/form-data',
           'access-control-allow-origin': '*',
-          'access-control-allow-methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+          'access-control-allow-methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+          'X-Requested-With': 'XMLHttpRequest',
+          'Access-Control-Allow-Credentials': 'true'
+          // 'Accept': 'application/json',
+          // 'Content-Type': 'application/json; charset=utf-8'//,
+          // 'X-Requested-With': 'XMLHttpRequest',
+          // 'SameSite': 'None'
         }
       })
       return res.data

@@ -21,7 +21,19 @@ export default function useNotify () {
       icon: 'report',
       position,
       color: 'negative',
-      message: message || 'Failed !',
+      message: message || 'Erro',
+      actions: [
+        { icon: 'close', color: 'white', round: true, handler: () => { /* ... */ } }
+      ]
+    })
+  }
+
+  const notifyInfo = (message: string) => {
+    Notify.create({
+      icon: 'info',
+      position,
+      color: 'info',
+      message: message,
       actions: [
         { icon: 'close', color: 'white', round: true, handler: () => { /* ... */ } }
       ]
@@ -30,11 +42,13 @@ export default function useNotify () {
 
   return {
     notifySuccess,
-    notifyError
+    notifyError,
+    notifyInfo
   }
 }
 
 export const $notify = {
   success: useNotify().notifySuccess,
-  error: useNotify().notifyError
+  error: useNotify().notifyError,
+  info: useNotify().notifyInfo
 }

@@ -6,6 +6,8 @@ export default interface ISaasClient {
   company_name?: string | null;
   email?: string | null;
   phone?: string | null;
+  url_logo?: string | null;
+  url_logo_up?: File | null;
   observation?: string | null;
   status?: string | null;
   created_at?: string | null;

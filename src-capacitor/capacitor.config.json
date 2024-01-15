@@ -4,6 +4,6 @@
   "webDir": "www",
   "server": {
     "androidScheme": "https",
-    "url": "http://192.168.100.89:9500"
+    "url": "https://api.listme.local:8890/api/v1"
   }
 }

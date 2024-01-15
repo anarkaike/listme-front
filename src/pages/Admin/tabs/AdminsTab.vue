@@ -3,7 +3,7 @@
   <q-table
     class="my-sticky-last-column-table"
     flat bordered
-    :rows="users"
+    :rows="usersFiltered"
     compact
     :columns="columns"
     row-key="name"
@@ -12,9 +12,12 @@
 <!--    selection="multiple"-->
 <!--    :selected-rows-label="methods.getSelectedString"-->
 
-    <template #top>
+    <template v-slot:top>
       <div class="fit row wrap justify-between items-start content-start">
-        <div class="text-h6">Admins</div>
+        <div class="text-h6 col-grow">Admins</div>
+        <div style="min-width: 100px; margin-top: -3px;" class="q-pr-sm ctn-filter col-12 q-mb-sm col-md-5">
+          <q-input dense name="busca" outlined label="Filtrar dados" type="text" v-model="filterForm.filter" class="q-mr-md"></q-input>
+        </div>
         <div>
           <q-btn unelevated dense color="primary" class="q-px-md" @click="methods.toogleDialogForm(true)">
             Novo Admin
@@ -24,31 +27,46 @@
     </template>
     <!-- TEMPLATE PARA SLOT DE BODY DA TABELA -->
     <template v-slot:body="props">
-      <q-tr :props="props">
+      <q-tr :props="props" :style="[methods.styleStatusForColumn(props.row.status)]">
         <!-- TEMPLATE COLUNA CHECK -->
-        <q-td auto-width style="display: none;">
+        <q-td style="display: none;">
           <q-checkbox :name="`admin_${props.row.id}`" :toggle-indeterminate="false" v-model="props.selected" />
         </q-td>
 
         <!-- TEMPLATE COLUNA NAME -->
         <q-td key="name" :props="props" @click="methods.onView(props.row)" style="cursor: pointer;">
-          {{ props.row.name }}
-          <div style="font-size: 0.8em; color: #666;">{{ props.row.email }}</div>
-          <div style="font-size: 0.8em; color: #666;">{{ props.row.phone }}</div>
-        </q-td>
-
-        <!-- TEMPLATE COLUNA STATUS -->
-        <q-td key="status" :props="props" auto-width style="text-align: center;cursor: pointer;">
-          <JcBtnToogle v-model:status="props.row.status" activeValue="active" inactiveValue="inactive" />
+          <strong>
+            {{ props.row.name }}
+            <q-chip outline :style="[methods.styleStatusForChip(props.row.status)]" class="chip-status q-ml-xs" dense>
+              {{toEUserStatusLabels[props.row.status]}}
+            </q-chip>
+          </strong>
+          <div style="font-size: 10px;">
+            {{ props.row.phone }}
+          </div>
+          <div style="font-size: 10px;">
+            {{ props.row.email }}
+          </div>
         </q-td>
 
         <!-- TEMPLATE COLUNA AUDTORIA -->
-        <q-td key="auditoria" :props="props" style="font-size: 10px;">
+        <q-td auto-width key="profiles" :props="props" style="font-size: 10px;" @click="methods.onView(props.row)">
+            <div v-if="props.row.profiles && props.row.profiles.length > 0">
+              <div v-for="profile in props.row.profiles" :key="profile.id">
+                <q-chip outline class="chip-status q-ml-xs" dense>
+                  {{profile.name}}
+                </q-chip>
+              </div>
+            </div>
+        </q-td>
+
+        <!-- TEMPLATE COLUNA AUDTORIA -->
+        <q-td auto-width key="auditoria" :props="props" style="font-size: 10px;" @click="methods.onView(props.row)">
           <JcAudit :row="props.row" />
         </q-td>
 
         <!-- TEMPLATE COLUNA ACTIONS -->
-        <q-td key="actions" :props="props" auto-width>
+        <q-td auto-width key="actions" :props="props">
           <JcGroupBtnForTables
             @on-view="methods.onView(props.row)"
             @on-edit="methods.onEdit(props.row)"
@@ -80,32 +98,60 @@
   </q-table>
 
   <!-- DIALOG USER VIEW -->
-  <JcDialog v-model:openDialog="openDialogView" :tags-title="tagsProfileUserView">
+  <JcDialog v-model:openDialog="openDialogView">
     <template #title>{{ userView.name }}</template>
-    <JcUsersDataView :user="userView" />
+    <JcUserDataView v-model:data="userView" />
   </JcDialog>
   <!-- DIALOG USER EDIT/NEW -->
   <JcDialog v-model:openDialog="openDialogForm" disable-btn-close @close="userForEdit={}">
     <template #title>{{userForEdit?.id?'Editando Administrador':'Cadastrando Administrador'}}</template>
-    <JcUserForm :user="userForEdit" @on-cancel="methods.toogleDialogForm" @close-dialog="methods.toogleDialogForm" class="q-ma-sm q-ma-md-none" />
+    <JcUserForm v-model:user="userForEdit" @on-cancel="methods.toogleDialogForm" @close-dialog="methods.toogleDialogForm" class="q-ma-sm q-ma-md-none" />
   </JcDialog>
 </template>
 <script lang="ts" setup>
+import { useQuasar } from 'quasar'
 import { ref, onBeforeMount, computed } from 'vue'
 import type { IUser } from '@/interfaces'
 import {
   JcGroupBtnForTables,
   JcAudit,
-  JcBtnToogle,
-  JcUsersDataView,
+  JcUserDataView,
   JcDialog,
   JcUserForm
 } from '@/components'
 import { $stores } from '@/stores/all'
+import { $notify } from '@/composables'
+import { EUserStatusLabels, EUserStatusValues } from '@/enums'
 
+const toEUserStatusLabels = EUserStatusLabels
+const filterForm = ref<{filter: string}>({
+  filter: ''
+})
+const usersFiltered = computed(() => {
+  if (!filterForm.value.filter) return users.value
+  return users.value.filter((user: IUser) => {
+    const key = filterForm.value.filter.toLowerCase().split(' ')
+    const name = user.name?.toLowerCase()
+    const email = user.email?.toLowerCase()
+    const phone = user.phone?.toLowerCase()
+      .replace('.', '')
+      .replace(' ', '')
+      .replace('(', '')
+      .replace(')', '')
+      .replace('-', '')
+    let encontrado = false
+    key.forEach((keyParte) => {
+      if (name?.includes(keyParte) ||
+        email?.includes(keyParte) ||
+        phone?.includes(keyParte)) encontrado = true
+    })
+    return encontrado
+  })
+})
+const $q = useQuasar()
 const columns = ref([
   { name: 'name', align: 'left', label: 'Nome', field: 'name', sortable: true },
-  { name: 'status', align: 'center', label: 'Status', field: 'status', sortable: false },
+  { name: 'profiles', align: 'left', label: 'Perfis', field: 'profiles', sortable: false },
   { name: 'auditoria', align: 'center', label: 'Auditoria', field: 'auditoria', sortable: false },
   { name: 'actions', align: 'center', label: 'Ações', field: 'actions', sortable: false }
 ])
@@ -114,20 +160,13 @@ const users = ref<IUser[]>([])
 
 // BOTÃO DE VISUALIZAR
 const openDialogView = ref(false)
-// const auditRow = ref<object|null>({})
 const userView = ref<IUser|null>()
-const tagsProfileUserView = computed(() => {
-  if (!userView.value || !userView.value.profiles) return []
-  return userView.value.profiles.map(profile => ({ title: 'Perfil: ' + profile.name }))
-})
+
 // BOTÃO DE EDITAR E NOVO
 const openDialogForm = ref(false)
 const userForEdit = ref<IUser|null>()
 
 const methods = {
-  getSelectedString () {
-    return selected.value.length === 0 ? '' : `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected `
-  },
   onView (user: IUser) {
     userView.value = user
     this.toogleDialogView()
@@ -136,7 +175,7 @@ const methods = {
     openDialogView.value = !openDialogView.value
   },
   onEdit (user: IUser) {
-    userForEdit.value = user
+    userForEdit.value = { ...user } as IUser
     this.toogleDialogForm()
   },
   toogleDialogForm (reset = false): void {
@@ -144,22 +183,61 @@ const methods = {
     openDialogForm.value = !openDialogForm.value
   },
   onDelete (user: IUser) {
-    console.log('Junio: delete AdminTab', user)
+    $q.dialog({
+      title: 'Atenção!',
+      message: `Deseja realmente excluir o usuário ${user.name}?`,
+      cancel: true,
+      persistent: true
+    }).onOk(() => {
+      $stores.users.delete(user.id as number).then(() => {
+        $notify.success('Usuário excluido com sucesso!')
+      })
+    }).onOk(() => {
+      // console.log('>>>> second OK catcher')
+    }).onCancel(() => {
+      // console.log('>>>> Cancel')
+    }).onDismiss(() => {
+      // console.log('I am triggered on both OK and Cancel')
+    })
+  },
+  listAdmins () {
+    $stores.users.listAll().then((data: IUser[]) => {
+      users.value = data
+      // users.value = data.filter(user => {
+      //   return (user.profile_ids && (
+      //     user.profile_ids.includes(1) ||
+      //     user.profile_ids.includes(4) ||
+      //     user.profile_ids.includes(5) ||
+      //     user.profile_ids.includes(6)))
+      // })
+    })
+  },
+  styleStatusForColumn (status: EUserStatusValues): string {
+    switch (status) {
+      case EUserStatusValues.active:
+        return 'color: green; background-color: #f8fcf4; background: linear-gradient(150deg, #f8fcf4 20%, #FFF 100%);'
+      case EUserStatusValues.inactive:
+        return 'color: gray; background-color: #f4f4f4; background: linear-gradient(150deg, #f4f4f4 20%, #FFF 100%)'
+      case EUserStatusValues.blocked:
+        return 'color: red; background-color: #f9f2f2; background: linear-gradient(150deg, #f9f2f2 20%, #FFF 100%)'
+    }
+    return ''
+  },
+  styleStatusForChip (status: EUserStatusValues): string {
+    switch (status) {
+      case EUserStatusValues.active:
+        return 'border-color: green; color: green; background-color: #bcff7a !important;'
+      case EUserStatusValues.inactive:
+        return 'border-color: gray; color: gray; background-color: #e0e0e0 !important;'
+      case EUserStatusValues.blocked:
+        return 'border-color: red; color: red; background-color: #ffc6c6 !important;'
+    }
+    return ''
   }
 }
 
 onBeforeMount(() => {
-  $stores.users.listAll().then((data: IUser[]) => {
-    console.log('Junio users', data)
-    users.value = data
-    // users.value = data.filter(user => {
-    //   return (user.profile_ids && (
-    //     user.profile_ids.includes(1) ||
-    //     user.profile_ids.includes(4) ||
-    //     user.profile_ids.includes(5) ||
-    //     user.profile_ids.includes(6)))
-    // })
-  })
+  methods.listAdmins()
 })
 </script>
 
@@ -182,17 +260,44 @@ onBeforeMount(() => {
 .my-sticky-last-column-table {  /* specifying max-width so the example can
     highlight the sticky column on any browser window */
 
+  th {
+    padding: 0px !important;
+  }
   thead tr:last-child th:last-child {    /* bg color is important for th; just specify one */
     background-color: var(--bg-transparent-4);
   }
+  td {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
   td:last-child {
     background-color: var(--bg-transparent-4);
+    padding: 0px !important;
+  }
+  th:last-child {
+    background-color: var(--bg-transparent-5);
+    padding: 0px !important;
+    position: sticky !important;
+    right: 0 !important;
+    z-index: 1;
   }
   th:last-child,
   td:last-child {
-    position: sticky;
-    right: 0;
-    z-index: 1;
+    background-color: var(--bg-transparent-5);
+    position: sticky !important;
+    right: 0 !important;
+    z-index: 1 !important;
+    padding: 5px !important;
   }
+}
+.my-sticky-last-column-table td {
+}
+.chip-status {
+  text-align: center;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 10px;
+  border-width: 1px;
+  border-style: solid;
 }
 </style>

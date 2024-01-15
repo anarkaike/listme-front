@@ -1,3 +1,4 @@
+import { LocalStorage } from 'quasar'
 import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
@@ -28,6 +29,14 @@ export default route(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.MODE === 'ssr' ? void 0 : process.env.VUE_ROUTER_BASE)
   })
 
+  Router.afterEach(() => {
+    setInterval(() => {
+      if (!LocalStorage.has('LmToken')) {
+        return { nome: 'login' }
+      }
+    }, 1000)
+  })
+
   Router.beforeEach((to) => {
     // if (
     //   authStore().isLoggedIn &&
@@ -42,7 +51,7 @@ export default route(function (/* { store, ssrContext } */) {
       return { name: 'login' }
     }
     if (authStore().isLoggedIn && !to.meta.requiresAuth) {
-      return { name: 'me' }
+      return { name: 'home' }
     }
   })
 

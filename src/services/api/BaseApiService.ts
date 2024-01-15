@@ -1,5 +1,11 @@
+// import { $notify } from '@/composables'
+// import { $stores } from '@/stores/all'
 import { LocalStorage } from 'quasar'
 import { api } from '@/boot/axios'
+// import { useRouter } from 'vue-router'
+// import router from '@/router'
+
+// const $q = useQuasar()
 
 export default class BaseApiService {
   resource?: string
@@ -40,7 +46,17 @@ export default class BaseApiService {
   }
 
   handleErrors (err: unknown) {
-    console.log('Erro axios: ', JSON.stringify(err))
+    console.log('Erro axiosssss: ', JSON.stringify(err))
+    LocalStorage.clear()
+    // Queria redirecionar para o login aqui mas não consegui
+    // $stores.auth.logout()
+    // const router = useRouter()
+    // const r = router.getRoutes()
+    // console.log('Junio', $q)
+    // router.push({ name: 'login' }).then(r => {
+    //   $notify.info('A sessão encerrou. Entre novamente.')
+    //   console.log('Junio error handle', r)
+    // })
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     // notifyError('Erro: ' + err.message)

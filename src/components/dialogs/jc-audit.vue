@@ -1,14 +1,14 @@
 <template>
   <div class="ctn-jc-audit">
-    <div>
+    <div v-if="props.row.created_at">
       <strong>Criado em:</strong>
       <br />
-      {{ props.row.created_at }}
+      {{ humanizeDatetime(props.row.created_at) }}
     </div>
-    <div>
+    <div v-if="props.row.updated_at">
       <strong>Atualizado em:</strong>
       <br />
-      {{ props.row.updated_at }}
+      {{ humanizeDatetime(props.row.created_at) }}
     </div>
   </div>
 </template>
@@ -16,20 +16,9 @@
 <script lang="ts" setup>
 import { defineProps, withDefaults } from 'vue'
 import type { IAudit } from '@/interfaces'
+import { useHumanize } from '@/composables'
 
-const props = withDefaults(defineProps<{
-  row: object | null | IAudit
-}>(), {})
-
-// const methods = {
-//   getUserWhoCreated () {
-//
-//   },
-//   getUserWhoUpdated () {
-//
-//   },
-//   getUserWhoDeleted () {
-//
-//   }
-// }
+// CONSTANTES ---------------------------------------------------
+const { humanizeDatetime } = useHumanize()
+const props = withDefaults(defineProps<{ row: object | null | IAudit }>(), {})
 </script>

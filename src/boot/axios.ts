@@ -16,7 +16,7 @@ declare module '@vue/runtime-core' {
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
 // for each client)
-const api = axios.create({ baseURL: process.env.API_URL_BASE })
+const api = axios.create()// { baseURL: 'https://apilistme.junio.cc/api/v1' }
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
@@ -27,7 +27,8 @@ export default boot(({ app }) => {
   //       so you won't necessarily have to import axios in each vue file
 
   api.defaults.baseURL = process.env.API_URL_BASE
-  api.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
+  // api.defaults.baseURL = 'https://apilistme.junio.cc/api/v1'
+  // api.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
   // api.defaults.headers.common['Content-Type'] = 'multipart/form-data'
   // api.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
   api.defaults.headers.common['Access-Control-Allow-Origin'] = '*'

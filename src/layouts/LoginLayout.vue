@@ -18,26 +18,11 @@
   </q-layout>
 </template>
 <script lang="ts" setup>
-// import { defineComponent } from 'vue'//, onMounted
-// import { useApi } from '@composables'
 import { CircularLogo } from '@/components'
-//
-// export default defineComponent({
-//   name: 'LoginLayout',
-//   components: { CircularLogo },
-//   setup () {
-//     // const { getBrand } = useApi()
-//     // onMounted(() => {
-//     //   // getBrand()
-//     // })
-//     return {
-//     }
-//   }
-// })
 </script>
 <style scoped lang="scss">
 .ctn-login-layout {
-  background-image: url('./src/assets/bg.jpg');
+  background-image: url('/imgs/bg.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: top center;

@@ -1,6 +1,7 @@
 import useNotify, { $notify } from './useNotify'
 import useLoading, { $loading } from './useLoading'
 import useVibratePhone, { $vibrate } from './useVibratePhone'
+import useHumanize from './useHumanize'
 
 export {
   useNotify,
@@ -8,5 +9,6 @@ export {
   useLoading,
   $loading,
   useVibratePhone,
-  $vibrate
+  $vibrate,
+  useHumanize
 }

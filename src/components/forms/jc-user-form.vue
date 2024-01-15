@@ -1,9 +1,9 @@
 <template>
-  <div class="jc-user-form row">
-    <div class="col-grow q-pr-md-md q-px-xs q-mb-lg col-md-3" v-if="user.url_photo && user.url_photo!==''">
+  <div class="jc-user-form row jc-form">
+    <div class="col-grow q-pr-md-md q-px-xs q-mb-lg col-md-3" v-if="user.url_photo && user.url_photo!=='' && typeof user.url_photo==='string'">
       <q-img :src="user.url_photo" style="max-height: 200px;" fit="contain" />
     </div>
-    <q-form class="col-grow" ref="myForm" @submit.prevent="methods.submit" :class="{ 'col-md-9':user.url_photo && user.url_photo!=='' }">
+    <q-form class="col-grow" ref="myForm" @submit.prevent="methods.save" :class="{ 'col-md-9':user.url_photo && user.url_photo!=='' }">
       <div class="row">
         <!-- CAMPO NAME -->
         <div class="col-12 col-md-6">
@@ -21,6 +21,7 @@
             </template>
           </q-input>
         </div>
+
         <!-- CAMPO PROFILES-->
         <div class="col-12 col-md-6">
           <q-select
@@ -44,6 +45,7 @@
             </template>
           </q-select>
         </div>
+
         <!-- CAMPO EMAIL -->
         <div class="col-12 col-md-6">
           <q-input
@@ -64,6 +66,7 @@
             </template>
           </q-input>
         </div>
+
         <!-- CAMPO SENHA -->
         <div class="col-12 col-md-3">
           <q-input
@@ -87,6 +90,7 @@
             </template>
           </q-input>
         </div>
+
         <!-- CAMPO REPITA A SENHA-->
         <div class="col-12 col-md-3">
           <q-input
@@ -110,6 +114,7 @@
             </template>
           </q-input>
         </div>
+
         <!-- CAMPO TELEFONE -->
         <div class="col-12 col-md-4">
           <q-input
@@ -127,6 +132,7 @@
             </template>
           </q-input>
         </div>
+
         <!-- CAMPO UPLOAD DE FOTO -->
         <div class="col-12 col-md-5">
           <q-file
@@ -142,6 +148,7 @@
             </template>
           </q-file>
         </div>
+
         <!-- CAMPO STATUS -->
         <div class="col-12 col-md-3">
           <q-select
@@ -162,15 +169,15 @@
             </template>
           </q-select>
         </div>
+
         <!-- CAMPO CLIENTE SAAS -->
         <div class="col-12">
           <q-select
             label="Adicionar este usuário no sistema de qual cliente saas?"
             filled
-            v-model="user.saas_client_ids"
+            v-model="user.saas_client_id"
             :options="optionsValues.saasClients"
             :loading="optionsValues.saasClients.length === 0"
-            multiple
             options-dense
             options-selected-class="#c6c9c1"
             emit-value
@@ -186,11 +193,12 @@
           </q-select>
         </div>
       </div>
+
       <!-- BOTÕES SALVAR E CANCELAR -->
-      <div class="row q-mt-lg">
+      <div class="row q-mt-lg sticky-buttons">
         <q-space class="col-auto" />
         <q-btn label="Cancelar" @click="methods.cancel" color="primary" flat class="q-mr-sm" />
-        <q-btn label="Cadastrar" type="submit" color="primary"/>
+        <q-btn :label="user.id?'Atualizar':'Cadastrar'" type="submit" color="primary"/>
       </div>
     </q-form>
   </div>
@@ -198,12 +206,10 @@
 
 <script lang="ts" setup>
 import { onBeforeMount, defineProps, withDefaults, Ref, ref } from 'vue'
+import { rand } from '@vueuse/core'
+import { QForm } from 'quasar'
 import type { IUser, IOption } from '@/interfaces'
 import { $stores } from '@/stores/all'
-import { $notify } from '@/composables'
-import { QForm } from 'quasar'
-import { rand } from '@vueuse/core'
-// return
 
 // CONSTANTES ---------------------------------------------------
 const myForm = ref<QForm|null>(null)
@@ -212,6 +218,7 @@ const props = withDefaults(defineProps<{
   // Geral
   user?: IUser|null
 }>(), {})
+const originalUser : Ref<IUser> = ref<IUser>(props.user as IUser)
 const user: Ref<IUser> = ref<IUser>(props.user ?? {
   status: 'active',
   name: 'Junio',
@@ -219,7 +226,8 @@ const user: Ref<IUser> = ref<IUser>(props.user ?? {
   phone: '11976871674',
   password: '123456',
   password2: '123456',
-  url_photo: ''
+  url_photo: '',
+  url_photo_up: null
 } as IUser)
 const optionsValues = ref({
   profiles: [] as IOption[],
@@ -227,9 +235,9 @@ const optionsValues = ref({
 })
 
 const statusOption: Ref<IOption[]> = ref([
+  { id: 'active', label: 'Ativo' } as IOption,
   { id: 'inactive', label: 'Inativo' } as IOption,
-  { id: 'blocked', label: 'Bloqueado' } as IOption,
-  { id: 'active', label: 'Ativo' } as IOption
+  { id: 'blocked', label: 'Bloqueado' } as IOption
 ] as IOption[])
 const pwsVisible = ref(false)
 
@@ -243,17 +251,17 @@ const emit = defineEmits([
 
 // METODOS ------------------------------------------------------
 const methods = {
-  submit () {
+  save () {
     const method = user.value.id ? 'update' : 'create'
-    user.value.url_photo = urlPhotoModel.value as unknown as File
+    if ('name' in urlPhotoModel.value) {
+      console.log('Junio ENTROUUU', urlPhotoModel.value)
+      user.value.url_photo_up = urlPhotoModel.value as unknown as File
+    }
     $stores.users[method](user.value).then((value: IUser) => {
-      $notify.success(`Usuário "${value.name}" ${user.value.id ? 'atualizar' : 'cadastrar'} com sucesso!`)
       emit('on-submit', value)
       emit(user.value.id ? 'on-update' : 'on-create', value)
       user.value.url_photo = value.url_photo
       methods.closeDialog()
-    }).catch((err) => {
-      $notify.error(`Erro ao tentar ${user.value.id ? 'atualizar' : 'cadastrar'} o usuário ${user.value.name}! ${err.message}`)
     })
   },
   cancel () {

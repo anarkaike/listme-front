@@ -24,7 +24,7 @@
 
       </q-card-section>
       <q-card-actions align="right" class="ctn-dialog-footer-actions bg-white text-teal q-px-md" v-if="!props.disableBtnClose || $slots.actions">
-        <q-btn flat label="Fechar" v-close-popup v-if="!props.disableBtnClose" />
+        <q-btn flat label="Fechar esta janela" color="primary" v-close-popup v-if="!props.disableBtnClose" />
         <slot name="actions" />
       </q-card-actions>
     </q-card>

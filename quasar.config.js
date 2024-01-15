@@ -12,7 +12,7 @@ const { configure } = require('quasar/wrappers')
 const path = require('path')
 // require('dotenv').config()
 
-module.exports = configure(function (/* ctx */) {
+module.exports = configure(function (ctx) {
   return {
     eslint: {
       // fix: true,
@@ -31,7 +31,8 @@ module.exports = configure(function (/* ctx */) {
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
       'i18n',
-      'axios'
+      'axios',
+      'iconify'
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
@@ -56,7 +57,10 @@ module.exports = configure(function (/* ctx */) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
       env: {
-        ...require('dotenv').config().parsed
+        ...require('dotenv').config().parsed,
+        // API_URL_BASE: ctx.dev
+        //   ? 'https://api.listme.local:8890/api/v1'
+        //   : 'https://apilistme.junio.cc/api/v1'
       },
       publicPath: "",
       // extendViteConf(viteConf, { isServer, isClient }) {
@@ -67,7 +71,7 @@ module.exports = configure(function (/* ctx */) {
         node: 'node16'
       },
 
-      vueRouterMode: 'history', // available values: 'hash', 'history'
+      vueRouterMode: 'hash', // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
@@ -114,9 +118,9 @@ module.exports = configure(function (/* ctx */) {
     devServer: {
       // https: true
       // host: 'localhost',
-      server: {
-        type: 'https'
-      },
+      // server: {
+      //   type: 'https'
+      // },
       // port: 9000,
       // proxy: {
       //   '/': {
@@ -127,14 +131,14 @@ module.exports = configure(function (/* ctx */) {
       //     }
       //   }
       // },
-      // headers: {
-      //   'access-control-allow-origin': '*',
-      //   'access-control-allow-methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS'
-      // },
+      headers: {
+        'access-control-allow-origin': '*',
+        'access-control-allow-methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+      },
       // proxy: {
       //   // proxy all requests starting with /api to jsonplaceholder
       //   '/v1/api': {
-      //     target: 'https://api.listme.local:8890/v1/api',
+      //     target: 'https://apilistme.junio.cc/v1/api',
       //     changeOrigin: true,
       //     pathRewrite: {
       //       '^/v1/api': '/v1/api'
@@ -146,6 +150,7 @@ module.exports = configure(function (/* ctx */) {
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
     framework: {
+      autoImportComponentCase: 'combined',
       config: {
         // brand: {
           // primary: '#5c0969',
@@ -161,11 +166,10 @@ module.exports = configure(function (/* ctx */) {
           // warning: '#f2b611'
         // }
       },
-
+      type: 'https',
       cssAddon: true,
       // iconSet: 'material-icons', // Quasar icon set
       lang: 'pt-BR', // Quasar language pack
-
       // For special cases outside of where the auto-import strategy can have an impact
       // (like functional components as one of the examples),
       // you can manually specify Quasar components/directives to be available everywhere:

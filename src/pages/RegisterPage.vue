@@ -1,7 +1,10 @@
 <template>
   <q-page style="min-height: auto !important;">
-    <q-form ref="myForm" class="row justify-center" @submit.prevent="handleRegister">
+    <!-- FORMULÁRIO DE AUTO REGISTRO -->
+    <q-form ref="myForm" class="row justify-center" @submit.prevent="methods.autoRegister">
+      <!-- TITULO DA PAGINA -->
       <p class="col-12 text-h5 text-bold text-center box-title">Criar nova conta</p>
+      <!-- PASSO 1 - DADOS DE IDENTIFICACAO -->
         <q-stepper
           v-model="step"
           vertical
@@ -18,10 +21,10 @@
             icon="person"
             :done="step > 1"
           >
-
+            <!-- CAMPO NOME DO CONTATO -->
             <q-input
               label="Seu nome"
-              v-model="form.name"
+              v-model="form.contact_name"
               filled
               lazy-rules
               dense
@@ -34,6 +37,7 @@
               </template>
             </q-input>
 
+            <!-- CAMPO NOME DA EMPRESA -->
             <q-input
               label="Nome da empresa"
               v-model="form.contact_name"
@@ -47,6 +51,8 @@
                 <q-icon name="business" />
               </template>
             </q-input>
+
+            <!-- CAMPO RAMO DE ATIVIDADE / BUSINESS SECTOR -->
             <q-select
               label="Ramo de atividade"
               v-model="form.business_sector"
@@ -60,18 +66,21 @@
                 <q-icon name="category" />
               </template>
             </q-select>
+
+            <!-- BOTÃO CONTINUAR -->
             <q-stepper-navigation class="q-pt-sm">
-              <q-btn @click="nextStep" color="primary" label="Continuar" class="float-right" unelevated />
+              <q-btn @click="methods.nextStep" color="primary" label="Continuar" class="float-right" unelevated />
             </q-stepper-navigation>
           </q-step>
 
+          <!-- PASSO 2 - DADOS DE CONTATO -->
           <q-step
             :name="2"
             title="Dados de contato"
             icon="phone_iphone"
             :done="step > 2"
           >
-
+            <!-- CAMPO EMAIL -->
             <q-input
               label="Email"
               v-model="form.email"
@@ -90,6 +99,7 @@
               </template>
             </q-input>
 
+            <!-- CAMPO CELULAR -->
             <q-input
               label="Celular"
               v-model="form.phone"
@@ -106,19 +116,21 @@
               </template>
             </q-input>
 
+            <!-- BOTÕES VOLTAR E CONTINUAR -->
             <q-stepper-navigation class="q-pt-sm d-flex">
-              <q-btn flat @click="prevStep" color="secondary" label="Voltar" />
-              <q-btn @click="nextStep" color="primary" label="Continuar" class="float-right" unelevated />
+              <q-btn flat @click="methods.prevStep" color="secondary" label="Voltar" />
+              <q-btn @click="methods.nextStep" color="primary" label="Continuar" class="float-right" unelevated />
             </q-stepper-navigation>
           </q-step>
 
+          <!-- PASSO 3 - SENHAS DE ACESSO -->
           <q-step
             :name="3"
             title="Senha de acesso"
             icon="lock"
             :done="step > 3"
           >
-
+            <!-- CAMPO SENHA -->
             <q-input
               label="Senha"
               v-model="form.password"
@@ -144,6 +156,7 @@
               </template>
             </q-input>
 
+            <!-- CAMPO REPITA A SENHA -->
             <q-input
               label="Repita a senha"
               v-model="form.password2"
@@ -170,49 +183,28 @@
               </template>
             </q-input>
 
+            <!-- BOTÕES VOLTAR E CADASTRAR -->
             <q-stepper-navigation class="q-pt-sm">
-              <q-btn flat @click="prevStep" color="secondary" label="Voltar" />
+              <q-btn flat @click="methods.prevStep" color="secondary" label="Voltar" />
               <q-btn type="submit" color="primary" label="Cadastrar" class="float-right" unelevated />
             </q-stepper-navigation>
           </q-step>
         </q-stepper>
-
-        <div class="full-width q-mb-lg" style="display:none;">
-          <q-btn
-            label="Register"
-            color="primary"
-            class="full-width"
-            unelevated
-            type="submit"
-          />
-        </div>
-        <div class="full-width q-gutter-y-sm">
-          <q-btn
-            label="Voltar para o login"
-            color="secondary"
-            class="full-width"
-            flat
-            icon="undo"
-            size="md"
-            :to="{ name: 'login' }"
-          />
-        </div>
     </q-form>
   </q-page>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import useNotify from 'src/composables/useNotify'
-import useVibratePhone from '../composables/useVibratePhone'
-import useLoading from '@/composables/useLoading'
 import { QForm } from 'quasar'
-// import { authStore } from '@/stores/auth-store'
+import { $vibrate, $loading, $notify } from '@/composables'
+import { $stores } from '@/stores/all'
+import { IAuthResponse } from '@/interfaces'
+import { useRouter } from 'vue-router'
 
-const { showLoading } = useLoading()
+const router = useRouter()
+
 const pwsVisible = ref(false)
-const { notifyError, notifySuccess } = useNotify()
-const { vibrateForAction, vibrateForError, vibrateForSuccess } = useVibratePhone()
 const step = ref(1)
 const myForm = ref<QForm|null>(null)
 const form = ref({
@@ -224,38 +216,32 @@ const form = ref({
   phone: '',
   password2: ''
 })
-const nextStep = () => {
-  if (myForm.value === null) return
-  myForm.value.validate().then((success: boolean) => {
-    if (success) {
-      step.value++
-      vibrateForAction()
-    } else {
-      notifyError('Complete os campos antes de continuar.')
-    }
-  })
-}
-const prevStep = () => {
-  step.value--
-  vibrateForAction()
-}
-const handleRegister = async () => {
-  try {
-    showLoading()
-    // authStore().autoRegister(form.value).then(() => {
-    //   hideLoading()
-    //   // router.push({ name: 'me' })
-    // })
 
-    // notifySuccess()
-    vibrateForSuccess()
-    // router.push({
-    //   name: 'email-confirmation',
-    //   query: { email: form.value.email }
-    // })
-  } catch (error) {
-    vibrateForError()
-    // notifyError(error.message)
+const methods = {
+  nextStep () {
+    if (myForm.value === null) return
+    myForm.value.validate().then((success: boolean) => {
+      if (success) {
+        step.value++
+        $vibrate.action()
+      } else {
+        $notify.error('Complete os campos antes de continuar.')
+      }
+    })
+  },
+  prevStep () {
+    step.value--
+    $vibrate.action()
+  },
+  autoRegister () {
+    $loading.show()
+    $stores.auth.autoRegister(form.value).then(() => {
+      $loading.hide()
+      $notify.success('Acesso realizado com sucesso')
+      router.push({ name: 'home' })
+    }).catch(() => {
+      $notify.error('Erro ao tentar realizar o acesso')
+    })
   }
 }
 </script>

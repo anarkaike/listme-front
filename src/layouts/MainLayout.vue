@@ -1,36 +1,80 @@
 <template>
-  <q-layout view="lHh Lpr lFf" class="ctn-main-layout">
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-      :width="250"
-    >
-      <q-list>
-        <q-item-label class="title"
-          header
-        >
+  <q-layout class="ctn-main-layout">
+    <!-- LATERAL ESQUERDA - MENU -->
+    <q-drawer v-model="sideBars.left" show-if-above bordered :width="250">
+
+      <q-list  class="text-blue-grey-14 ctn-menu-main">
+        <!-- MENU - TITULO -->
+        <q-item-label class="title" header>
           Menu
         </q-item-label>
-        <q-item clickable :to="{ name: 'admin' }">
+
+        <!-- MENU ITEM - ADMIN -->
+        <q-item clickable :to="{ name: 'home' }" active-class="text-purple-14">
           <q-item-section avatar>
-            <q-icon name="admin_panel_settings" />
+            <icon icon="ion:home" />
+          </q-item-section>
+          <q-item-section>Home</q-item-section>
+        </q-item>
+
+        <!-- MENU ITEM - ADMIN -->
+        <q-item clickable :to="{ name: 'admin' }" active-class="text-purple-14">
+          <q-item-section avatar>
+            <icon icon="eos-icons:admin-outlined" />
           </q-item-section>
           <q-item-section>Administradores</q-item-section>
         </q-item>
-        <q-item clickable v-close-popup @click="handleFullscren">
+
+        <!-- MENU ITEM CONVIDADOS -->
+        <q-item clickable v-close-popup @click="toggle">
           <q-item-section avatar>
-            <q-icon name="people" />
+            <icon icon="fontisto:person" />
           </q-item-section>
           <q-item-section>Usuários</q-item-section>
         </q-item>
-        <q-item clickable v-close-popup @click="handleFullscren">
+
+        <!-- MENU ITEM RECEPCIONISTA -->
+        <q-item clickable v-close-popup @click="toggle">
           <q-item-section avatar>
-            <q-icon name="calendar_month" />
+            <icon icon="bi:person-badge-fill" />
+          </q-item-section>
+          <q-item-section>Recepcionista</q-item-section>
+        </q-item>
+
+        <!-- MENU ITEM PROMOTERS -->
+        <q-item clickable v-close-popup @click="toggle">
+          <q-item-section avatar>
+            <icon icon="fluent:person-voice-20-filled" />
+          </q-item-section>
+          <q-item-section>Promoters</q-item-section>
+        </q-item>
+
+        <!-- MENU ITEM EVENTOS -->
+        <q-item clickable v-close-popup @click="toggle">
+          <q-item-section avatar>
+            <icon icon="tabler:calendar-star" />
           </q-item-section>
           <q-item-section>Eventos</q-item-section>
         </q-item>
-        <q-item clickable v-close-popup @click="handleLogout">
+
+        <!-- MENU ITEM - EVENTOS -->
+        <q-item clickable v-close-popup @click="toggle">
+          <q-item-section avatar>
+            <icon icon="material-symbols:patient-list" />
+          </q-item-section>
+          <q-item-section>Lista de Eventos</q-item-section>
+        </q-item>
+
+        <!-- MENU ITEM CONVIDADOS -->
+        <q-item clickable v-close-popup @click="toggle">
+          <q-item-section avatar>
+            <icon icon="fluent:person-heart-24-filled" />
+          </q-item-section>
+          <q-item-section>Nomes e Convidados</q-item-section>
+        </q-item>
+
+        <!-- MENU ITEM - SAIR -->
+        <q-item clickable v-close-popup @click="methods.logout">
           <q-item-section avatar>
             <q-icon name="door_front" />
           </q-item-section>
@@ -38,51 +82,53 @@
         </q-item>
       </q-list>
     </q-drawer>
-    <q-drawer
-      v-model="rightDrawerOpen"
-      bordered
-      :width="250"
-      side="right"
-    >
+
+    <!-- LATERAL DIREITA - VER O QUE SERA AINDA -->
+    <q-drawer v-model="sideBars.right" bordered :width="250" side="right">
+      <!-- TITULO -->
       <q-list>
-        <q-item-label class="title"
-          header
-        >
+        <q-item-label class="title" header>
           Informações & Ajuda
         </q-item-label>
       </q-list>
     </q-drawer>
+
+    <!-- TOPO -->
     <q-header>
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
-        <dark-mode-toogle />
+        <q-btn flat dense round icon="menu" aria-label="Menu" @click="methods.sideBase.toogleLeft" />
+<!--        <dark-mode-toogle />-->
 
+        <!-- TOPO - LOGO -->
+        <q-toolbar-title>
+          {{$stores.auth.$state.saasClient.company_name}}
+        </q-toolbar-title>
         <q-toolbar-title>
           <CircularLogo />
         </q-toolbar-title>
 
-        <q-btn-dropdown :label="authStore().$state.user.name" flat rounded icon="person" class="btn-left-top-menu" style="text-transform: none;">
+        <!-- TOPO BOTÃO MENU DROPDOWN DIREITO -->
+        <q-btn-dropdown :label="$stores.auth.$state?.user?.name" flat rounded icon="person" class="btn-left-top-menu" style="text-transform: none;">
           <q-list class="list-left-top-menu" dense>
+
+            <!-- LINK MEEU PERFIL -->
             <q-item clickable>
               <q-item-section avatar>
                 <q-icon name="alternate_email" />
               </q-item-section>
               <q-item-section>Meu Perfil</q-item-section>
             </q-item>
-            <q-item clickable v-close-popup @click="handleFullscren">
+
+            <!-- LINK MENU FULLSCREEN -->
+            <q-item clickable v-close-popup @click="enter">
               <q-item-section avatar>
                 <q-icon name="fullscreen" />
               </q-item-section>
               <q-item-section>Fullscreen</q-item-section>
             </q-item>
-            <q-item clickable v-close-popup @click="handleLogout">
+
+            <!-- LINK MENU SAIR -->
+            <q-item clickable v-close-popup @click="methods.logout">
               <q-item-section avatar>
                 <q-icon name="door_front" />
               </q-item-section>
@@ -90,16 +136,20 @@
             </q-item>
           </q-list>
         </q-btn-dropdown>
+
+        <!-- BOTÃO ABRIR LATERAL DIREITA -->
         <q-btn
           flat
           dense
           round
           icon="question_mark"
           aria-label="Menu"
-          @click="toggleRightDrawer"
+          @click="methods.sideBase.toogleRight"
         />
       </q-toolbar>
     </q-header>
+
+    <!-- CONTEUDO -->
     <q-page-container>
       <div>
         <router-view v-slot="{ Component }">
@@ -114,9 +164,10 @@
       </div>
     </q-page-container>
 
+    <!-- RODAPE -->
     <q-footer>
       <q-toolbar>
-        <q-toolbar-title>{{rightDrawerOpen}}</q-toolbar-title>
+        <q-toolbar-title></q-toolbar-title>
       </q-toolbar>
     </q-footer>
 
@@ -124,65 +175,45 @@
 </template>
 
 <script lang="ts" setup>
-// import EssentialLink from 'components/EssentialLink.vue'
-import DarkModeToogle from 'components/DarkModeToggle.vue'
+// import DarkModeToogle from 'components/DarkModeToggle.vue'
 import { CircularLogo } from '@/components'
 import { useFullscreen } from '@vueuse/core'
-
-// const linksList = [
-//   {
-//     title: 'Home',
-//     caption: '',
-//     icon: 'mdi-home',
-//     routeName: 'me'
-//   }
-// ]
-
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
-import { authStore } from '@/stores/auth-store'
-import useLoading from '@/composables/useLoading'
+import { $stores } from '@/stores/all'
+
+// CONSTANTES
 const { toggle } = useFullscreen()
-// import useAuthUser from 'src/composables/UseAuthUser'
-// import useApi from 'src/composables/UseApi'
-
-const leftDrawerOpen = ref(false)
-const rightDrawerOpen = ref(false)
-const { showLoading, hideLoading } = useLoading()
-
 const $q = useQuasar()
 const router = useRouter()
-// const { logout } = useAuthUser()
-// const { getBrand } = useApi()
-
-onMounted(() => {
-  // getBrand()
+const sideBars = ref<{left: boolean, right: boolean}>({
+  left: false,
+  right: false
 })
 
-const handleLogout = async () => {
-  $q.dialog({
-    title: 'Sair do sistema?',
-    message: 'Deseja realmente encerrar seu acesso?',
-    cancel: true,
-    persistent: true
-  }).onOk(async () => {
-    showLoading('Saindo...')
-    authStore().logout().then(() => {
-      hideLoading()
-      router.push({ name: 'login' })
+// METODOS
+const methods = {
+  sideBase: {
+    toogleLeft () {
+      sideBars.value.left = !sideBars.value.left
+    },
+    toogleRight () {
+      sideBars.value.right = !sideBars.value.right
+    }
+  },
+  async logout () {
+    $q.dialog({
+      title: 'Sair do sistema?',
+      message: 'Deseja realmente encerrar seu acesso?',
+      cancel: true,
+      persistent: true
+    }).onOk(async () => {
+      $stores.auth.logout().then(() => {
+        router.push({ name: 'login' })
+      })
     })
-  })
-}
-
-const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = !leftDrawerOpen.value
-}
-const toggleRightDrawer = () => {
-  rightDrawerOpen.value = !rightDrawerOpen.value
-}
-const handleFullscren = () => {
-  toggle()
+  }
 }
 </script>
 <style lang="scss">
@@ -193,7 +224,7 @@ const handleFullscren = () => {
   --title-bg-drawer: rgba(0, 0, 0, 0.4);
 }
 .ctn-main-layout {
-  background-image: url('./src/assets/bg.jpg');
+  background-image: url('/imgs/bg.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: top center;
@@ -241,7 +272,7 @@ const handleFullscren = () => {
   // MENU
   .q-drawer {
     //border: 5px solid red !important;
-    background-color: var(--bg-transparent-3) !important;
+    background-color: var(--bg-transparent-5) !important;
     .title {
       background-color: var(--title-bg-drawer);
       border-bottom: 1px solid rgba(110, 0, 132, 0.3);
@@ -251,7 +282,7 @@ const handleFullscren = () => {
       padding: 10px;
     }
     &.q-drawer--left {
-      margin-top: 60px;
+      //margin-top: 60px;
       margin-left: 0px;
       margin-bottom: 60px;
 
@@ -326,5 +357,25 @@ const handleFullscren = () => {
 }
 .list-left-top-menu {
   color: var(--colors-purple-4);
+}
+.q-router-link--exact-active {
+  background-color: #eceaed;
+  box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.1);
+  * {
+    color: #853196;
+  }
+}
+.ctn-menu-main {
+  .iconify {
+    transition: transform linear 0.2s;
+  }
+  .q-item {
+    &:hover {
+      .iconify {
+        transition: transform linear 0.1s;
+        transform: scale(1.2);
+      }
+    }
+  }
 }
 </style>
