@@ -13,4 +13,7 @@ export enum EPermissionsLabels {
 
   delete = 'Deletar registro',
   deleteNamed = 'Deletar %s',
+
+  justMine = 'Gerenciar apenas meus registros',
+  justMineNamed = 'Gerenciar Apenas meus %s',
 }

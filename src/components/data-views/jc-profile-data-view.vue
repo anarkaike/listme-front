@@ -17,7 +17,7 @@
           <q-item class="q-pa-sm q-pa-md-md">
             <q-item-section>
               <q-item-label class="text-caption text-weight-light">Descrição:</q-item-label>
-              <q-item-label class="text-body2 text-weight-medium">{{data.description}}</q-item-label>
+              <q-item-label class="text-body2 text-weight-medium"><div v-html="data.description" /></q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
@@ -50,10 +50,10 @@
       <div v-if="data">
         <span v-for="(permission, kPermission) in data.permissions" :key="permission.id">
             <div v-if="kPermission===0 || data.permissions[kPermission-1].model!==permission.model" class="q-mt-md">
-              <strong>{{ toEModelsLabels[permission.name.split(':')[0]] }}</strong> :
+              <strong>{{ toEModelsLabels[permission.name.split(':')[0]]??permission.name.split(':')[0] }}</strong> :
             </div>
             <q-chip>
-              {{ toEPermissionsLabels[permission.name.split(':')[1]] }}
+              {{ toEPermissionsLabels[permission.name.split(':')[1]]??permission.name.split(':')[1] }}
             </q-chip>
         </span>
       </div>

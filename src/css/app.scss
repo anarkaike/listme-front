@@ -172,3 +172,84 @@
     padding-right: 5px;
   }
 }
+
+.q-tab {
+  -webkit-border-top-left-radius: 10px;
+  -webkit-border-top-right-radius: 10px;
+  -moz-border-radius-topleft: 10px;
+  -moz-border-radius-topright: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+
+// MENU NAS SIDEBARS
+
+.jc-right-sidebar,
+.jc-left-sidebar {
+  $border-radius-menu: 10px;
+  .q-drawer {
+    //border: 5px solid red !important;
+    background-color: var(--bg-transparent-5) !important;
+    .title {
+      background-color: var(--title-bg-drawer);
+      border-bottom: 1px solid rgba(110, 0, 132, 0.3);
+      font-weight: bold;
+      color: var(--primary) !important;
+      text-align: center;
+      padding: 10px;
+    }
+    &.q-drawer--left {
+      //margin-top: 60px;
+      margin-left: 0px;
+//       margin-bottom: 0px;
+
+      -webkit-border-top-right-radius: $border-radius-menu;
+      -webkit-border-bottom-right-radius: $border-radius-menu;
+      -moz-border-radius-topright: $border-radius-menu;
+      -moz-border-radius-bottomright: $border-radius-menu;
+      border-top-right-radius: $border-radius-menu;
+      border-bottom-right-radius: $border-radius-menu;
+
+      .title {
+        -webkit-border-top-right-radius: 10px;
+        -moz-border-radius-topright: 10px;
+        border-top-right-radius: 10px;
+      }
+    }
+    &.q-drawer--right {
+      margin-right: 0px;
+
+      -webkit-border-top-left-radius: 10px;
+      -webkit-border-bottom-left-radius: 10px;
+      -moz-border-radius-topleft: 10px;
+      -moz-border-radius-bottomleft: 10px;
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+
+      .title {
+        -webkit-border-top-left-radius: 10px;
+        -moz-border-radius-topleft: 10px;
+        border-top-left-radius: 10px;
+      }
+    }
+    &.q-drawer--mobile {
+      margin-top: 70px;
+      margin-bottom: 70px;
+    }
+  }
+
+  .q-drawer--mobile,
+  .q-drawer--mobile {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+  }
+}
+
+.body--light {
+  --title-bg-drawer: rgba(255, 255, 255, 0.4);
+}
+.body--dark {
+  --title-bg-drawer: rgba(0, 0, 0, 0.4);
+}
+

@@ -106,9 +106,7 @@ const methods = {
     }
   },
   async login () {
-    $stores.auth.login(form.value.email, form.value.password).then(() => {
-      router.push({ name: 'home' })
-    })
+    $stores.auth.login(form.value.email, form.value.password, router)
   }
 }
 </script>

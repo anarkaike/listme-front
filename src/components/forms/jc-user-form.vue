@@ -218,7 +218,7 @@ const props = withDefaults(defineProps<{
   // Geral
   user?: IUser|null
 }>(), {})
-const originalUser : Ref<IUser> = ref<IUser>(props.user as IUser)
+// const originalUser : Ref<IUser> = ref<IUser>(props.user as IUser)
 const user: Ref<IUser> = ref<IUser>(props.user ?? {
   status: 'active',
   name: 'Junio',

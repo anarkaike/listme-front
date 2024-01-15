@@ -32,7 +32,7 @@ const routes = [
     path: '/admin',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', name: 'admin', component: () => import('pages/Admin/AdminHome.vue') }
+      { path: '', name: 'admin', component: () => import('pages/AdminPage.vue') }
       // { path: 'category', name: 'category', component: () => import('pages/category/List.vue') },
       // { path: 'form-category/:id?', name: 'form-category', component: () => import('pages/category/Form.vue') },
       // { path: 'product', name: 'product', component: () => import('pages/product/List.vue') },

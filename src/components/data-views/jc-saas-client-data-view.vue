@@ -53,8 +53,8 @@
       <q-list bordered >
         <!-- INFO LOGO -->
         <q-item class="q-pa-none">
-          <q-item-section v-if="data.logo && data.logo!=='' && typeof data.logo==='string'">
-            <q-img :src="data.logo" fit="contain" style="max-height: 200px;" />
+          <q-item-section v-if="data.url_logo && data.url_logo!=='' && typeof data.url_logo==='string'">
+            <q-img :src="data.url_logo" fit="contain" style="max-height: 200px;" />
           </q-item-section>
           <q-item-section v-else class="text-body text-grey-6 text-center">
             <q-item-label>Nenhuma <strong>logo</strong> cadastrada ainda</q-item-label>

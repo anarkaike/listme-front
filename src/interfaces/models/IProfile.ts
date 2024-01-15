@@ -3,6 +3,7 @@ import type { IUser, IPermission } from '@/interfaces'
 export default interface IProfile {
   id?: number | null;
   name?: string | null;
+  description?: string | null;
   permissions?: IPermission[] | null;
   created_at?: string | null;
   created_by?: string | null;

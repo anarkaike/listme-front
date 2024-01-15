@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
-import { LocalStorage } from 'quasar'
+import { Dialog, LocalStorage } from 'quasar'
 import { $api } from '@/services/api'
 import { IAuthResponse, ISaasClient, IUser } from '@/interfaces'
 import { $notify, $loading } from '@/composables'
+import { Router } from 'vue-router'
 
 export const authStore = defineStore('authStore', {
   state: () => ({
@@ -17,7 +18,14 @@ export const authStore = defineStore('authStore', {
     }
   },
   actions: {
-    async login (email: string, password: string): Promise<IAuthResponse> {
+    /**
+     * Login - Gerar token de acesso na API e criar sessão do usuário
+     *
+     * @param email
+     * @param password
+     * @param router - Se passar o router, um redirect para /login é feito automaticamente apos a limpesa da sessão
+     */
+    async login (email: string, password: string, router: Router|null = null): Promise<IAuthResponse> {
       $loading.show('Realizando acesso...')
       try {
         // Chamando login da API e verificando sucesso
@@ -37,6 +45,7 @@ export const authStore = defineStore('authStore', {
 
         $loading.hide()
         $notify.success('Acesso realizado com sucesso')
+        if (router) await router.push({ name: 'home' })
         return res
       } catch (err) {
         $loading.hide()
@@ -47,7 +56,13 @@ export const authStore = defineStore('authStore', {
         throw err
       }
     },
-    async autoRegister (user: IUser): Promise<IAuthResponse> {
+    /**
+     * AutoRegister - Auto cadastro feito pelo cliete que cai na landing page. Cria sessão apos realizado
+     *
+     * @param user
+     * @param router - Se passar o router, um redirect para /login é feito automaticamente apos a limpesa da sessão
+     */
+    async autoRegister (user: IUser, router: Router|null = null): Promise<IAuthResponse> {
       $loading.show('Realizando cadastro...')
       try {
         // Chamando autoRegister da API
@@ -67,6 +82,7 @@ export const authStore = defineStore('authStore', {
 
         $loading.hide()
         $notify.success('Cadastro realizado com sucesso')
+        if (router) await router.push({ name: 'home' })
         return res
       } catch (err) {
         $loading.hide()
@@ -80,27 +96,39 @@ export const authStore = defineStore('authStore', {
         throw err
       }
     },
-    async logout (): Promise<boolean> {
-      $loading.show('Encerrando acesso...')
+    /**
+     * Logout - Encerramento da sessão do usuário na API e limpeza da sessão
+     *
+     * @param router - Se passar o router, um redirect para /login é feito automaticamente apos a limpesa da sessão
+     */
+    async logout (router: Router|null = null): Promise<void> {
       try {
-        // Resetando estado
-        this.$patch({
-          user: null,
-          user_impersonation: null,
-          token: null
+        Dialog.create({
+          title: 'Sair do sistema?',
+          message: 'Deseja realmente encerrar seu acesso?',
+          cancel: true,
+          persistent: true
+        }).onOk(async () => {
+          $loading.show('Encerrando acesso...')
+          // Resetando estado
+          this.$patch({
+            user: null,
+            user_impersonation: null,
+            token: null
+          })
+
+          // Chamando logout da api e verificando sucesso
+          const res = await $api.auth.logout()
+          if (!res.success) {
+            console.error('Erro no request logout: ', res)
+            throw new Error(res.message)
+          }
+
+          $loading.hide()
+          $notify.success('Acesso encerrado com sucesso')
+          LocalStorage.clear()
+          if (router) await router.push({ name: 'login' })
         })
-
-        // Chamando logout da api e verificando sucesso
-        const res = await $api.auth.logout()
-        if (!res.success) {
-          console.error('Erro no request logout: ', res)
-          throw new Error(res.message)
-        }
-
-        $loading.hide()
-        $notify.success('Acesso encerrado com sucesso')
-        LocalStorage.clear()
-        return true
       } catch (err) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore

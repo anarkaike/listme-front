@@ -234,14 +234,7 @@ const methods = {
     $vibrate.action()
   },
   autoRegister () {
-    $loading.show()
-    $stores.auth.autoRegister(form.value).then(() => {
-      $loading.hide()
-      $notify.success('Acesso realizado com sucesso')
-      router.push({ name: 'home' })
-    }).catch(() => {
-      $notify.error('Erro ao tentar realizar o acesso')
-    })
+    $stores.auth.autoRegister(form.value, router)
   }
 }
 </script>

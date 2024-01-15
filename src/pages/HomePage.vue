@@ -21,7 +21,7 @@ import { $stores } from '@/stores/all'
 import { IEvent } from '@/interfaces'
 import { JcDialog, JcEventDataView } from '@/components'
 
-const openDialog = ref(true)
+const openDialog = ref(false)
 const data = ref<IEvent|null>(null)
 
 onBeforeMount(() => {

@@ -1,11 +1,15 @@
-import type { IUser } from '@/interfaces'
+import type { ISaasClientGeneralSettings, IUser } from '@/interfaces'
 
 export default interface ISaasClient {
   id?: number | null;
   contact_name?: string | null;
   company_name?: string | null;
-  email?: string | null;
+  domain_api?: string | null;
+  domain_front?: string | null;
   phone?: string | null;
+  email?: string | null;
+  business_sector?: string | null;
+  general_settings?: ISaasClientGeneralSettings | null;
   url_logo?: string | null;
   url_logo_up?: File | null;
   observation?: string | null;

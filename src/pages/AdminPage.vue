@@ -30,9 +30,14 @@
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { DasboardTab, AdminsTab, ProfilesTab, SaasClientsTab } from './tabs'
+import {
+  DasboardTab,
+  AdminsTab,
+  ProfilesTab,
+  SaasClientsTab
+} from './Admin'
 
-const pageTab = ref('admins')
+const pageTab = ref('saasClients')
 </script>
 <style lang="scss" scoped>
 .q-tab-panels {

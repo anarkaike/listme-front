@@ -17,7 +17,7 @@
         <!-- ABA PRINCIPAL -->
         <q-tab name="main">
           <div class="row q-px-sm">
-            <icon icon="streamline:news-paper" />
+            <icon icon="streamline:news-paper" class="only-mobile" />
             <span class="only-desktop text-subtitle2 q-ml-sm">Geral</span>
           </div>
         </q-tab>
@@ -25,7 +25,7 @@
         <!-- ABA LOCAL -->
         <q-tab name="location">
           <div class="row q-px-sm">
-            <icon icon="typcn:location-outline" />
+            <icon icon="typcn:location-outline" class="only-mobile" />
             <span class="only-desktop text-subtitle2 q-ml-sm">Local</span>
           </div>
         </q-tab>
@@ -33,7 +33,7 @@
         <!-- ABA INFO -->
         <q-tab name="additionalInfo">
           <div class="row q-px-sm">
-            <icon icon="icon-park-outline:more-two" />
+            <icon icon="icon-park-outline:more-two" class="only-mobile" />
             <span class="only-desktop text-subtitle2 q-ml-sm">Infos</span>
           </div>
         </q-tab>
@@ -41,7 +41,7 @@
         <!-- ABA DESCRIÇÃO -->
         <q-tab name="description">
           <div class="row q-px-sm">
-            <icon icon="fluent:text-description-24-filled" />
+            <icon icon="fluent:text-description-24-filled" class="only-mobile" />
             <span class="only-desktop text-subtitle2 q-ml-sm">Descrição</span>
           </div>
         </q-tab>
@@ -49,8 +49,16 @@
         <!-- ABA BANNER -->
         <q-tab name="banner" class="only-mobile">
           <div class="row q-px-sm">
-            <icon icon="akar-icons:image" />
+            <icon icon="akar-icons:image" class="only-mobile" />
             <span class="only-desktop text-subtitle2 q-ml-sm">Banner</span>
+          </div>
+        </q-tab>
+
+        <!-- ABA LISTAS E CONVIDADOS -->
+        <q-tab name="eventLists">
+          <div class="row q-px-sm">
+            <icon icon="material-symbols:patient-list" class="only-mobile" />
+            <span class="only-desktop text-subtitle2 q-ml-sm">LISTAS</span>
           </div>
         </q-tab>
       </q-tabs>
@@ -85,6 +93,11 @@
           <JcEventBanner :data="data" />
         </q-tab-panel>
 
+        <!-- CONTEUDO ABA BANNER -->
+        <q-tab-panel name="eventLists">
+          <JcEventLists :data="data" />
+        </q-tab-panel>
+
       </q-tab-panels>
 
     </div>
@@ -100,7 +113,14 @@
 import { defineProps, withDefaults, ref, watchEffect } from 'vue'
 import type { IEvent } from '@/interfaces'
 import { useHumanize } from '@/composables'
-import { JcEventMain, JcEventLocal, JcEventInfo, JcEventDescription, JcEventBanner } from './details'
+import {
+  JcEventMain,
+  JcEventLocal,
+  JcEventInfo,
+  JcEventDescription,
+  JcEventBanner,
+  JcEventLists
+} from './details'
 
 // CONSTANTES ---------------------------------------------------
 const { humanizeDuration, humanizeDatetime } = useHumanize()
