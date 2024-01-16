@@ -16,12 +16,14 @@ export const eventsStore = defineStore('eventsStore', {
   actions: {
     async listAll (): Promise<IEvent[]> {
       try {
-        // Buscando eventos na API
-        const events: IEvent[] = await $api.events.listAll()
-        if (events.length === 0) {
-          $notify.info('Nenhum evento foi encontrado')
+        // Buscando na store antes deusuarios na API
+        if (this.events.length === 0) {
+          const events: IEvent[] = await $api.events.listAll()
+          if (events.length === 0) {
+            $notify.info('Nenhum evento foi encontrado')
+          }
+          this.$patch({ events })
         }
-        this.$patch({ events })
 
         return this.events
       } catch (err) {

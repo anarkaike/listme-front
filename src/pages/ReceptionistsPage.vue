@@ -23,13 +23,13 @@ const methods = {
     return users.filter((user: IUser) => {
       return !user.is_super_admin &&
       (
-        user.profile_ids?.includes(7)
+        user.profile_ids?.includes(6)
       )
     })
   },
   filterProfilesOptions (options: IOption[]) {
     return options.filter((option: IOption) => {
-      return option.id === 7
+      return option.id === '6'
     })
   }
 }

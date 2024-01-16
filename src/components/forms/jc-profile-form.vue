@@ -3,29 +3,53 @@
     <div class="col-grow q-pr-md-md q-px-xs q-mb-lg col-md-3" v-if="row.url_photo && row.url_photo!=='' && typeof row.url_photo==='string'">
       <q-img :src="row.url_photo" style="max-height: 200px;" fit="contain" />
     </div>
-    <q-form class="col-grow" ref="myForm" @submit.prevent="methods.save" :class="{ 'col-md-9':row.url_photo && row.url_photo!=='' }">
-      <div class="row">
-        <!-- CAMPO NAME -->
-        <div class="col-12">
-          <q-input
-            filled
-            v-model="row.name"
-            label="Nome"
-            lazy-rules
-            dense
-            :rules="[ val => val && val.length > 0 || 'Digite o nome']"
-          >
-            <template #prepend>
-              <q-icon name="badge" />
-            </template>
-          </q-input>
-        </div>
-        <!-- CAMPO DESCRIÇÃO -->
-        <div class="col-12">
-          <q-editor ref="editorRef"
-            v-model="row.description"
-            :dense="$q.screen.lt.md"
-            :toolbar="[
+
+    <q-tabs
+      v-model="tab"
+      dense
+      class="text-grey"
+      active-color="primary"
+      indicator-color="primary"
+      align="justify"
+      narrow-indicator
+    >
+      <q-tab name="profile" label="Perfil" />
+      <q-tab name="permissions" label="Permissões" />
+    </q-tabs>
+
+    <q-separator />
+
+    <q-tab-panels v-model="tab" animated>
+      <q-tab-panel name="profile">
+        <div class="text-h6">Mails</div>
+
+        <!-- FORMULÁRIO PERFIL -->
+
+        <q-form class="col-grow" ref="myForm" @submit.prevent="methods.save" :class="{ 'col-md-9':row.url_photo && row.url_photo!=='' }">
+          <div class="row">
+
+            <!-- CAMPO NAME -->
+            <div class="col-12">
+              <q-input
+                filled
+                v-model="row.name"
+                label="Nome"
+                lazy-rules
+                dense
+                :rules="[ val => val && val.length > 0 || 'Digite o nome']"
+              >
+                <template #prepend>
+                  <q-icon name="badge" />
+                </template>
+              </q-input>
+            </div>
+
+            <!-- CAMPO DESCRIÇÃO COM EDITOR -->
+            <div class="col-12">
+              <q-editor ref="editorRef"
+                        v-model="row.description"
+                        :dense="$q.screen.lt.md"
+                        :toolbar="[
               [
                 'bold',
                 'italic',
@@ -104,7 +128,7 @@
               ['print', 'fullscreen']
               // ['viewsource']
             ]"
-            :fonts="{
+                        :fonts="{
               arial: 'Arial',
               arial_black: 'Arial Black',
               comic_sans: 'Comic Sans MS',
@@ -114,22 +138,50 @@
               times_new_roman: 'Times New Roman',
               verdana: 'Verdana'
             }"
-          />
-        </div>
-      </div>
+              />
+            </div>
 
-      <!-- BOTÕES SALVAR E CANCELAR -->
-      <div class="row q-mt-lg sticky-buttons">
-        <q-space class="col-auto" />
-        <q-btn label="Cancelar" @click="methods.cancel" color="primary" flat class="q-mr-sm" />
-        <q-btn :label="row.id?'Atualizar':'Cadastrar'" type="submit" color="primary"/>
-      </div>
-    </q-form>
+          </div>
+
+          <!-- BOTÕES SALVAR E CANCELAR -->
+          <div class="row q-mt-lg sticky-buttons">
+            <q-space class="col-auto" />
+            <q-btn label="Cancelar" @click="methods.cancel" color="primary" flat class="q-mr-sm" />
+            <q-btn :label="row.id?'Atualizar':'Cadastrar'" type="submit" color="primary"/>
+          </div>
+        </q-form>
+      </q-tab-panel>
+
+      <q-tab-panel name="permissions">
+        <div class="text-h6">Permissões do Perfil {{row.name}}</div>
+
+        <!-- FORMULÁRIO ADD/REM PERMISSÕES -->
+        <div class="col-md-8 col-12 q-pl-none q-pl-md-md">
+          <div class="text-h6 q-mb-sm">Permissões atribuídas a este perfil:</div>
+          <div v-if="row && permissions.length > 0">
+        <span v-for="(permission, kPermission) in permissions" :key="permission.id">
+            <div v-if="kPermission===0 || permissions[kPermission-1].model!==permission.model" class="q-mt-md">
+              <strong>{{ toEModelsLabels[permission.name.split(':')[0]]??permission.name.split(':')[0] }}</strong> :
+            </div>
+            <q-chip>
+              {{ toEPermissionsLabels[permission.name.split(':')[1]]??permission.name.split(':')[1] }}
+            </q-chip>
+        </span>
+          </div>
+          <div v-else>
+            Nenhuma permissão atribuída a este perfil
+          </div>
+        </div>
+
+      </q-tab-panel>
+    </q-tab-panels>
+
   </div>
 </template>
 
 <script lang="ts" setup>
-import { defineProps, withDefaults, Ref, ref, watchEffect } from 'vue'
+import { IPermission } from '@/interfaces'
+import { defineProps, withDefaults, Ref, ref, watchEffect, onBeforeMount } from 'vue'
 import { QForm } from 'quasar'
 import type { IProfile } from '@/interfaces'
 import { $stores } from '@/stores/all'
@@ -138,7 +190,9 @@ import { $stores } from '@/stores/all'
 const myForm = ref<QForm|null>(null)
 const props = withDefaults(defineProps<{ row?: IProfile|null }>(), {})
 const row: Ref<IProfile> = ref<IProfile>(props.row ?? { name: '', description: '' } as IProfile)
-
+const tab = ref('profile')
+const editorRef = ref(null)
+const permissions: Ref<IPermission[]> = ref([])
 const emit = defineEmits([
   'on-cancel',
   'on-submit',
@@ -146,13 +200,13 @@ const emit = defineEmits([
   'on-update',
   'close-dialog'
 ])
-const editorRef = ref(null)
 
 watchEffect(() => {
   if (typeof row.value.description === 'undefined') {
     row.value.description = ''
   }
 })
+
 // METODOS ------------------------------------------------------
 const methods = {
   save () {
@@ -170,8 +224,16 @@ const methods = {
   closeDialog () {
     row.value = {} as IProfile
     emit('close-dialog')
+  },
+  getPermissionsByProfileId (profileId: number) {
+    $stores.permissions.listByProfile(profileId).then((res: IPermission[]) => {
+      permissions.value = res
+    })
   }
 }
+onBeforeMount(() => {
+  methods.getPermissionsByProfileId(row.value.id as number)
+})
 </script>
 
 <style lang="scss" scoped>

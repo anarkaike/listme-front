@@ -47,15 +47,22 @@
     <!-- INFO PERMISSÕES -->
     <div class="col-md-8 col-12 q-pl-none q-pl-md-md">
       <div class="text-h6 q-mb-sm">Permissões atribuídas a este perfil:</div>
-      <div v-if="row && permissions.length > 0">
+      <div v-if="row && permissions.length > 0 && !loadingPermissions">
         <span v-for="(permission, kPermission) in permissions" :key="permission.id">
+          <span v-if="permission.allow">
             <div v-if="kPermission===0 || permissions[kPermission-1].model!==permission.model" class="q-mt-md">
               <strong>{{ toEModelsLabels[permission.name.split(':')[0]]??permission.name.split(':')[0] }}</strong> :
             </div>
             <q-chip>
               {{ toEPermissionsLabels[permission.name.split(':')[1]]??permission.name.split(':')[1] }}
             </q-chip>
+          </span>
         </span>
+      </div>
+      <div v-else-if="loadingPermissions" class="q-mt-lg" color="purple">
+        <QSpinnerPuff size="100" />
+        <br />
+        Carregando permissões
       </div>
       <div v-else>
         Nenhuma permissão atribuída a este perfil
@@ -82,6 +89,7 @@ const props = withDefaults(defineProps<{
 const row = ref<IProfile>(props.row)
 const emit = defineEmits<{(e: 'update:row', row: IProfile): void}>()
 const permissions: Ref<IPermission[]> = ref([])
+const loadingPermissions = ref(true)
 
 // WATCHS ---------------------------------------------------
 watchEffect(() => {
@@ -93,6 +101,7 @@ const methods = {
   getPermissionsByProfileId (profileId: number) {
     $stores.permissions.listByProfile(profileId).then((res: IPermission[]) => {
       permissions.value = res
+      loadingPermissions.value = false
     })
   }
 }

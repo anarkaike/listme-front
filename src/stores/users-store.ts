@@ -16,12 +16,14 @@ export const usersStore = defineStore('usersStore', {
   actions: {
     async listAll (): Promise<IUser[]> {
       try {
-        // Buscando usuarios na API
-        const users: IUser[] = await $api.users.listAll()
-        if (users.length === 0) {
-          $notify.info('Nenhum usuário foi encontrado')
+        // Buscando na store antes deusuarios na API
+        if (this.users.length === 0) {
+          const users: IUser[] = await $api.users.listAll()
+          if (users.length === 0) {
+            $notify.info('Nenhum usuário foi encontrado')
+          }
+          this.$patch({ users })
         }
-        this.$patch({ users })
 
         return this.users
       } catch (err) {

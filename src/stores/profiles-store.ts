@@ -16,12 +16,14 @@ export const profilesStore = defineStore('profilesStore', {
   actions: {
     async listAll (): Promise<IProfile[]> {
       try {
-        // Buscando perfis na API
-        const profiles: IProfile[] = await $api.profiles.listAll()
-        if (profiles.length === 0) {
-          $notify.info('Nenhum perfil foi encontrado')
+        // Buscando na store antes deusuarios na API
+        if (this.profiles.length === 0) {
+          const profiles: IProfile[] = await $api.profiles.listAll()
+          if (profiles.length === 0) {
+            $notify.info('Nenhum perfil foi encontrado')
+          }
+          this.$patch({ profiles })
         }
-        this.$patch({ profiles })
 
         return this.profiles
       } catch (err) {

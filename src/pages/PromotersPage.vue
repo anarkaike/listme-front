@@ -29,7 +29,7 @@ const methods = {
   },
   filterProfilesOptions (options: IOption[]) {
     return options.filter((option: IOption) => {
-      return option.id === 7
+      return option.id === '7'
     })
   }
 }

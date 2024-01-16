@@ -21,9 +21,27 @@
       <q-separator />
       <q-tab-panels v-model="pageTab" animated transition-prev="jump-left" transition-next="jump-right">
 <!--        <q-tab-panel name="home"><DasboardTab /></q-tab-panel>-->
-        <q-tab-panel name="admins"><JcUserList :filter-profiles-options="methods.filterProfilesOptions" :filter-data="methods.filterUsers" /></q-tab-panel>
-        <q-tab-panel name="profiles"><JcProfileList /></q-tab-panel>
-        <q-tab-panel name="saasClients"><JcSaasClientList /></q-tab-panel>
+        <q-tab-panel name="admins">
+          <JcUserList
+            title="Listagem de Admins"
+            singular-label="Admim"
+            plural-label="Admins"
+            :filter-profiles-options="methods.filterProfilesOptions"
+            :filter-data="methods.filterUsers"
+          />
+        </q-tab-panel>
+        <q-tab-panel name="profiles">
+          <JcProfileList
+            singular-label="Perfil"
+            plural-label="Perfis"
+          />
+        </q-tab-panel>
+        <q-tab-panel name="saasClients">
+          <JcSaasClientList
+            singular-label="Cliente SaaS"
+            plural-label="Clientes SaaS"
+          />
+        </q-tab-panel>
       </q-tab-panels>
     </q-page>
   </q-layout>

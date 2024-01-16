@@ -16,12 +16,14 @@ export const saasClientsStore = defineStore('saasClientsStore', {
   actions: {
     async listAll (): Promise<ISaasClient[]> {
       try {
-        // Buscando clintes saas na API
-        const saasClients: ISaasClient[] = await $api.saasClients.listAll()
-        if (saasClients.length === 0) {
-          $notify.info('Nenhum cliente saas foi encontrado')
+        // Buscando na store antes deusuarios na API
+        if (this.saasClients.length === 0) {
+          const saasClients: ISaasClient[] = await $api.saasClients.listAll()
+          if (saasClients.length === 0) {
+            $notify.info('Nenhum cliente saas foi encontrado')
+          }
+          this.$patch({ saasClients })
         }
-        this.$patch({ saasClients })
 
         return this.saasClients
       } catch (err) {

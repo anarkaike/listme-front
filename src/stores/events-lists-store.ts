@@ -16,12 +16,14 @@ export const eventsListsStore = defineStore('eventsListsStore', {
   actions: {
     async listAll (): Promise<IEventList[]> {
       try {
-        // Buscando listas de eventos na API
-        const eventsLists: IEventList[] = await $api.eventsLists.listAll()
-        if (eventsLists.length === 0) {
-          $notify.info('Nenhuma lista de evento foi encontrado')
+        // Buscando na store antes deusuarios na API
+        if (this.eventsLists.length === 0) {
+          const eventsLists: IEventList[] = await $api.eventsLists.listAll()
+          if (eventsLists.length === 0) {
+            $notify.info('Nenhuma lista de evento foi encontrado')
+          }
+          this.$patch({ eventsLists })
         }
-        this.$patch({ eventsLists })
 
         return this.eventsLists
       } catch (err) {

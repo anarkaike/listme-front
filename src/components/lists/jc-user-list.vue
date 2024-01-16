@@ -1,5 +1,7 @@
 <template>
   <JcGenericList
+    :singular-label="props.singularLabel"
+    :plural-label="props.pluralLabel"
     :data-view-component="JcUserDataView"
     :form-component="JcUserForm"
     :filter-by-columns="['name']"
@@ -55,6 +57,20 @@ import { $stores } from '@/stores/all'
 import { EUserStatusLabels, EUserStatusValues } from '@/enums'
 import type { IModel, IOption } from '@/interfaces'
 
+// PROPS ----------------------------------------
+const props = withDefaults(defineProps<{
+  title?: string,
+  singularLabel?: string,
+  pluralLabel?: string,
+  filterData?:(rows: IModel[]) => IModel[]
+  filterProfilesOptions?:(options: IOption[]) => IOption[]
+}>(), {
+  singularLabel: 'Usuário',
+  pluralLabel: 'Usuários',
+  title: 'Listagem de registros',
+  filterData: (rows: IModel[]) => rows,
+  filterProfilesOptions: (options: IOption[]) => options
+})
 const toEUserStatusLabels = EUserStatusLabels
 const columns = ref([
   { name: 'name', align: 'left', label: 'Nome', field: 'name', sortable: true },
@@ -62,15 +78,6 @@ const columns = ref([
   { name: 'auditoria', align: 'center', label: 'Auditoria', field: 'auditoria', sortable: false },
   { name: 'actions', align: 'center', label: 'Ações', field: 'actions', sortable: false }
 ])
-const props = withDefaults(defineProps<{
-  title?: string,
-  filterData?:(rows: IModel[]) => IModel[]
-  filterProfilesOptions?:(options: IOption[]) => IOption[]
-}>(), {
-  title: 'Listagem de registros',
-  filterData: (rows: IModel[]) => rows,
-  filterProfilesOptions: (options: IOption[]) => options
-})
 
 const methods = {
   styleStatusForColumn (status: EUserStatusValues): string {

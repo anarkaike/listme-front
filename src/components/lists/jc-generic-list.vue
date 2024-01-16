@@ -14,13 +14,13 @@
     <!-- TITULO DA TABELA -->
     <template v-slot:top>
       <div class="fit row wrap justify-between items-start content-start">
-        <div class="text-h6 col-grow">{{props.title ?? 'Listagem'}}</div>
+        <div class="text-h6 col-grow">{{props.title}}</div>
         <div style="min-width: 100px; margin-top: -3px;" class="q-pr-sm ctn-filter col-12 q-mb-sm col-md-5">
           <q-input dense name="busca" outlined label="Filtrar dados" type="text" v-model="filterForm.filter" class="q-mr-md"></q-input>
         </div>
         <div>
           <q-btn unelevated dense color="primary" class="q-px-md" @click="methods.toogleDialogForm(true)">
-            Novo Registro
+            Novo {{props.singularLabel}}
           </q-btn>
         </div>
       </div>
@@ -54,27 +54,49 @@
 
     <!-- TEMPLATE SLOT LOADING -->
     <template #loading>
-      Carregando
+      Carregando {{props.pluralLabel.toLowerCase()}}
     </template>
 
     <!-- TEMPLATE SLOT SEM REGISTRO -->
     <template #no-data>
       <div style="padding-top: 20px; padding-bottom: 20px; text-align: center; width: 100%;">
-        Nenhum registro contrado
+        <div v-if="loadingData">
+          <QSpinnerPuff size="100" />
+          <br />
+          Carregando dados
+        </div>
+        <div v-else>
+          Nenhum {{props.singularLabel.toLowerCase()}} contrado
+        </div>
       </div>
     </template>
   </q-table>
 
   <!-- DIALOG USER VIEW -->
   <JcDialog v-model:openDialog="openDialogView" v-if="props.dataViewComponent" @on-close="methods.onCloseDialogView">
-    <template #title>Visualizando dados</template>
-    <component :is="props.dataViewComponent" v-model:row="rowForView" />
+    <template #title>{{methods.titleForDialogView(rowForView)}}</template>
+    <!-- COMPONENTE DATA VIEW INJETADO -->
+    <component
+      :is="props.dataViewComponent"
+      v-model:row="rowForView"
+    />
   </JcDialog>
 
   <!-- DIALOG USER EDIT/NEW -->
   <JcDialog v-model:openDialog="openDialogForm" disable-btn-close @on-close="methods.onCloseDialogForm" v-if="props.formComponent">
-    <template #title>{{rowForEdit?.id?'Editando Administrador':'Cadastrando Administrador'}}</template>
-    <component :filterProfilesOptions="props.filterProfilesOptions" :is="props.formComponent" @on-create="methods.onCreate" v-model:row="rowForEdit" @on-cancel="methods.toogleDialogForm" @close-dialog="methods.toogleDialogForm" class="q-ma-sm q-ma-md-none" />
+    <template #title>{{methods.titleForDialogForm(rowForEdit)}}</template>
+    <!-- COMPONENTE FORMULARIO INJETADO -->
+    <component
+      :is="props.formComponent"
+      v-model:row="rowForEdit"
+      :singular-label="props.singularLabel"
+      :plural-label="props.pluralLabel"
+      :filterProfilesOptions="props.filterProfilesOptions"
+      @on-create="methods.onCreate"
+      @on-cancel="methods.toogleDialogForm"
+      @close-dialog="methods.toogleDialogForm"
+      class="q-ma-sm q-ma-md-none"
+    />
   </JcDialog>
 </template>
 <script lang="ts" setup>
@@ -90,6 +112,29 @@ import { $loading, $notify } from '@/composables'
 import { useRoute, useRouter } from 'vue-router'
 import { defineProps, withDefaults } from 'vue/dist/vue'
 
+// PROPS ----------------------------------------
+const props = withDefaults(defineProps<{
+  fieldLabel?: string,
+  dataViewComponent: null,
+  formComponent: null,
+  title?: string,
+  columns: [],
+  singularLabel?: string,
+  pluralLabel?: string,
+  filterByColumns?: [],
+  stores?:null,
+  styleStatusForColumn?:(status: string) => string,
+  filterData?:(rows: IModel[]) => IModel[]
+  filterProfilesOptions?:(rows: IOption[]) => IOption[]
+}>(), {
+  title: 'Listagem',
+  fieldLabel: 'name',
+  singularLabel: 'Registro',
+  pluralLabel: 'Registros',
+  styleStatusForColumn: () => '',
+  filterData: (rows: IModel[]) => rows,
+  filterProfilesOptions: (rows: IOption[]) => rows
+})
 const route = useRoute()
 const router = useRouter()
 const filterForm = ref<{filter: string}>({
@@ -109,6 +154,7 @@ const rowsFiltered = computed(() => {
     return encontrado
   })
 })
+const loadingData = ref(true)
 const $q = useQuasar()
 const selected = ref([])
 const rows = ref<IModel[]>([])
@@ -120,22 +166,6 @@ const rowForView = ref<IModel|null>()
 // BOTÃO DE EDITAR E NOVO
 const openDialogForm = ref(false)
 const rowForEdit = ref<IModel|null>()
-
-const props = withDefaults(defineProps<{
-  columns: [],
-  filterByColumns?: [],
-  stores?:null,
-  dataViewComponent: null,
-  formComponent: null,
-  title: string,
-  styleStatusForColumn?:(status: string) => string,
-  filterData?:(rows: IModel[]) => IModel[]
-  filterProfilesOptions?:(rows: IOption[]) => IOption[]
-}>(), {
-  styleStatusForColumn: () => '',
-  filterData: (rows: IModel[]) => rows,
-  filterProfilesOptions: (rows: IOption[]) => rows
-})
 const columns = ref(props.columns)
 
 const methods = {
@@ -153,7 +183,7 @@ const methods = {
     const query = route.query
     delete query.action
     delete query.id
-    router.push({ query: query })
+    router.push({ query })
   },
   onEdit (row: IModel) {
     rowForEdit.value = { ...row } as IModel
@@ -170,7 +200,7 @@ const methods = {
     const query = route.query
     delete query.action
     delete query.id
-    router.push({ query: query })
+    router.push({ query })
   },
   onDelete (row: IModel) {
     $q.dialog({
@@ -192,11 +222,12 @@ const methods = {
   },
   list () {
     if (props.stores) {
-      $loading.show('Buscando dados...')
+      // $loading.show('Buscando dados...')
       props.stores.listAll().then((data: IModel[]) => {
-        $loading.hide()
+        // $loading.hide()
         const r = props.filterData(data)
         rows.value = r
+        loadingData.value = false
       })
     }
   },
@@ -204,6 +235,14 @@ const methods = {
     if (props.styleStatusForColumn) {
       return props.styleStatusForColumn(status)
     }
+  },
+  titleForDialogView (row: IModel): string {
+    const label = row.name ?? row.title ?? row[props.fieldLabel] ?? null
+    return 'Visualizando dados' + (label ? ` de "${label}"` : ` de ${label}`)
+  },
+  titleForDialogForm (row: IModel) {
+    const label = row?.id ? 'Editando ' + props.singularLabel : 'Cadastrando ' + props.singularLabel
+    return 'Editando dados' + (label ? ` de "${label}"` : ` de ${label}`)
   }
 }
 
@@ -213,14 +252,12 @@ onBeforeMount(() => {
   // Verificando se na URL existe parametro ID para carregar dialog de view/edit
   if (route.query?.id) {
     props.stores.getById(route.query?.id as unknown as number).then((row: IModel) => {
-      const action = route.query?.action ? 'onEdit' : 'onView'
+      const action = route.query?.action === 'edit' ? 'onEdit' : 'onView'
       methods[action](row)
     })
   }
 })
 
-// onMounted(() => {
-// })
 </script>
 
 <style scoped lang="scss">

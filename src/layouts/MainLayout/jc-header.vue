@@ -5,7 +5,7 @@
       <!--        <dark-mode-toogle />-->
 
       <!-- TOPO - LOGO -->
-      <q-toolbar-title>
+      <q-toolbar-title v-show="!$q.screen.xs && !$q.screen.sm">
         {{$stores.auth.$state.saasClient?.company_name ?? 'Listme'}}
       </q-toolbar-title>
       <q-toolbar-title>
@@ -13,7 +13,7 @@
       </q-toolbar-title>
 
       <!-- TOPO BOTÃO MENU DROPDOWN DIREITO -->
-      <q-btn-dropdown :label="$stores.auth.$state?.user?.name" flat rounded icon="person" class="btn-left-top-menu" style="text-transform: none;">
+      <q-btn-dropdown :label="$q.screen.xs || $q.screen.sm ? '' : $stores.auth.$state?.user?.name" flat rounded icon="person" class="btn-left-top-menu" style="text-transform: none;">
         <q-list class="list-left-top-menu" dense>
 
           <!-- LINK MEEU PERFIL -->
