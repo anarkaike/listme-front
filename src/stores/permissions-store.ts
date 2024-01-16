@@ -14,10 +14,30 @@ export const permissionsStore = defineStore('permissionsStore', {
   // }
   // },
   actions: {
-    async listAll (): Promise<IPermission[]> {
+    async listAll (params = []): Promise<IPermission[]> {
       try {
         // Buscando permissões na API
-        const permissions: IPermission[] = await $api.permissions.listAll()
+        const permissions: IPermission[] = await $api.permissions.listAll(params)
+        if (permissions.length === 0) {
+          $notify.info('Nenhuma permissão foi encontrada')
+        }
+        this.$patch({ permissions })
+
+        return this.permissions
+      } catch (err) {
+        console.error('Erro ao listar as permissões: ', err)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        $notify.error(err.response.data.message ?? err.message ?? 'Erro ao listar permissões')
+        throw err
+      }
+    },
+    async listByProfile (profileId: number): Promise<IPermission[]> {
+      try {
+        // Buscando permissões na API
+        const permissions: IPermission[] = await $api.permissions.listAll({
+          profile_id: profileId
+        })
         if (permissions.length === 0) {
           $notify.info('Nenhuma permissão foi encontrada')
         }

@@ -27,15 +27,12 @@ const emit = defineEmits([
 // METODOS ---------------------------------------------------
 const methods = {
   onView (row: unknown) {
-    console.log('Junio group button onView')
     emit('on-view', row)
   },
   onEdit (row: unknown) {
-    console.log('Junio group button onEdit')
     emit('on-edit', row)
   },
   onDelete (row: unknown) {
-    console.log('Junio group button onDelete')
     emit('on-delete', row)
   }
 }

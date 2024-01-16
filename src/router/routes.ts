@@ -16,8 +16,10 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: 'home', name: 'home', component: () => import('pages/HomePage.vue') }
-      // { path: 'category', name: 'category', component: () => import('pages/category/List.vue') },
+      { path: 'home', name: 'home', component: () => import('pages/HomePage.vue') },
+      { path: 'users', name: 'users', component: () => import('pages/UsersPage.vue') },
+      { path: 'promoters', name: 'promoters', component: () => import('pages/PromotersPage.vue') },
+      { path: 'receptionists', name: 'receptionists', component: () => import('pages/ReceptionistsPage.vue') }
       // { path: 'form-category/:id?', name: 'form-category', component: () => import('pages/category/Form.vue') },
       // { path: 'product', name: 'product', component: () => import('pages/product/List.vue') },
       // { path: 'form-product/:id?', name: 'form-product', component: () => import('pages/product/Form.vue') },

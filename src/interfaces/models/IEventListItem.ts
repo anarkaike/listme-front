@@ -1,6 +1,7 @@
 import type { IUser, ISaasClient, IEvent, IEventList } from '@/interfaces'
+import IModel from '@/interfaces/models/IModel'
 
-export default interface IEventListItem {
+export default interface IEventListItem extends IModel {
   id?: number | null;
   name?: string | null;
   email?: string | null;

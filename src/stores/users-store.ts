@@ -98,7 +98,6 @@ export const usersStore = defineStore('usersStore', {
       $loading.show(`Atualizando usuário "${user.name}"...`)
       try {
         // Atualizando usuário na api e state
-        console.log('Junio user', user)
         const userUpdated: IUser = await $api.users.update(user)
         const users = this.$state.users
         users[this.$state.users.findIndex(userRow => userRow.id === user.id)] = userUpdated

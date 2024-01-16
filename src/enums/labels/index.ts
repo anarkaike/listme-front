@@ -1,7 +1,13 @@
 import { EModelsLabels } from './EModelsLabels'
+import { EModelsValues } from './EModelsValues'
 import { EPermissionsLabels } from './EPermissionsLabels'
+import { EPermissionsValues } from './EPermissionsValues'
+import { EStoresValues } from './EStoresValues'
 
 export {
   EModelsLabels,
-  EPermissionsLabels
+  EModelsValues,
+  EPermissionsLabels,
+  EPermissionsValues,
+  EStoresValues
 }

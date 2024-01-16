@@ -1,15 +1,15 @@
 <template>
   <div class="jc-profile-form row jc-form">
-    <div class="col-grow q-pr-md-md q-px-xs q-mb-lg col-md-3" v-if="profile.url_photo && profile.url_photo!=='' && typeof profile.url_photo==='string'">
-      <q-img :src="profile.url_photo" style="max-height: 200px;" fit="contain" />
+    <div class="col-grow q-pr-md-md q-px-xs q-mb-lg col-md-3" v-if="row.url_photo && row.url_photo!=='' && typeof row.url_photo==='string'">
+      <q-img :src="row.url_photo" style="max-height: 200px;" fit="contain" />
     </div>
-    <q-form class="col-grow" ref="myForm" @submit.prevent="methods.save" :class="{ 'col-md-9':profile.url_photo && profile.url_photo!=='' }">
+    <q-form class="col-grow" ref="myForm" @submit.prevent="methods.save" :class="{ 'col-md-9':row.url_photo && row.url_photo!=='' }">
       <div class="row">
         <!-- CAMPO NAME -->
         <div class="col-12">
           <q-input
             filled
-            v-model="profile.name"
+            v-model="row.name"
             label="Nome"
             lazy-rules
             dense
@@ -23,7 +23,7 @@
         <!-- CAMPO DESCRIÇÃO -->
         <div class="col-12">
           <q-editor ref="editorRef"
-            v-model="profile.description"
+            v-model="row.description"
             :dense="$q.screen.lt.md"
             :toolbar="[
               [
@@ -122,22 +122,22 @@
       <div class="row q-mt-lg sticky-buttons">
         <q-space class="col-auto" />
         <q-btn label="Cancelar" @click="methods.cancel" color="primary" flat class="q-mr-sm" />
-        <q-btn :label="profile.id?'Atualizar':'Cadastrar'" type="submit" color="primary"/>
+        <q-btn :label="row.id?'Atualizar':'Cadastrar'" type="submit" color="primary"/>
       </div>
     </q-form>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { defineProps, withDefaults, Ref, ref } from 'vue'
+import { defineProps, withDefaults, Ref, ref, watchEffect } from 'vue'
 import { QForm } from 'quasar'
 import type { IProfile } from '@/interfaces'
 import { $stores } from '@/stores/all'
 
 // CONSTANTES ---------------------------------------------------
 const myForm = ref<QForm|null>(null)
-const props = withDefaults(defineProps<{ profile?: IProfile|null }>(), {})
-const profile: Ref<IProfile> = ref<IProfile>(props.profile ?? { name: '', description: '' } as IProfile)
+const props = withDefaults(defineProps<{ row?: IProfile|null }>(), {})
+const row: Ref<IProfile> = ref<IProfile>(props.row ?? { name: '', description: '' } as IProfile)
 
 const emit = defineEmits([
   'on-cancel',
@@ -148,22 +148,27 @@ const emit = defineEmits([
 ])
 const editorRef = ref(null)
 
+watchEffect(() => {
+  if (typeof row.value.description === 'undefined') {
+    row.value.description = ''
+  }
+})
 // METODOS ------------------------------------------------------
 const methods = {
   save () {
-    const method = profile.value.id ? 'update' : 'create'
-    $stores.profiles[method](profile.value).then((value: IProfile) => {
+    const method = row.value.id ? 'update' : 'create'
+    $stores.profiles[method](row.value).then((value: IProfile) => {
       emit('on-submit', value)
-      emit(profile.value.id ? 'on-update' : 'on-create', value)
+      emit(row.value.id ? 'on-update' : 'on-create', value)
       methods.closeDialog()
     })
   },
   cancel () {
-    profile.value = {} as IProfile
+    row.value = {} as IProfile
     emit('on-cancel')
   },
   closeDialog () {
-    profile.value = {} as IProfile
+    row.value = {} as IProfile
     emit('close-dialog')
   }
 }

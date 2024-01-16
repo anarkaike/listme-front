@@ -184,12 +184,6 @@ const methods = {
       $stores.saasClients.delete(saasClient.id as number).then(() => {
         $notify.success('Cliente SaaS excluido com sucesso!')
       })
-    }).onOk(() => {
-      // console.log('>>>> second OK catcher')
-    }).onCancel(() => {
-      // console.log('>>>> Cancel')
-    }).onDismiss(() => {
-      // console.log('I am triggered on both OK and Cancel')
     })
   },
   listAdmins () {

@@ -1,79 +1,41 @@
 <template>
-  <JcProfileList />
-</template>
-<script lang="ts" setup>
-import { useQuasar } from 'quasar'
-import { ref, onBeforeMount, computed } from 'vue'
-import type { IProfile } from '@/components'
-import {
-  JcGroupBtnForTables,
-  JcAudit,
-  JcProfileDataView,
-  JcDialog,
-  JcProfileForm
-} from '@/components'
-import { $stores } from '@/stores/all'
+  <JcGenericList
+    :data-view-component="JcProfileDataView"
+    :form-component="JcProfileForm"
+    :filter-by-columns="['name', 'description']"
+    :stores="$stores.profiles"
+    :columns="columns"
+    title="Perfis de Usuários"
+  >
 
-const filterForm = ref<{filter: string}>({
-  filter: ''
-})
-const profilesFiltered = computed(() => {
-  if (!filterForm.value.filter) return profiles.value
-  return profiles.value.filter((profile: IProfile) => {
-    const key = filterForm.value.filter.toLowerCase().split(' ')
-    const name = profile.name?.toLowerCase()
-    const description = profile.description?.toLowerCase()
-    let encontrado = false
-    key.forEach((keyParte) => {
-      if (name?.includes(keyParte) ||
-        description?.includes(keyParte)) encontrado = true
-    })
-    return encontrado
-  })
-})
-const $q = useQuasar()
+    <!-- COLUNA NOME -->
+    <template #columns="scope">
+      <!-- TEMPLATE COLUNA NAME -->
+      <q-td key="name" :props="scope.props" style="cursor: pointer;" @click="scope.onView(scope.props.row)">
+        <strong>
+          {{ scope.props.row.name }}
+        </strong>
+        <div style="font-size: 10px;" v-html="scope.props.row.description" />
+      </q-td>
+    </template>
+
+  </JcGenericList>
+</template>
+
+<script lang="ts" setup>
+import { ref, onBeforeMount } from 'vue'
+import { $stores } from '@/stores/all'
+import { JcGenericList, JcProfileDataView, JcProfileForm } from '@/components'
+import type { IProfile } from '@/interfaces'
+
 const columns = ref([
   { name: 'name', align: 'left', label: 'Nome', field: 'name', sortable: true },
   { name: 'auditoria', align: 'center', label: 'Auditoria', field: 'auditoria', sortable: false },
   { name: 'actions', align: 'center', label: 'Ações', field: 'actions', sortable: false }
 ])
-const selected = ref([])
 const profiles = ref<IProfile[]>([])
 
-// BOTÃO DE VISUALIZAR
-const openDialogView = ref(false)
-const profileView = ref<IProfile|null>()
-
-// BOTÃO DE EDITAR E NOVO
-const openDialogForm = ref(false)
-const profileForEdit = ref<IProfile|null>()
-
 const methods = {
-  onView (profile: IProfile) {
-    profileView.value = profile
-    this.toogleDialogView()
-  },
-  toogleDialogView (): void {
-    openDialogView.value = !openDialogView.value
-  },
-  onEdit (profile: IProfile) {
-    profileForEdit.value = { ...profile } as IProfile
-    this.toogleDialogForm()
-  },
-  toogleDialogForm (reset = false): void {
-    if (reset) profileForEdit.value = { name: '', description: '' }
-    openDialogForm.value = !openDialogForm.value
-  },
-  onDelete (profile: IProfile) {
-    $q.dialog({
-      title: 'Atenção!',
-      message: `Deseja realmente excluir o perfil ${profile.name}?`,
-      cancel: true,
-      persistent: true
-    }).onOk(() => {
-      $stores.profiles.delete(profile.id as number)
-    })
-  },
   listProfiles () {
     $stores.profiles.listAll().then((data: IProfile[]) => { profiles.value = data })
   }

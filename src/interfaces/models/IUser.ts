@@ -1,6 +1,7 @@
 import type { IProfile, ISaasClient } from '@/interfaces'
+import IModel from '@/interfaces/models/IModel'
 
-export default interface IUser {
+export default interface IUser extends IModel {
   id?: number | null;
   name?: string | null;
   email?: string | null;
@@ -13,13 +14,13 @@ export default interface IUser {
   url_photo_up?: string | null | File;
   status?: string;
   created_at?: string | null;
-  created_by?: string | null;
+  created_by?: number | null;
   created?: IUser | null;
   updated_at?: string | null;
-  updated_by?: string | null;
+  updated_by?: number | null;
   updated?: IUser | null;
   deleted_at?: string | null;
-  deleted_by?: string | null;
+  deleted_by?: number | null;
   deleted?: IUser | null;
   profiles?: IProfile[];
   profile_ids?: number[];

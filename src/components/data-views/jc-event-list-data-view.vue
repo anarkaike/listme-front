@@ -5,7 +5,7 @@
         <q-item class="q-pa-sm q-pa-md-md">
           <q-item-section class="q-pa-none">
             <q-item-label class="text-caption text-weight-light">Nome:</q-item-label>
-            <q-item-label class="text-body2 text-weight-medium">{{data.name}}</q-item-label>
+            <q-item-label class="text-body2 text-weight-medium">{{row.name}}</q-item-label>
           </q-item-section>
         </q-item>
         <q-separator />
@@ -13,7 +13,7 @@
           <q-item class="q-pa-sm q-pa-md-md">
             <q-item-section>
               <q-item-label class="text-caption text-weight-light">Descrição:</q-item-label>
-              <q-item-label class="text-body2 text-weight-medium">{{data.description}}</q-item-label>
+              <q-item-label class="text-body2 text-weight-medium">{{row.description}}</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
@@ -22,7 +22,7 @@
           <q-item-section avatar><q-icon name="post_add" /></q-item-section>
           <q-item-section>
             <q-item-label class="text-caption text-weight-light">Criado em:</q-item-label>
-            <q-item-label class="text-body2 text-weight-medium">{{data.created_at}}</q-item-label>
+            <q-item-label class="text-body2 text-weight-medium">{{row.created_at}}</q-item-label>
           </q-item-section>
         </q-item>
         <q-separator />
@@ -30,16 +30,16 @@
           <q-item-section avatar><q-icon name="save_as" /></q-item-section>
           <q-item-section>
             <q-item-label class="text-caption text-weight-light">Atualizado em:</q-item-label>
-            <q-item-label class="text-body2 text-weight-medium">{{data.updated_at}}</q-item-label>
+            <q-item-label class="text-body2 text-weight-medium">{{row.updated_at}}</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
     </div>
     <div class="col-md-8 col-12 q-pl-none q-pl-md-md">
       <div class="text-h6 q-mb-sm">Permissões atribuídas a este perfil:</div>
-      <div v-if="data">
-        <span v-for="(permission, kPermission) in data.permissions" :key="permission.id">
-            <div v-if="kPermission===0 || data.permissions[kPermission-1].model!==permission.model" class="q-mt-md">
+      <div v-if="row">
+        <span v-for="(permission, kPermission) in row.permissions" :key="permission.id">
+            <div v-if="kPermission===0 || row.permissions[kPermission-1].model!==permission.model" class="q-mt-md">
               <strong>{{ toEModelsLabels[permission.name.split(':')[0]] }}</strong> :
             </div>
             <q-chip>
@@ -64,14 +64,14 @@ const toEPermissionsLabels = EPermissionsLabels
 
 // CONSTANTES ---------------------------------------------------
 const props = withDefaults(defineProps<{
-  data: IProfile
+  row: IProfile
 }>(), {})
-const data = ref<IProfile>(props.data)
-const emit = defineEmits<{(e: 'update:data', data: IProfile): void}>()
+const row = ref<IProfile>(props.row)
+const emit = defineEmits<{(e: 'update:row', row: IProfile): void}>()
 
 // WATCHS ---------------------------------------------------
 watchEffect(() => {
-  emit('update:data', data.value)
+  emit('update:row', row.value)
 })
 
 // METODOS ---------------------------------------------------

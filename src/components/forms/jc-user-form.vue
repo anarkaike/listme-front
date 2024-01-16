@@ -1,15 +1,15 @@
 <template>
   <div class="jc-user-form row jc-form">
-    <div class="col-grow q-pr-md-md q-px-xs q-mb-lg col-md-3" v-if="user.url_photo && user.url_photo!=='' && typeof user.url_photo==='string'">
-      <q-img :src="user.url_photo" style="max-height: 200px;" fit="contain" />
+    <div class="col-grow q-pr-md-md q-px-xs q-mb-lg col-md-3" v-if="row.url_photo && row.url_photo!=='' && typeof row.url_photo==='string'">
+      <q-img :src="row.url_photo" style="max-height: 200px;" fit="contain" />
     </div>
-    <q-form class="col-grow" ref="myForm" @submit.prevent="methods.save" :class="{ 'col-md-9':user.url_photo && user.url_photo!=='' }">
+    <q-form class="col-grow" ref="myForm" @submit.prevent="methods.save" :class="{ 'col-md-9':row.url_photo && row.url_photo!=='' }">
       <div class="row">
         <!-- CAMPO NAME -->
         <div class="col-12 col-md-6">
           <q-input
             filled
-            v-model="user.name"
+            v-model="row.name"
             label="Nome"
             lazy-rules
             dense
@@ -26,7 +26,7 @@
         <div class="col-12 col-md-6">
           <q-select
             label="Perfil"
-            v-model="user.profile_ids"
+            v-model="row.profile_ids"
             :options="optionsValues.profiles"
             multiple
             :loading="optionsValues.profiles.length === 0"
@@ -50,7 +50,7 @@
         <div class="col-12 col-md-6">
           <q-input
             filled
-            v-model="user.email"
+            v-model="row.email"
             label="Email"
             class="q-mr-md-sm q-mb-none q-mb-md-none"
             lazy-rules
@@ -71,7 +71,7 @@
         <div class="col-12 col-md-3">
           <q-input
             label="Senha"
-            v-model="user.password"
+            v-model="row.password"
             filled
             hide-bottom-space
             dense
@@ -95,7 +95,7 @@
         <div class="col-12 col-md-3">
           <q-input
             label="Repita a senha"
-            v-model="user.password2"
+            v-model="row.password2"
             filled
             dense
             hide-bottom-space
@@ -119,7 +119,7 @@
         <div class="col-12 col-md-4">
           <q-input
             filled
-            v-model="user.phone"
+            v-model="row.phone"
             label="Celular"
             lazy-rules
             dense
@@ -154,7 +154,7 @@
           <q-select
             filled
             dense
-            v-model="user.status"
+            v-model="row.status"
             @change="methods.onSelectStatus"
             :options="statusOption"
             label="Status"
@@ -175,7 +175,7 @@
           <q-select
             label="Adicionar este usuário no sistema de qual cliente saas?"
             filled
-            v-model="user.saas_client_id"
+            v-model="row.saas_client_id"
             :options="optionsValues.saasClients"
             :loading="optionsValues.saasClients.length === 0"
             options-dense
@@ -198,7 +198,7 @@
       <div class="row q-mt-lg sticky-buttons">
         <q-space class="col-auto" />
         <q-btn label="Cancelar" @click="methods.cancel" color="primary" flat class="q-mr-sm" />
-        <q-btn :label="user.id?'Atualizar':'Cadastrar'" type="submit" color="primary"/>
+        <q-btn :label="row.id?'Atualizar':'Cadastrar'" type="submit" color="primary"/>
       </div>
     </q-form>
   </div>
@@ -216,10 +216,13 @@ const myForm = ref<QForm|null>(null)
 const urlPhotoModel = ref<File[]>([] as File[])
 const props = withDefaults(defineProps<{
   // Geral
-  user?: IUser|null
-}>(), {})
-// const originalUser : Ref<IUser> = ref<IUser>(props.user as IUser)
-const user: Ref<IUser> = ref<IUser>(props.user ?? {
+  row?: IUser|null,
+  filterProfilesOptions?:(options: IOption[]) => IOption[]
+}>(), {
+  filterProfilesOptions: (options: IOption[]) => options
+})
+// const originalUser : Ref<IUser> = ref<IUser>(props.row as IUser)
+const row: Ref<IUser> = ref<IUser>(props.row ?? {
   status: 'active',
   name: 'Junio',
   email: `anarkaike+teste${rand(1, 999999)}@gmail.com`,
@@ -252,30 +255,31 @@ const emit = defineEmits([
 // METODOS ------------------------------------------------------
 const methods = {
   save () {
-    const method = user.value.id ? 'update' : 'create'
+    const method = row.value.id ? 'update' : 'create'
     if ('name' in urlPhotoModel.value) {
-      console.log('Junio ENTROUUU', urlPhotoModel.value)
-      user.value.url_photo_up = urlPhotoModel.value as unknown as File
+      row.value.url_photo_up = urlPhotoModel.value as unknown as File
     }
-    $stores.users[method](user.value).then((value: IUser) => {
+    $stores.users[method](row.value).then((value: IUser) => {
       emit('on-submit', value)
-      emit(user.value.id ? 'on-update' : 'on-create', value)
-      user.value.url_photo = value.url_photo
+      emit(row.value.id ? 'on-update' : 'on-create', value)
+      row.value.url_photo = value.url_photo
       methods.closeDialog()
     })
   },
   cancel () {
-    user.value = {} as IUser
+    row.value = {} as IUser
     emit('on-cancel')
   },
   closeDialog () {
-    user.value = {} as IUser
+    row.value = {} as IUser
     emit('close-dialog')
   }
 }
 
 onBeforeMount(() => {
-  $stores.profiles.getOptions().then((options) => { optionsValues.value.profiles = options })
+  $stores.profiles.getOptions().then((options) => {
+    optionsValues.value.profiles = props.filterProfilesOptions(options)
+  })
   $stores.saasClients.getOptions().then((options) => { optionsValues.value.saasClients = options })
 })
 </script>

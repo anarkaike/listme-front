@@ -6,7 +6,7 @@
 
       <!-- TOPO - LOGO -->
       <q-toolbar-title>
-        {{$stores.auth.$state.saasClient.company_name}}
+        {{$stores.auth.$state.saasClient?.company_name ?? 'Listme'}}
       </q-toolbar-title>
       <q-toolbar-title>
         <CircularLogo />

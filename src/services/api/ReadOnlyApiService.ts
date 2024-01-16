@@ -3,10 +3,10 @@ import { api } from '@/boot/axios'
 import { AxiosResponse } from 'axios'
 
 export default class ReadOnlyApiService extends BaseApiService {
-  async listAll () {
+  async listAll (params = {}) {
     try {
       this.setToken()
-      const res = await api.get(this.getUrlForListAll())
+      const res = await api.get(this.getUrlForListAll(), params)
       return res.data
     } catch (err) {
       this.handleErrors(err)

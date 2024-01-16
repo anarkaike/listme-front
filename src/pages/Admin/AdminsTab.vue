@@ -1,4 +1,5 @@
 <template>
+
   <!-- TABELA PARA LISTAGEM DE ADMINSTRADORES -->
   <q-table
     class="my-sticky-last-column-table"
@@ -49,7 +50,7 @@
           </div>
         </q-td>
 
-        <!-- TEMPLATE COLUNA AUDTORIA -->
+        <!-- TEMPLATE COLUNA PROFILES -->
         <q-td auto-width key="profiles" :props="props" style="font-size: 10px;" @click="methods.onView(props.row)">
             <div v-if="props.row.profiles && props.row.profiles.length > 0">
               <div v-for="profile in props.row.profiles" :key="profile.id">
@@ -122,7 +123,10 @@ import {
 import { $stores } from '@/stores/all'
 import { $notify } from '@/composables'
 import { EUserStatusLabels, EUserStatusValues } from '@/enums'
+import { useRoute, useRouter } from 'vue-router'
 
+const route = useRoute()
+const router = useRouter()
 const toEUserStatusLabels = EUserStatusLabels
 const filterForm = ref<{filter: string}>({
   filter: ''
@@ -169,14 +173,18 @@ const userForEdit = ref<IUser|null>()
 const methods = {
   onView (user: IUser) {
     userView.value = user
-    this.toogleDialogView()
+    router.replace({ name: 'admin', query: { ...route.query, action: 'view', id: user?.id } }).then(() => {
+      this.toogleDialogView()
+    })
   },
   toogleDialogView (): void {
     openDialogView.value = !openDialogView.value
   },
   onEdit (user: IUser) {
     userForEdit.value = { ...user } as IUser
-    this.toogleDialogForm()
+    router.replace({ name: 'admin', query: { ...route.query, action: 'edit', id: user?.id } }).then(() => {
+      this.toogleDialogForm()
+    })
   },
   toogleDialogForm (reset = false): void {
     if (reset) userForEdit.value = {}
@@ -192,12 +200,6 @@ const methods = {
       $stores.users.delete(user.id as number).then(() => {
         $notify.success('Usuário excluido com sucesso!')
       })
-    }).onOk(() => {
-      // console.log('>>>> second OK catcher')
-    }).onCancel(() => {
-      // console.log('>>>> Cancel')
-    }).onDismiss(() => {
-      // console.log('I am triggered on both OK and Cancel')
     })
   },
   listAdmins () {
@@ -238,7 +240,16 @@ const methods = {
 
 onBeforeMount(() => {
   methods.listAdmins()
+  if (route.query?.id) {
+    $stores.users.getById(route.query?.id as unknown as number).then((user: IUser) => {
+      const action = route.query?.action ? 'onEdit' : 'onView'
+      methods[action](user)
+    })
+  }
 })
+
+// onMounted(() => {
+// })
 </script>
 
 <style scoped lang="scss">

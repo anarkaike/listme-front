@@ -9,7 +9,7 @@
           <q-item-section avatar><icon icon="arcticons:google-my-business" /></q-item-section>
           <q-item-section class="q-pa-none">
             <q-item-label class="text-caption text-weight-light">Nome da empresa:</q-item-label>
-            <q-item-label class="text-body2 text-weight-medium">{{data.company_name}}</q-item-label>
+            <q-item-label class="text-body2 text-weight-medium">{{row.company_name}}</q-item-label>
           </q-item-section>
         </q-item>
 
@@ -20,7 +20,7 @@
           <q-item-section avatar><icon icon="fluent:person-accounts-20-regular" /></q-item-section>
           <q-item-section class="q-pa-none">
             <q-item-label class="text-caption text-weight-light">Nome do contato:</q-item-label>
-            <q-item-label class="text-body2 text-weight-medium">{{data.contact_name}}</q-item-label>
+            <q-item-label class="text-body2 text-weight-medium">{{row.contact_name}}</q-item-label>
           </q-item-section>
         </q-item>
 
@@ -31,7 +31,7 @@
           <q-item-section avatar><icon icon="iconamoon:email-thin" /></q-item-section>
           <q-item-section>
             <q-item-label class="text-caption text-weight-light">Email:</q-item-label>
-            <q-item-label class="text-body2 text-weight-medium">{{data.email}}</q-item-label>
+            <q-item-label class="text-body2 text-weight-medium">{{row.email}}</q-item-label>
           </q-item-section>
         </q-item>
 
@@ -42,7 +42,7 @@
           <q-item-section avatar><icon icon="et:phone" /></q-item-section>
           <q-item-section>
             <q-item-label class="text-caption text-weight-light">Celular:</q-item-label>
-            <q-item-label class="text-body2 text-weight-medium">{{data.phone}}</q-item-label>
+            <q-item-label class="text-body2 text-weight-medium">{{row.phone}}</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -53,8 +53,8 @@
       <q-list bordered >
         <!-- INFO LOGO -->
         <q-item class="q-pa-none">
-          <q-item-section v-if="data.url_logo && data.url_logo!=='' && typeof data.url_logo==='string'">
-            <q-img :src="data.url_logo" fit="contain" style="max-height: 200px;" />
+          <q-item-section v-if="row.url_logo && row.url_logo!=='' && typeof row.url_logo==='string'">
+            <q-img :src="row.url_logo" fit="contain" style="max-height: 200px;" />
           </q-item-section>
           <q-item-section v-else class="text-body text-grey-6 text-center">
             <q-item-label>Nenhuma <strong>logo</strong> cadastrada ainda</q-item-label>
@@ -64,11 +64,11 @@
         <q-separator />
 
         <!-- INFO STATUS -->
-        <q-item :style="{color:(data.status?'green':'gray')}">
-          <q-item-section avatar><q-icon :name="data.status?'toggle_on':'toggle_off'" /></q-item-section>
+        <q-item :style="{color:(row.status?'green':'gray')}">
+          <q-item-section avatar><q-icon :name="row.status?'toggle_on':'toggle_off'" /></q-item-section>
           <q-item-section>
             <q-item-label class="text-caption text-weight-light">Status:</q-item-label>
-            <q-item-label class="text-body2 text-weight-medium">{{data.status?'Ativo':'Inativo'}}</q-item-label>
+            <q-item-label class="text-body2 text-weight-medium">{{row.status?'Ativo':'Inativo'}}</q-item-label>
           </q-item-section>
         </q-item>
 
@@ -79,7 +79,7 @@
           <q-item-section avatar><icon icon="ph:calendar-plus-light" /></q-item-section>
           <q-item-section>
             <q-item-label class="text-caption text-weight-light">Criado em:</q-item-label>
-            <q-item-label class="text-body2 text-weight-medium">{{data.created_at}}</q-item-label>
+            <q-item-label class="text-body2 text-weight-medium">{{row.created_at}}</q-item-label>
           </q-item-section>
         </q-item>
 
@@ -90,7 +90,7 @@
           <q-item-section avatar><icon icon="material-symbols-light:edit-calendar-outline" /></q-item-section>
           <q-item-section>
             <q-item-label class="text-caption text-weight-light">Atualizado em:</q-item-label>
-            <q-item-label class="text-body2 text-weight-medium">{{data.updated_at}}</q-item-label>
+            <q-item-label class="text-body2 text-weight-medium">{{row.updated_at}}</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -103,13 +103,13 @@ import { defineProps, withDefaults, ref, watchEffect } from 'vue'
 import type { ISaasClient } from '@/interfaces'
 
 // CONSTANTES ---------------------------------------------------
-const props = withDefaults(defineProps<{ data: ISaasClient }>(), {})
-const emit = defineEmits<{(e: 'update:data', data: ISaasClient): void}>()
-const data = ref<ISaasClient>(props.data)
+const props = withDefaults(defineProps<{ row: ISaasClient }>(), {})
+const emit = defineEmits<{(e: 'update:row', row: ISaasClient): void}>()
+const row = ref<ISaasClient>(props.row)
 
 // WATCHS ---------------------------------------------------
 watchEffect(() => {
-  emit('update:data', data.value)
+  emit('update:row', row.value)
 })
 
 // METODOS ---------------------------------------------------

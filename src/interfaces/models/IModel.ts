@@ -1,11 +1,7 @@
-import type { IUser, IPermission } from '@/interfaces'
-import IModel from '@/interfaces/models/IModel'
+import type { IUser } from '@/interfaces'
 
-export default interface IProfile extends IModel {
+export default interface IModel {
   id?: number | null;
-  name?: string | null;
-  description?: string | null;
-  permissions?: IPermission[] | null;
   created_at?: string | null;
   created_by?: number | null;
   created?: IUser | null;

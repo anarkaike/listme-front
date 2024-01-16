@@ -22,7 +22,7 @@
     </q-item>
 
     <!-- MENU ITEM CONVIDADOS -->
-    <q-item clickable v-close-popup>
+    <q-item clickable :to="{ name: 'users' }" active-class="text-purple-14" v-close-popup>
       <q-item-section avatar>
         <icon icon="fontisto:person" />
       </q-item-section>
@@ -30,7 +30,7 @@
     </q-item>
 
     <!-- MENU ITEM RECEPCIONISTA -->
-    <q-item clickable v-close-popup>
+    <q-item clickable :to="{ name: 'receptionists' }" active-class="text-purple-14" v-close-popup>
       <q-item-section avatar>
         <icon icon="bi:person-badge-fill" />
       </q-item-section>
@@ -38,7 +38,7 @@
     </q-item>
 
     <!-- MENU ITEM PROMOTERS -->
-    <q-item clickable v-close-popup>
+    <q-item clickable :to="{ name: 'promoters' }" active-class="text-purple-14" v-close-popup>
       <q-item-section avatar>
         <icon icon="fluent:person-voice-20-filled" />
       </q-item-section>

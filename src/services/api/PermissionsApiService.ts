@@ -6,8 +6,9 @@ export default class PermissionsApiService extends ReadOnlyApiService {
     super('permissions')
   }
 
-  async listAll (): Promise<IPermission[]> {
-    const res: IResponse<IPermission[]> = await super.listAll()
+  async listAll (params = {}): Promise<IPermission[]> {
+    console.log('Junio params: ', params)
+    const res: IResponse<IPermission[]> = await super.listAll(params)
     return res.data
   }
 

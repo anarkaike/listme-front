@@ -5,7 +5,7 @@
     <!-- INFO DESCRIÇÃO -->
     <q-item class="q-px-none">
       <q-item-section>
-        <q-item-label class="">{{data.description}}</q-item-label>
+        <q-item-label class="">{{props.data.description}}</q-item-label>
       </q-item-section>
     </q-item>
 

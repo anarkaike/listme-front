@@ -7,7 +7,7 @@
       <q-item-section avatar><icon icon="tabler:calendar-star" /></q-item-section>
       <q-item-section class="q-pa-none">
         <q-item-label class="text-caption text-weight-light">Nome do evento:</q-item-label>
-        <q-item-label class="text-body2 text-weight-medium">{{data.name}}</q-item-label>
+        <q-item-label class="text-body2 text-weight-medium">{{props.data.name}}</q-item-label>
       </q-item-section>
     </q-item>
     <q-separator />
@@ -21,7 +21,7 @@
           <q-item-section class="q-pa-none">
             <q-item-label class="text-caption text-weight-light">Início:</q-item-label>
             <q-item-label class="text-body2 text-weight-medium">
-              {{ humanizeDatetime(data.starts_at) }}
+              {{ humanizeDatetime(props.data.starts_at) }}
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -35,7 +35,7 @@
           <q-item-section class="q-pa-none">
             <q-item-label class="text-caption text-weight-light">Fim:</q-item-label>
             <q-item-label class="text-body2 text-weight-medium">
-              {{ humanizeDatetime(data.ends_at) }}
+              {{ humanizeDatetime(props.data.ends_at) }}
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -46,16 +46,16 @@
       <div class="col-12 col-sm-6">
         <q-item class="q-pa-sm q-pa-md-xs">
           <q-item-section avatar><icon icon="tabler:calendar-time" /></q-item-section>
-          <q-item-section class="q-pa-none" v-if="(new Date()).getTime() < (new Date(data.starts_at)).getTime()">
+          <q-item-section class="q-pa-none" v-if="(new Date()).getTime() < (new Date(props.data.starts_at)).getTime()">
             <q-item-label class="text-caption text-weight-light">Falta para chegar:</q-item-label>
             <q-item-label class="text-body2 text-weight-medium">
-              {{ humanizeDuration((new Date()).getTime()-(new Date(data.starts_at)).getTime()) }}
+              {{ humanizeDuration((new Date()).getTime()-(new Date(props.data.starts_at)).getTime()) }}
             </q-item-label>
           </q-item-section>
           <q-item-section class="q-pa-none" v-else>
             <q-item-label class="text-caption text-weight-light">O evento aconteceu faz:</q-item-label>
             <q-item-label class="text-body2 text-weight-medium">
-              {{ humanizeDuration((new Date(data.starts_at)).getTime() - (new Date()).getTime()) }}
+              {{ humanizeDuration((new Date(props.data.starts_at)).getTime() - (new Date()).getTime()) }}
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -69,7 +69,7 @@
           <q-item-section class="q-pa-none">
             <q-item-label class="text-caption text-weight-light">Duração:</q-item-label>
             <q-item-label class="text-body2 text-weight-medium">
-              {{ humanizeDuration(data.duration_in_hours ? (data.duration_in_hours * 3600000) : ((new Date(data.starts_at)).getTime() - (new Date(data.ends_at)).getTime())) }}
+              {{ humanizeDuration(props.data.duration_in_hours ? (props.data.duration_in_hours * 3600000) : ((new Date(props.data.starts_at)).getTime() - (new Date(props.data.ends_at)).getTime())) }}
             </q-item-label>
           </q-item-section>
         </q-item>

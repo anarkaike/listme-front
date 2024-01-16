@@ -45,17 +45,14 @@ export default class BaseApiService {
     }
   }
 
-  handleErrors (err: unknown) {
-    console.log('Erro axiosssss: ', JSON.stringify(err))
-    LocalStorage.clear()
+  handleErrors () {
+    // LocalStorage.clear()
     // Queria redirecionar para o login aqui mas não consegui
     // $stores.auth.logout()
     // const router = useRouter()
     // const r = router.getRoutes()
-    // console.log('Junio', $q)
     // router.push({ name: 'login' }).then(r => {
     //   $notify.info('A sessão encerrou. Entre novamente.')
-    //   console.log('Junio error handle', r)
     // })
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

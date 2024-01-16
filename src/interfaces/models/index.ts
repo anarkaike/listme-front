@@ -7,6 +7,7 @@ import type ISaasClientGeneralSettings from './ISaasClientGeneralSettings'
 import type IProfile from './IProfile'
 import type IPermission from './IPermission'
 import type IAudit from './IAudit'
+import type IModel from './IModel'
 
 export {
   IEvent,
@@ -17,5 +18,6 @@ export {
   ISaasClientGeneralSettings,
   IProfile,
   IPermission,
-  IAudit
+  IAudit,
+  IModel
 }

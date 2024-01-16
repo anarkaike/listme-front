@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="openDialog" @close="methods.closeDialog">
+  <q-dialog v-model="openDialog" @close="methods.close" @cancel="methods.close" @hide="methods.close" @abort="methods.close">
     <q-card style="width: 100%; max-width: 1000px;">
       <q-card-section class="ctn-dialog-title q-pb-none q-py-xs q-px-sm row justify-between">
         <div class="text-h6 q-pt-xs q-pl-md-sm col">
@@ -48,7 +48,8 @@ const props = withDefaults(defineProps<{
 })
 const openDialog: Ref<boolean> = ref<boolean>(props.openDialog)
 const emit = defineEmits([
-  'update:openDialog'
+  'update:openDialog',
+  'on-close'
 ])
 
 // WATCHS ---------------------------------------------------
@@ -64,8 +65,8 @@ watch(
 
 // METODOS ---------------------------------------------------
 const methods = {
-  closeDialog () {
-    console.log('Junio fechando dialog')
+  close () {
+    emit('on-close')
   }
 }
 </script>

@@ -33,7 +33,7 @@ export default function useNotify () {
       icon: 'info',
       position,
       color: 'info',
-      message: message,
+      message,
       actions: [
         { icon: 'close', color: 'white', round: true, handler: () => { /* ... */ } }
       ]

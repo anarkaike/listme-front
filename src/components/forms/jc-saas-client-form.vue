@@ -1,16 +1,16 @@
 <template>
   <div class="jc-saasClient-form row jc-form">
-    <div class="col-grow q-pr-md-md q-px-xs q-mb-lg col-md-3" v-if="saasClient.url_logo && saasClient.url_logo!=='' && typeof saasClient.url_logo==='string'">
-      <q-img :src="saasClient.url_logo" style="max-height: 200px;" fit="contain" />
+    <div class="col-grow q-pr-md-md q-px-xs q-mb-lg col-md-3" v-if="row.url_logo && row.url_logo!=='' && typeof row.url_logo==='string'">
+      <q-img :src="row.url_logo" style="max-height: 200px;" fit="contain" />
     </div>
-    <q-form class="col-grow" ref="myForm" @submit.prevent="methods.save" :class="{ 'col-md-9':saasClient.url_logo && saasClient.url_logo!=='' }">
+    <q-form class="col-grow" ref="myForm" @submit.prevent="methods.save" :class="{ 'col-md-9':row.url_logo && row.url_logo!=='' }">
       <div class="row">
 
         <!-- CAMPO NOME EMPRESA -->
         <div class="col-12 col-md-4">
           <q-input
             filled
-            v-model="saasClient.company_name"
+            v-model="row.company_name"
             label="Nome da empresa"
             dense
             class="q-mr-md-sm"
@@ -25,7 +25,7 @@
         <div class="col-12 col-md-5">
           <q-input
             filled
-            v-model="saasClient.contact_name"
+            v-model="row.contact_name"
             label="Nome do contato"
             dense
             class="q-mx-md-sm q-mb-md"
@@ -41,7 +41,7 @@
           <q-select
             filled
             dense
-            v-model="saasClient.status"
+            v-model="row.status"
             :options="statusOption"
             label="Status"
             emit-value
@@ -60,7 +60,7 @@
         <div class="col-12 col-md-5">
           <q-input
             filled
-            v-model="saasClient.email"
+            v-model="row.email"
             label="Email da empresa"
             class="q-mr-md-sm q-mb-none q-mb-md-none"
             lazy-rules
@@ -81,7 +81,7 @@
         <div class="col-12 col-md-4">
           <q-input
             filled
-            v-model="saasClient.phone"
+            v-model="row.phone"
             label="Telefone de contato"
             lazy-rules
             dense
@@ -100,7 +100,7 @@
           <q-select
             filled
             dense
-            v-model="saasClient.business_sector"
+            v-model="row.business_sector"
             :options="businessSectorOption"
             label="Mercado de Atuação"
             emit-value
@@ -135,7 +135,7 @@
         <div class="col-12 col-md-4">
           <q-input
             filled
-            v-model="saasClient.domain_api"
+            v-model="row.domain_api"
             label="URL da API"
             dense
             class="q-mx-md-sm q-mb-md"
@@ -150,7 +150,7 @@
         <div class="col-12 col-md-4">
           <q-input
             filled
-            v-model="saasClient.domain_front"
+            v-model="row.domain_front"
             label="URL da Front"
             dense
             class="q-ml-md-sm"
@@ -167,7 +167,7 @@
       <div class="row q-mt-lg sticky-buttons">
         <q-space class="col-auto" />
         <q-btn label="Cancelar" @click="methods.cancel" color="primary" flat class="q-mr-sm" />
-        <q-btn :label="saasClient.id?'Atualizar':'Cadastrar'" type="submit" color="primary"/>
+        <q-btn :label="row.id?'Atualizar':'Cadastrar'" type="submit" color="primary"/>
       </div>
     </q-form>
   </div>
@@ -188,8 +188,8 @@ import {
 // CONSTANTES ---------------------------------------------------
 const myForm = ref<QForm|null>(null)
 const urlLogoModel = ref<File[]>([] as File[])
-const props = withDefaults(defineProps<{ saasClient?: ISaasClient|null }>(), {})
-const saasClient: Ref<ISaasClient> = ref<ISaasClient>(props.saasClient ?? {} as ISaasClient)
+const props = withDefaults(defineProps<{ row?: ISaasClient|null }>(), {})
+const row: Ref<ISaasClient> = ref<ISaasClient>(props.row ?? {} as ISaasClient)
 
 const statusOption: Ref<IOption[]> = ref([
   { id: ESaasClientStatusValues.active, label: ESaasClientStatusLabels.active } as IOption,
@@ -219,24 +219,23 @@ const emit = defineEmits([
 // METODOS ------------------------------------------------------
 const methods = {
   save () {
-    const method = saasClient.value.id ? 'update' : 'create'
+    const method = row.value.id ? 'update' : 'create'
     if ('name' in urlLogoModel.value) {
-      console.log('Junio ENTROUUU', urlLogoModel.value)
-      saasClient.value.url_logo_up = urlLogoModel.value as unknown as File
+      row.value.url_logo_up = urlLogoModel.value as unknown as File
     }
-    $stores.saasClients[method](saasClient.value).then((value: ISaasClient) => {
+    $stores.saasClients[method](row.value).then((value: ISaasClient) => {
       emit('on-submit', value)
-      emit(saasClient.value.id ? 'on-update' : 'on-create', value)
-      saasClient.value.url_logo = value.url_logo
+      emit(row.value.id ? 'on-update' : 'on-create', value)
+      row.value.url_logo = value.url_logo
       methods.closeDialog()
     })
   },
   cancel () {
-    saasClient.value = {} as ISaasClient
+    row.value = {} as ISaasClient
     emit('on-cancel')
   },
   closeDialog () {
-    saasClient.value = {} as ISaasClient
+    row.value = {} as ISaasClient
     emit('close-dialog')
   }
 }
