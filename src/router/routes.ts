@@ -19,10 +19,10 @@ const routes = [
       { path: 'home', name: 'home', component: () => import('pages/HomePage.vue') },
       { path: 'users', name: 'users', component: () => import('pages/UsersPage.vue') },
       { path: 'promoters', name: 'promoters', component: () => import('pages/PromotersPage.vue') },
-      { path: 'receptionists', name: 'receptionists', component: () => import('pages/ReceptionistsPage.vue') }
-      // { path: 'form-category/:id?', name: 'form-category', component: () => import('pages/category/Form.vue') },
-      // { path: 'product', name: 'product', component: () => import('pages/product/List.vue') },
-      // { path: 'form-product/:id?', name: 'form-product', component: () => import('pages/product/Form.vue') },
+      { path: 'receptionists', name: 'receptionists', component: () => import('pages/ReceptionistsPage.vue') },
+      { path: 'events', name: 'events', component: () => import('pages/EventPage.vue') },
+      { path: 'events-lists', name: 'events-lists', component: () => import('pages/EventListPage.vue') },
+      { path: 'events-lists-items', name: 'events-lists-items', component: () => import('pages/EventListItemPage.vue') }
       // { path: 'form-config/:id?', name: 'form-config', component: () => import('pages/config/Form.vue') }
       // { path: '', component: () => import('pages/Index.vue') }
     ],

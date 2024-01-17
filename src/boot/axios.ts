@@ -31,6 +31,9 @@ export default boot(({ app }) => {
   // api.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
   // api.defaults.headers.common['Content-Type'] = 'multipart/form-data'
   // api.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  api.defaults.headers.common['X-Jc-Current-Domain'] = window.location
   api.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
   api.defaults.headers.common['Access-Control-Allow-Headers'] = 'Content-Type'
   api.defaults.headers.common['Access-Control-Allow-Methods'] = 'GET, POST, PUT, PATCH, DELETE, OPTIONS'

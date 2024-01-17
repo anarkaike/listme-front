@@ -18,12 +18,11 @@ export const eventsStore = defineStore('eventsStore', {
       try {
         // Buscando na store antes deusuarios na API
         if (this.events.length === 0) {
-          const events: IEvent[] = await $api.events.listAll()
-          if (events.length === 0) {
-            $notify.info('Nenhum evento foi encontrado')
-          }
-          this.$patch({ events })
+          this.events = await $api.events.listAll()
         }
+        setTimeout(async () => {
+          this.events = await $api.events.listAll()
+        }, 100)
 
         return this.events
       } catch (err) {

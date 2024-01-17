@@ -18,12 +18,11 @@ export const usersStore = defineStore('usersStore', {
       try {
         // Buscando na store antes deusuarios na API
         if (this.users.length === 0) {
-          const users: IUser[] = await $api.users.listAll()
-          if (users.length === 0) {
-            $notify.info('Nenhum usuário foi encontrado')
-          }
-          this.$patch({ users })
+          this.users = await $api.users.listAll()
         }
+        setTimeout(async () => {
+          this.users = await $api.users.listAll()
+        }, 100)
 
         return this.users
       } catch (err) {
@@ -84,6 +83,7 @@ export const usersStore = defineStore('usersStore', {
           ]
         })
 
+        this.listAll()
         $loading.hide()
         $notify.success(`Usuário "${user.name}" foi cadastrado com sucesso`)
         return userCreated
@@ -105,6 +105,7 @@ export const usersStore = defineStore('usersStore', {
         users[this.$state.users.findIndex(userRow => userRow.id === user.id)] = userUpdated
         this.$patch({ users })
 
+        this.listAll()
         $loading.hide()
         $notify.success(`Usuário "${user.name}" foi atualizado com sucesso`)
         return userUpdated

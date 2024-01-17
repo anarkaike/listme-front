@@ -10,17 +10,27 @@
     :filterData="props.filterData"
     :filterProfilesOptions="props.filterProfilesOptions"
     :title="props.title"
-    :styleStatusForColumn="methods.styleStatusForColumn"
+    :styleStatusForColumn="$stylesByStatusOfUser.background"
   >
 
     <!-- COLUNA NOME -->
     <template #columns="scope">
 
       <!-- TEMPLATE COLUNA NAME -->
+      <q-td class="col-auto" key="photo" :props="scope.props" @click="scope.onView(scope.props.row)" style="width: 120px; text-align: left; cursor: pointer;">
+        <div v-if="scope.props.row.url_photo && scope.props.row.url_photo!=='' && typeof scope.props.row.url_photo === 'string'">
+          <q-img :src="scope.props.row.url_photo" style="max-height: 100px; width: 100px; border-radius: 10px;" fit="contain" />
+        </div>
+        <div v-else>
+          sem foto
+        </div>
+      </q-td>
+
+      <!-- TEMPLATE COLUNA NAME -->
       <q-td key="name" :props="scope.props" @click="scope.onView(scope.props.row)" style="cursor: pointer;">
         <strong>
           {{ scope.props.row.name }}
-          <q-chip outline :style="[methods.styleStatusForChip(scope.props.row.status)]" class="chip-status q-ml-xs" dense>
+          <q-chip outline :style="[$stylesByStatusOfUser.chip(scope.props.row.status)]" class="chip-status q-ml-xs" dense>
             {{toEUserStatusLabels[scope.props.row.status]}}
           </q-chip>
         </strong>
@@ -48,14 +58,11 @@
 </template>
 <script lang="ts" setup>
 import { defineProps, ref, withDefaults } from 'vue'
-import {
-  JcUserDataView,
-  JcUserForm,
-  JcGenericList
-} from '@/components'
 import { $stores } from '@/stores/all'
-import { EUserStatusLabels, EUserStatusValues } from '@/enums'
+import { JcUserDataView, JcUserForm, JcGenericList } from '@/components'
+import { EUserStatusLabels } from '@/enums'
 import type { IModel, IOption } from '@/interfaces'
+import { $stylesByStatusOfUser } from '@/composables'
 
 // PROPS ----------------------------------------
 const props = withDefaults(defineProps<{
@@ -73,36 +80,12 @@ const props = withDefaults(defineProps<{
 })
 const toEUserStatusLabels = EUserStatusLabels
 const columns = ref([
+  { name: 'photo', align: 'left', label: 'Nome', field: 'name', sortable: true },
   { name: 'name', align: 'left', label: 'Nome', field: 'name', sortable: true },
   { name: 'profiles', align: 'left', label: 'Perfis', field: 'profiles', sortable: false },
   { name: 'auditoria', align: 'center', label: 'Auditoria', field: 'auditoria', sortable: false },
   { name: 'actions', align: 'center', label: 'Ações', field: 'actions', sortable: false }
 ])
-
-const methods = {
-  styleStatusForColumn (status: EUserStatusValues): string {
-    switch (status) {
-      case EUserStatusValues.active:
-        return 'color: green; background-color: #f8fcf4; background: linear-gradient(150deg, #f8fcf4 20%, #FFF 100%);'
-      case EUserStatusValues.inactive:
-        return 'color: gray; background-color: #f4f4f4; background: linear-gradient(150deg, #f4f4f4 20%, #FFF 100%)'
-      case EUserStatusValues.blocked:
-        return 'color: red; background-color: #f9f2f2; background: linear-gradient(150deg, #f9f2f2 20%, #FFF 100%)'
-    }
-    return ''
-  },
-  styleStatusForChip (status: EUserStatusValues): string {
-    switch (status) {
-      case EUserStatusValues.active:
-        return 'border-color: green; color: green; background-color: #bcff7a !important;'
-      case EUserStatusValues.inactive:
-        return 'border-color: gray; color: gray; background-color: #e0e0e0 !important;'
-      case EUserStatusValues.blocked:
-        return 'border-color: red; color: red; background-color: #ffc6c6 !important;'
-    }
-    return ''
-  }
-}
 </script>
 
 <style scoped lang="scss">

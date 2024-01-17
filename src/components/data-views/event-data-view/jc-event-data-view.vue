@@ -70,32 +70,32 @@
 
         <!-- CONTEUDO ABA PRINCIPAL -->
         <q-tab-panel name="main">
-          <JcEventMain :data="data"  />
+          <JcEventMain :row="row"  />
         </q-tab-panel>
 
         <!-- CONTEUDO ABA LOCAL -->
         <q-tab-panel name="location">
-          <JcEventLocal :data="data" />
+          <JcEventLocal :row="row" />
         </q-tab-panel>
 
         <!-- CONTEUDO ABA INFO -->
         <q-tab-panel name="additionalInfo">
-          <JcEventInfo :data="data" />
+          <JcEventInfo :row="row" />
         </q-tab-panel>
 
         <!-- CONTEUDO ABA DESCRIÇÃO -->
         <q-tab-panel name="description">
-          <JcEventDescription :data="data" />
+          <JcEventDescription :row="row" />
         </q-tab-panel>
 
         <!-- CONTEUDO ABA BANNER -->
         <q-tab-panel name="banner" class="only-mobile">
-          <JcEventBanner :data="data" />
+          <JcEventBanner :row="row" />
         </q-tab-panel>
 
         <!-- CONTEUDO ABA BANNER -->
         <q-tab-panel name="eventLists">
-          <JcEventLists :data="data" />
+          <JcEventLists :row="row" />
         </q-tab-panel>
 
       </q-tab-panels>
@@ -104,7 +104,7 @@
 
     <!-- COLUNA DE FOTO, STATUS E AUDITORIA -->
     <div class="col-md-4 col-12 q-pa-none q-pt-md q-pa-sm-none only-desktop">
-      <JcEventBanner :data="data" />
+      <JcEventBanner :row="row" />
     </div>
   </div>
 </template>
@@ -112,7 +112,6 @@
 <script lang="ts" setup>
 import { defineProps, withDefaults, ref, watchEffect } from 'vue'
 import type { IEvent } from '@/interfaces'
-import { useHumanize } from '@/composables'
 import {
   JcEventMain,
   JcEventLocal,
@@ -120,18 +119,17 @@ import {
   JcEventDescription,
   JcEventBanner,
   JcEventLists
-} from './details'
+} from './components'
 
 // CONSTANTES ---------------------------------------------------
-const { humanizeDuration, humanizeDatetime } = useHumanize()
-const props = withDefaults(defineProps<{ data: IEvent }>(), {})
-const emit = defineEmits<{(e: 'update:data', data: IEvent): void}>()
-const data = ref<IEvent>(props.data)
+const props = withDefaults(defineProps<{ row: IEvent }>(), {})
+const emit = defineEmits<{(e: 'update:row', row: IEvent): void}>()
+const row = ref<IEvent>(props.row)
 const tabDataView = ref('main')
 
 // WATCHS ---------------------------------------------------
 watchEffect(() => {
-  emit('update:data', data.value)
+  emit('update:row', row.value)
 })
 
 // METODOS ---------------------------------------------------

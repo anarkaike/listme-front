@@ -21,7 +21,6 @@
 
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="profile">
-        <div class="text-h6">Mails</div>
 
         <!-- FORMULÁRIO PERFIL -->
 
@@ -153,24 +152,20 @@
       </q-tab-panel>
 
       <q-tab-panel name="permissions">
-        <div class="text-h6">Permissões do Perfil {{row.name}}</div>
 
         <!-- FORMULÁRIO ADD/REM PERMISSÕES -->
-        <div class="col-md-8 col-12 q-pl-none q-pl-md-md">
-          <div class="text-h6 q-mb-sm">Permissões atribuídas a este perfil:</div>
-          <div v-if="row && permissions.length > 0">
-        <span v-for="(permission, kPermission) in permissions" :key="permission.id">
-            <div v-if="kPermission===0 || permissions[kPermission-1].model!==permission.model" class="q-mt-md">
-              <strong>{{ toEModelsLabels[permission.name.split(':')[0]]??permission.name.split(':')[0] }}</strong> :
-            </div>
-            <q-chip>
-              {{ toEPermissionsLabels[permission.name.split(':')[1]]??permission.name.split(':')[1] }}
-            </q-chip>
-        </span>
-          </div>
-          <div v-else>
-            Nenhuma permissão atribuída a este perfil
-          </div>
+        <div v-if="row && permissions.length > 0">
+          <span v-for="(permission, kPermission) in permissions" :key="permission.id">
+              <div v-if="kPermission===0 || permissions[kPermission-1].model!==permission.model" class="q-mt-md">
+                <strong>{{ toEModelsLabels[permission.name.split(':')[0]]??permission.name.split(':')[0] }}</strong> :
+              </div>
+              <q-chip>
+                {{ toEPermissionsLabels[permission.name.split(':')[1]]??permission.name.split(':')[1] }}
+              </q-chip>
+          </span>
+        </div>
+        <div v-else>
+          Nenhuma permissão atribuída a este perfil
         </div>
 
       </q-tab-panel>
@@ -185,8 +180,11 @@ import { defineProps, withDefaults, Ref, ref, watchEffect, onBeforeMount } from 
 import { QForm } from 'quasar'
 import type { IProfile } from '@/interfaces'
 import { $stores } from '@/stores/all'
+import { EModelsLabels, EPermissionsLabels } from '@/enums'
 
 // CONSTANTES ---------------------------------------------------
+const toEModelsLabels = EModelsLabels
+const toEPermissionsLabels = EPermissionsLabels
 const myForm = ref<QForm|null>(null)
 const props = withDefaults(defineProps<{ row?: IProfile|null }>(), {})
 const row: Ref<IProfile> = ref<IProfile>(props.row ?? { name: '', description: '' } as IProfile)

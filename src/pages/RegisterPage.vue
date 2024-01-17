@@ -1,10 +1,11 @@
 <template>
   <q-page style="min-height: auto !important;">
+
     <!-- FORMULÁRIO DE AUTO REGISTRO -->
     <q-form ref="myForm" class="row justify-center" @submit.prevent="methods.autoRegister">
+
       <!-- TITULO DA PAGINA -->
       <p class="col-12 text-h5 text-bold text-center box-title">Criar nova conta</p>
-      <!-- PASSO 1 - DADOS DE IDENTIFICACAO -->
         <q-stepper
           v-model="step"
           vertical
@@ -15,12 +16,15 @@
           done-color="positive"
           active-color="accent"
         >
+
+          <!-- PASSO 1 - DADOS DE IDENTIFICACAO -->
           <q-step
             :name="1"
             title="Dados para identificação"
             icon="person"
             :done="step > 1"
           >
+
             <!-- CAMPO NOME DO CONTATO -->
             <q-input
               label="Seu nome"
@@ -40,7 +44,7 @@
             <!-- CAMPO NOME DA EMPRESA -->
             <q-input
               label="Nome da empresa"
-              v-model="form.contact_name"
+              v-model="form.company_name"
               filled
               lazy-rules
               dense
@@ -60,7 +64,11 @@
               dense
               class="q-pb-sm"
               lazy-rules
-              :options="['Boate', 'Bar', 'Produtor de Festas', 'Cerimonialista', 'Outro']"
+              emit-value
+              map-options
+              option-value="id"
+              option-label="label"
+              :options="optionsBusinessSector()"
               :rules="[val => (val && val.length > 0) || 'Escolha o setor de negócio']">
               <template #prepend>
                 <q-icon name="category" />
@@ -80,6 +88,7 @@
             icon="phone_iphone"
             :done="step > 2"
           >
+
             <!-- CAMPO EMAIL -->
             <q-input
               label="Email"
@@ -196,27 +205,36 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { QForm } from 'quasar'
-import { $vibrate, $loading, $notify } from '@/composables'
-import { $stores } from '@/stores/all'
-import { IAuthResponse } from '@/interfaces'
 import { useRouter } from 'vue-router'
+import { QForm } from 'quasar'
+import { $vibrate, $notify } from '@/composables'
+import { $stores } from '@/stores/all'
+import { ESaasClientBusinessSectorValues, ESaasClientBusinessSectorLabels } from '@/enums'
 
+// CONSTANTES ---------------------------------------------
 const router = useRouter()
-
 const pwsVisible = ref(false)
 const step = ref(1)
 const myForm = ref<QForm|null>(null)
 const form = ref({
-  name: '',
+  company_name: '',
+  contact_name: '',
   email: '',
   password: '',
-  contact_name: '',
   business_sector: '',
   phone: '',
   password2: ''
 })
+const optionsBusinessSector = () => {
+  return [
+    { id: ESaasClientBusinessSectorValues.bar, label: ESaasClientBusinessSectorLabels.bar },
+    { id: ESaasClientBusinessSectorValues.boate, label: ESaasClientBusinessSectorLabels.boate },
+    { id: ESaasClientBusinessSectorValues.produtor_de_festas, label: ESaasClientBusinessSectorLabels.produtor_de_festas },
+    { id: ESaasClientBusinessSectorValues.cerimonialista, label: ESaasClientBusinessSectorLabels.cerimonialista }
+  ]
+}
 
+// METODOS -------------------------------------------------------
 const methods = {
   nextStep () {
     if (myForm.value === null) return
@@ -237,6 +255,7 @@ const methods = {
     $stores.auth.autoRegister(form.value, router)
   }
 }
+
 </script>
 <style scoped lang="scss">
 .page-title {

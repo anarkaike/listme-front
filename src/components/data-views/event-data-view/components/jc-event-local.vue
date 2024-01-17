@@ -33,7 +33,7 @@
           <q-item-section avatar><icon icon="arcticons:50-us-states-map" /></q-item-section>
           <q-item-section>
             <q-item-label class="text-caption text-weight-light">Estado:</q-item-label>
-            <q-item-label class="text-body2 text-weight-medium">{{props.data.state}}</q-item-label>
+            <q-item-label class="text-body2 text-weight-medium">{{props.row.state}}</q-item-label>
           </q-item-section>
         </q-item>
         <q-separator />
@@ -46,7 +46,7 @@
       <q-item-section avatar><icon icon="mdi:cellphone-information" /></q-item-section>
       <q-item-section>
         <q-item-label class="text-caption text-weight-light">Informações de contato:</q-item-label>
-        <q-item-label class="text-body2 text-weight-medium">{{props.data.contact_info}}</q-item-label>
+        <q-item-label class="text-body2 text-weight-medium">{{props.row.contact_info}}</q-item-label>
       </q-item-section>
     </q-item>
 
@@ -57,5 +57,5 @@
 import { defineProps, withDefaults } from 'vue'
 import { IEvent } from '@/interfaces'
 
-const props = withDefaults(defineProps<{ data: IEvent }>(), {})
+const props = withDefaults(defineProps<{ row: IEvent }>(), {})
 </script>

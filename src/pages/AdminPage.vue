@@ -49,7 +49,6 @@
 <script lang="ts" setup>
 import { IOption, IUser } from '@/interfaces'
 import { ref } from 'vue'
-import { DasboardTab } from './Admin'
 import { EProfileAdminIds } from '@/enums'
 import {
   JcProfileList,

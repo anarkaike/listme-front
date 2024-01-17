@@ -13,14 +13,6 @@
       <q-item-section>Home</q-item-section>
     </q-item>
 
-    <!-- MENU ITEM - ADMIN -->
-    <q-item clickable :to="{ name: 'admin' }" active-class="text-purple-14">
-      <q-item-section avatar>
-        <icon icon="eos-icons:admin-outlined" />
-      </q-item-section>
-      <q-item-section>Administradores</q-item-section>
-    </q-item>
-
     <!-- MENU ITEM CONVIDADOS -->
     <q-item clickable :to="{ name: 'users' }" active-class="text-purple-14" v-close-popup>
       <q-item-section avatar>
@@ -46,7 +38,7 @@
     </q-item>
 
     <!-- MENU ITEM EVENTOS -->
-    <q-item clickable v-close-popup>
+    <q-item clickable :to="{ name: 'events' }"  v-close-popup>
       <q-item-section avatar>
         <icon icon="tabler:calendar-star" />
       </q-item-section>
@@ -54,7 +46,7 @@
     </q-item>
 
     <!-- MENU ITEM - LISTAS DE EVENTOS -->
-    <q-item clickable v-close-popup>
+    <q-item clickable :to="{ name: 'eventsLists' }"  v-close-popup>
       <q-item-section avatar>
         <icon icon="material-symbols:patient-list" />
       </q-item-section>
@@ -62,11 +54,19 @@
     </q-item>
 
     <!-- MENU ITEM CONVIDADOS -->
-    <q-item clickable v-close-popup>
+    <q-item clickable :to="{ name: 'eventsListsItems' }"  v-close-popup>
       <q-item-section avatar>
         <icon icon="fluent:person-heart-24-filled" />
       </q-item-section>
       <q-item-section>Nomes e Convidados</q-item-section>
+    </q-item>
+
+    <!-- MENU ITEM - ADMIN -->
+    <q-item clickable :to="{ name: 'admin' }" active-class="text-purple-14">
+      <q-item-section avatar>
+        <icon icon="eos-icons:admin-outlined" />
+      </q-item-section>
+      <q-item-section>Administrativo</q-item-section>
     </q-item>
 
     <!-- MENU ITEM - SAIR -->

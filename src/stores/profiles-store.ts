@@ -18,12 +18,11 @@ export const profilesStore = defineStore('profilesStore', {
       try {
         // Buscando na store antes deusuarios na API
         if (this.profiles.length === 0) {
-          const profiles: IProfile[] = await $api.profiles.listAll()
-          if (profiles.length === 0) {
-            $notify.info('Nenhum perfil foi encontrado')
-          }
-          this.$patch({ profiles })
+          this.profiles = await $api.profiles.listAll()
         }
+        setTimeout(async () => {
+          this.profiles = await $api.profiles.listAll()
+        }, 100)
 
         return this.profiles
       } catch (err) {
@@ -84,6 +83,7 @@ export const profilesStore = defineStore('profilesStore', {
           ]
         })
 
+        this.listAll()
         $loading.hide()
         $notify.success(`Perfil "${profile.name}" foi cadastrado com sucesso`)
         return profileCreated
@@ -105,6 +105,7 @@ export const profilesStore = defineStore('profilesStore', {
         profiles[this.$state.profiles.findIndex(profileRow => profileRow.id === profile.id)] = profileUpdated
         this.$patch({ profiles })
 
+        this.listAll()
         $loading.hide()
         $notify.success(`Perfil "${profile.name}" foi atualizado com sucesso`)
         return profileUpdated

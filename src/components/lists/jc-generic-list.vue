@@ -108,7 +108,7 @@ import {
   JcAudit,
   JcDialog
 } from '@/components'
-import { $loading, $notify } from '@/composables'
+import { $notify } from '@/composables'
 import { useRoute, useRouter } from 'vue-router'
 import { defineProps, withDefaults } from 'vue/dist/vue'
 
@@ -145,7 +145,11 @@ const rowsFiltered = computed(() => {
   const key = filterForm.value.filter.toLowerCase().split(' ')
   return rows.value.filter((row) => {
     let encontrado = false
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     props.filterByColumns.forEach((column) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       const value = row[column]?.toLowerCase()
       key.forEach((keyParte) => {
         if (value?.includes(keyParte)) encontrado = true
@@ -201,6 +205,11 @@ const methods = {
     delete query.action
     delete query.id
     router.push({ query })
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    props.stores.listAll().then((data: IModel[]) => {
+      rows.value = props.filterData(data)
+    })
   },
   onDelete (row: IModel) {
     $q.dialog({
@@ -209,6 +218,8 @@ const methods = {
       cancel: true,
       persistent: true
     }).onOk(() => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       props.stores.delete(row.id as number).then(() => {
         $notify.success('Registro excluido com sucesso!')
       })
@@ -223,6 +234,8 @@ const methods = {
   list () {
     if (props.stores) {
       // $loading.show('Buscando dados...')
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       props.stores.listAll().then((data: IModel[]) => {
         // $loading.hide()
         const r = props.filterData(data)
@@ -237,12 +250,17 @@ const methods = {
     }
   },
   titleForDialogView (row: IModel): string {
-    const label = row.name ?? row.title ?? row[props.fieldLabel] ?? null
-    return 'Visualizando dados' + (label ? ` de "${label}"` : ` de ${label}`)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const labelRegister = row.name ?? row.title ?? row[props.fieldLabel] ?? null
+    return 'Visualizando ' + props.singularLabel + (labelRegister ? ` • ${labelRegister}` : '')
   },
   titleForDialogForm (row: IModel) {
     const label = row?.id ? 'Editando ' + props.singularLabel : 'Cadastrando ' + props.singularLabel
-    return 'Editando dados' + (label ? ` de "${label}"` : ` de ${label}`)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const labelRegister = row.name ?? row.title ?? row[props.fieldLabel] ?? null
+    return label + ' • ' + labelRegister
   }
 }
 
@@ -251,6 +269,8 @@ onBeforeMount(() => {
 
   // Verificando se na URL existe parametro ID para carregar dialog de view/edit
   if (route.query?.id) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     props.stores.getById(route.query?.id as unknown as number).then((row: IModel) => {
       const action = route.query?.action === 'edit' ? 'onEdit' : 'onView'
       methods[action](row)

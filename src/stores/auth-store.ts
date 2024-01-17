@@ -8,7 +8,7 @@ import { Router } from 'vue-router'
 export const authStore = defineStore('authStore', {
   state: () => ({
     user: null as IUser | null,
-    saasClient: null as ISaasClient | null,
+    saas_client: null as ISaasClient | null,
     user_impersonation: null as IUser | null,
     token: null as string|null
   }),
@@ -39,7 +39,7 @@ export const authStore = defineStore('authStore', {
         LocalStorage.set('LmToken', res.data.token.plainTextToken)
         this.$patch({
           user: res.data.user,
-          saasClient: res.data.saasClient,
+          saas_client: res.data.saasClient,
           token: res.data.token.plainTextToken
         })
 
@@ -76,7 +76,7 @@ export const authStore = defineStore('authStore', {
         LocalStorage.set('LmToken', res.data.token.plainTextToken)
         this.$patch({
           user: res.data.user,
-          saasClient: res.data.saasClient,
+          saas_client: res.data.saasClient,
           token: res.data.token.plainTextToken
         })
 
@@ -96,6 +96,7 @@ export const authStore = defineStore('authStore', {
         throw err
       }
     },
+
     /**
      * Logout - Encerramento da sessão do usuário na API e limpeza da sessão
      *
@@ -135,6 +136,26 @@ export const authStore = defineStore('authStore', {
         $notify.error(err.response.data.message ?? err.message ?? 'Erro ao encerrar o sistema')
         $loading.hide()
         console.error('Erro no logou no catch: ', err)
+        throw err
+      }
+    },
+
+    /**
+     * Obtem dados atual do saas usando o dominio
+     */
+    async getSaasClientByDomain (): Promise<ISaasClient|null> {
+      try {
+        // Buscando cliente saas no state antes de buscar na API
+        if (!this.saas_client) {
+          this.saas_client = await $api.auth.getCurrentSaasClientByDomain()
+        }
+
+        return this.saas_client
+      } catch (err) {
+        console.error('Erro ao carregar os dados do cliente saas": ', err)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        $notify.error(err.response.data.message ?? err.message ?? 'Erro ao carregar os dados do cliente saas')
         throw err
       }
     }

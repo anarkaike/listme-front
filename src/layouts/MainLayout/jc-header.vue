@@ -6,7 +6,7 @@
 
       <!-- TOPO - LOGO -->
       <q-toolbar-title v-show="!$q.screen.xs && !$q.screen.sm">
-        {{$stores.auth.$state.saasClient?.company_name ?? 'Listme'}}
+        {{$stores.auth.$state?.saas_client?.company_name ?? 'Listme'}}
       </q-toolbar-title>
       <q-toolbar-title>
         <CircularLogo />

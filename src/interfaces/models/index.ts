@@ -9,6 +9,8 @@ import type IPermission from './IPermission'
 import type IAudit from './IAudit'
 import type IModel from './IModel'
 
+export * from './ISaasClientGeneralSettings'
+
 export {
   IEvent,
   IEventList,

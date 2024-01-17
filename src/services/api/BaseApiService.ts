@@ -1,4 +1,5 @@
 // import { $notify } from '@/composables'
+import { AxiosResponse } from 'axios/index'
 // import { $stores } from '@/stores/all'
 import { LocalStorage } from 'quasar'
 import { api } from '@/boot/axios'
@@ -45,8 +46,35 @@ export default class BaseApiService {
     }
   }
 
+  async request (method = 'get', endPoint: string) {
+    try {
+      this.setToken()
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const res: AxiosResponse = await api[method](endPoint)
+      return res.data
+    } catch (err: unknown) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      this.handleErrors(err)
+      throw err
+    }
+  }
+
+  async post (endPoint: string) {
+    return await this.request('post', endPoint)
+  }
+
+  async put (endPoint: string) {
+    return await this.request('put', endPoint)
+  }
+
+  async get (endPoint: string) {
+    return await this.request('get', endPoint)
+  }
+
   handleErrors () {
-    // LocalStorage.clear()
+    LocalStorage.clear()
     // Queria redirecionar para o login aqui mas não consegui
     // $stores.auth.logout()
     // const router = useRouter()

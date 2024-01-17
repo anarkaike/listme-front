@@ -5,7 +5,7 @@
     <!-- INFO DESCRIÇÃO -->
     <q-item class="q-px-none">
       <q-item-section>
-        <q-item-label class="">{{props.data.description}}</q-item-label>
+        <q-item-label class="">{{props.row.description}}</q-item-label>
       </q-item-section>
     </q-item>
 
@@ -16,5 +16,5 @@
 import { defineProps, withDefaults } from 'vue'
 import { IEvent } from '@/interfaces'
 
-const props = withDefaults(defineProps<{ data: IEvent }>(), {})
+const props = withDefaults(defineProps<{ row: IEvent }>(), {})
 </script>

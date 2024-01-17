@@ -59,13 +59,10 @@ import { defineProps, withDefaults, ref, watchEffect } from 'vue'
 import type { IProfile } from '@/interfaces'
 import { EModelsLabels, EPermissionsLabels } from '@/enums'
 
+// CONSTANTES ---------------------------------------------------
 const toEModelsLabels = EModelsLabels
 const toEPermissionsLabels = EPermissionsLabels
-
-// CONSTANTES ---------------------------------------------------
-const props = withDefaults(defineProps<{
-  row: IProfile
-}>(), {})
+const props = withDefaults(defineProps<{ row: IProfile }>(), {})
 const row = ref<IProfile>(props.row)
 const emit = defineEmits<{(e: 'update:row', row: IProfile): void}>()
 
@@ -73,9 +70,6 @@ const emit = defineEmits<{(e: 'update:row', row: IProfile): void}>()
 watchEffect(() => {
   emit('update:row', row.value)
 })
-
-// METODOS ---------------------------------------------------
-// const methods = {}
 </script>
 
 <style lang="scss" scoped>

@@ -17,11 +17,12 @@ export const permissionsStore = defineStore('permissionsStore', {
     async listAll (params = []): Promise<IPermission[]> {
       try {
         // Buscando permissões na API
-        const permissions: IPermission[] = await $api.permissions.listAll(params)
-        if (permissions.length === 0) {
-          $notify.info('Nenhuma permissão foi encontrada')
+        if (this.permissions.length === 0) {
+          this.permissions = await $api.permissions.listAll(params)
         }
-        this.$patch({ permissions })
+        setTimeout(async () => {
+          this.permissions = await $api.permissions.listAll(params)
+        }, 100)
 
         return this.permissions
       } catch (err) {

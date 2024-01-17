@@ -14,6 +14,8 @@ export default class ReadOnlyApiService extends BaseApiService {
       const res = await api.get(this.getUrlForListAll() + urlParams, params)
       return res.data
     } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       this.handleErrors(err)
       throw err
     }
@@ -25,6 +27,8 @@ export default class ReadOnlyApiService extends BaseApiService {
       const res: AxiosResponse = await api.get(this.getUrlForGetById(id))
       return res.data
     } catch (err: unknown) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       this.handleErrors(err)
       throw err
     }

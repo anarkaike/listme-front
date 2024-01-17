@@ -34,10 +34,10 @@
             options-selected-class="#c6c9c1"
             emit-value
             map-options
-            filled
-            dense
             option-value="id"
             option-label="label"
+            filled
+            dense
             class="q-ml-md-sm q-mb-md"
           >
             <template #prepend>
@@ -206,22 +206,22 @@
 
 <script lang="ts" setup>
 import { onBeforeMount, defineProps, withDefaults, Ref, ref } from 'vue'
-import { rand } from '@vueuse/core'
 import { QForm } from 'quasar'
-import type { IUser, IOption } from '@/interfaces'
+import { rand } from '@vueuse/core'
 import { $stores } from '@/stores/all'
+import { $optionsOfUser } from '@/composables/users/optionsOfUser'
+import type { IUser, IOption } from '@/interfaces'
 
 // CONSTANTES ---------------------------------------------------
 const myForm = ref<QForm|null>(null)
 const urlPhotoModel = ref<File[]>([] as File[])
 const props = withDefaults(defineProps<{
-  // Geral
   row?: IUser|null,
   filterProfilesOptions?:(options: IOption[]) => IOption[]
 }>(), {
   filterProfilesOptions: (options: IOption[]) => options
 })
-// const originalUser : Ref<IUser> = ref<IUser>(props.row as IUser)
+
 const row: Ref<IUser> = ref<IUser>(props.row ?? {
   status: 'active',
   name: 'Junio',
@@ -237,11 +237,7 @@ const optionsValues = ref({
   saasClients: [] as IOption[]
 })
 
-const statusOption: Ref<IOption[]> = ref([
-  { id: 'active', label: 'Ativo' } as IOption,
-  { id: 'inactive', label: 'Inativo' } as IOption,
-  { id: 'blocked', label: 'Bloqueado' } as IOption
-] as IOption[])
+const statusOption: Ref<IOption[]> = ref($optionsOfUser.status as IOption[])
 const pwsVisible = ref(false)
 
 const emit = defineEmits([

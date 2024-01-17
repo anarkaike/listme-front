@@ -13,10 +13,6 @@ import { IOption, IUser } from '@/interfaces'
 import {
   JcUserList
 } from '@/components'
-import { useRouter, useRoute } from 'vue-router'
-
-const router = useRouter()
-const route = useRoute()
 
 const methods = {
   filterUsers (users: IUser[]) {
@@ -29,7 +25,7 @@ const methods = {
   },
   filterProfilesOptions (options: IOption[]) {
     return options.filter((option: IOption) => {
-      return option.id === '7'
+      return option.id.toString() === '7'
     })
   }
 }

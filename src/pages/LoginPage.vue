@@ -1,6 +1,9 @@
 <template>
   <div view="lHh Lpr lFf">
-    <div class="box-title no-bg">Acesse o Sistema</div>
+    <div class="box-title no-bg">
+      <div class="q-pt-md" style="font-weight: lighter; font-size: 15px;">Bem vindo ao Sistema</div>
+      <div style="font-weight: bold; font-size: 20px;">{{$stores.auth.saas_client?.company_name}}</div>
+    </div>
     <q-page style="min-height: auto;">
       <!-- FORMULARIO DE LOGIN -->
       <q-form class="row justify-center" @submit.prevent="methods.login">
@@ -89,10 +92,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import { useFullscreen } from '@vueuse/core'
 import { $stores } from '@/stores/all'
 import { useRouter } from 'vue-router'
+import { colors } from 'quasar'
+
+const { hexToRgb } = colors
 
 const router = useRouter()
 const { isFullscreen, enter } = useFullscreen()
@@ -109,4 +115,8 @@ const methods = {
     $stores.auth.login(form.value.email, form.value.password, router)
   }
 }
+
+onBeforeMount(() => {
+  $stores.auth.getSaasClientByDomain()
+})
 </script>

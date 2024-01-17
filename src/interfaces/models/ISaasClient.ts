@@ -10,9 +10,13 @@ export default interface ISaasClient extends IModel {
   phone?: string | null;
   email?: string | null;
   business_sector?: string | null;
-  general_settings?: ISaasClientGeneralSettings | null;
+  general_settings?: ISaasClientGeneralSettings | string | null;
   url_logo?: string | null;
   url_logo_up?: File | null;
+  url_login_bg?: string | null;
+  url_login_bg_up?: File | null;
+  url_system_bg?: string | null;
+  url_system_bg_up?: File | null;
   observation?: string | null;
   status?: string | null;
   created_at?: string | null;

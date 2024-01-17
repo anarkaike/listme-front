@@ -18,12 +18,11 @@ export const saasClientsStore = defineStore('saasClientsStore', {
       try {
         // Buscando na store antes deusuarios na API
         if (this.saasClients.length === 0) {
-          const saasClients: ISaasClient[] = await $api.saasClients.listAll()
-          if (saasClients.length === 0) {
-            $notify.info('Nenhum cliente saas foi encontrado')
-          }
-          this.$patch({ saasClients })
+          this.saasClients = await $api.saasClients.listAll()
         }
+        setTimeout(async () => {
+          this.saasClients = await $api.saasClients.listAll()
+        }, 100)
 
         return this.saasClients
       } catch (err) {
@@ -84,6 +83,7 @@ export const saasClientsStore = defineStore('saasClientsStore', {
           ]
         })
 
+        // this.listAll()
         $loading.hide()
         $notify.success(`Cliente saas "${saasClient.company_name}" foi cadastrado com sucesso`)
         return saasClientCreated
@@ -99,12 +99,15 @@ export const saasClientsStore = defineStore('saasClientsStore', {
     async update (saasClient: ISaasClient): Promise<ISaasClient> {
       $loading.show(`Atualizando cliente saas "${saasClient.company_name}"...`)
       try {
+        console.log('Junio: State tinha: ', this.$state.saasClients[this.$state.saasClients.findIndex(saasClientRow => saasClientRow.id === saasClient.id)].url_logo)
+        console.log('Junio: Atualizar dados com: ', saasClient.url_logo)
         // Atualizando perfil na API e state
         const saasClientUpdated: ISaasClient = await $api.saasClients.update(saasClient)
-        const saasClients = this.$state.saasClients
-        saasClients[this.$state.saasClients.findIndex(saasClientRow => saasClientRow.id === saasClient.id)] = saasClientUpdated
-        this.$patch({ saasClients })
+        console.log('Junio: Retornou: ', saasClient.url_logo)
+        this.$state.saasClients[this.$state.saasClients.findIndex(saasClientRow => saasClientRow.id === saasClient.id)] = saasClientUpdated
 
+        console.log('Junio: State esta assim: ', this.$state.saasClients[this.$state.saasClients.findIndex(saasClientRow => saasClientRow.id === saasClient.id)].url_logo)
+        // this.listAll()
         $loading.hide()
         $notify.success(`Cliente saas "${saasClient.company_name}" foi atualizado com sucesso`)
         return saasClientUpdated

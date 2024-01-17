@@ -12,10 +12,6 @@
 import { IOption, IUser } from '@/interfaces'
 import { EProfileAdminIds } from '@/enums'
 import { JcUserList } from '@/components'
-import { useRouter, useRoute } from 'vue-router'
-
-const router = useRouter()
-const route = useRoute()
 
 const methods = {
   filterUsers (users: IUser[]) {
