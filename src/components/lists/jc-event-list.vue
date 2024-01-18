@@ -5,6 +5,8 @@
     :filter-by-columns="['name', 'description']"
     :stores="$stores.events"
     :columns="columns"
+    singular-label="Evento"
+    plural-label="Eventos"
   >
 
     <!-- COLUNA NOME -->

@@ -19,7 +19,6 @@
       </q-card-section>
       <q-card-section class="q-pa-xs q-pa-md-md">
 
-        <!-- USERS DATA VIEW -->
         <slot name="default" />
 
       </q-card-section>

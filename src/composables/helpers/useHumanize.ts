@@ -17,6 +17,17 @@ export default function useHumanize () {
 
   const humanizeDatetime = (datetime: string, format = 'DD/MM HHhmm') => {
     let dateHumanized = ''
+    datetime = datetime.replace('/', '-').replace('/', '-')
+
+    if (datetime.length === 16 || datetime.length === 18 || datetime.length === 21) { // Formato BR que vem do cast do laravel
+      const arrDateAndTime = datetime.split(' ')
+      const arrDate = arrDateAndTime[0].split('-')
+      if (arrDate[2].length === 2) { // Ano em 2 caracter
+        datetime = arrDate[2] + '-' + arrDate[1] + '-' + arrDate[0] + ' ' + arrDateAndTime[1]
+      } else { // ano em 4 caracter
+        datetime = arrDate[2] + '-' + arrDate[1] + '-' + arrDate[0] + ' ' + arrDateAndTime[1]
+      }
+    }
 
     const yearOfDatetime = date.formatDate(datetime, 'YY')
     const yearOfNow = date.formatDate(new Date(), 'YY')
@@ -24,6 +35,7 @@ export default function useHumanize () {
     if (format === 'DD/MM HHhmm') {
       format = yearOfDatetime === yearOfNow ? 'DD/MM HH' : 'DD/MM/YY HH'
       dateHumanized = date.formatDate(datetime, format) + 'h' + date.formatDate(datetime, 'mm')
+
       const sufix = yearOfDatetime === yearOfNow ? '' : '/'
       dateHumanized = dateHumanized
         .replace('/01' + sufix, '/jan' + sufix)
@@ -51,4 +63,9 @@ export default function useHumanize () {
     humanizeDuration,
     humanizeDatetime
   }
+}
+
+export const $useHumanize = {
+  duration: useHumanize().humanizeDuration,
+  datetime: useHumanize().humanizeDatetime
 }

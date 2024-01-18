@@ -4,6 +4,14 @@
       Dashboard
     </div>
     <q-page>
+
+      <q-rating
+        v-model="ratingModel"
+        size="3.5em"
+        color="blue"
+        icon="star_border"
+        icon-selected="star"
+      />
       <div class="row ctn-box-links">
         <div class="col-6 col-md-4 col-lg-4 q-pa-xs-none">
           <q-card class="q-ma-sm" style="cursor: pointer;" @click="router.push({ name: 'admin' })">

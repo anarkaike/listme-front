@@ -103,6 +103,18 @@
     }
   }
 }
+.mini-fab {
+  .q-fab {
+    .q-btn--fab {
+      padding: 8px !important;
+      min-width: 20px !important;
+      min-height: 20px !important;
+    }
+  }
+  .group-button-item-label {
+    background-color: var(--colors-purple-3) !important;
+  }
+}
 .iconify {
   font-size: 23px;
   min-width: 23px;
@@ -144,7 +156,14 @@
     display: none;
   }
 }
+
 @media (max-width: 1024px) {
+  .label-title-dialog-view-form {
+    display: inline-block;
+    font-width: normal !important;
+    font-size: 13px !important;
+    margin-bottom: -15px;
+  }
   .q-tab {
     padding-left: 5px;
   }
@@ -233,3 +252,32 @@
   --title-bg-drawer: rgba(0, 0, 0, 0.4);
 }
 
+// CSS para o formulario de evento (não funcionou dentro do componente)
+.ctn-event-form {
+  .q-stepper__tab {
+    padding: 3px;
+    border-radius: 30px;
+    border-top: 1px solid #f6eff7;
+    background: rgb(248,248,248);
+    background: linear-gradient(351deg, rgba(248,248,248,0.3) 70%, rgba(246,239,247,0.7) 100%);
+  }
+
+  .q-stepper--vertical .q-stepper__dot:after {
+    margin-top: 0px !important;
+  }
+  .q-stepper__dot {
+    width: 25px;
+    height: 25px;
+    font-size: 15px;
+  }
+
+  .q-stepper--vertical .q-stepper__step-inner {
+    padding-left: 25px !important;
+    padding-bottom: 20px;
+    margin-top: 5px;
+    padding-right: 5px;
+  }
+}
+.primary-color {
+  color: var(--colors-purple-3);
+}

@@ -74,7 +74,7 @@
 
   <!-- DIALOG USER VIEW -->
   <JcDialog v-model:openDialog="openDialogView" v-if="props.dataViewComponent" @on-close="methods.onCloseDialogView">
-    <template #title>{{methods.titleForDialogView(rowForView)}}</template>
+    <template #title><div v-html="methods.titleForDialogView(rowForView)"></div></template>
     <!-- COMPONENTE DATA VIEW INJETADO -->
     <component
       :is="props.dataViewComponent"
@@ -84,7 +84,7 @@
 
   <!-- DIALOG USER EDIT/NEW -->
   <JcDialog v-model:openDialog="openDialogForm" disable-btn-close @on-close="methods.onCloseDialogForm" v-if="props.formComponent">
-    <template #title>{{methods.titleForDialogForm(rowForEdit)}}</template>
+    <template #title><div v-html="methods.titleForDialogForm(rowForEdit)"></div></template>
     <!-- COMPONENTE FORMULARIO INJETADO -->
     <component
       :is="props.formComponent"
@@ -253,14 +253,14 @@ const methods = {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const labelRegister = row.name ?? row.title ?? row[props.fieldLabel] ?? null
-    return 'Visualizando ' + props.singularLabel + (labelRegister ? ` • ${labelRegister}` : '')
+    return '<span class="label-title-dialog-view-form">Visualizando ' + props.singularLabel + '</span>' + (labelRegister ? ` <div class="primary-color only-mobile">${labelRegister}</div><span class="primary-color only-desktop"> • ${labelRegister}</span>` : '')
   },
   titleForDialogForm (row: IModel) {
-    const label = row?.id ? 'Editando ' + props.singularLabel : 'Cadastrando ' + props.singularLabel
+    const label = (row?.id ? 'Editando ' : 'Cadastrando ') + props.singularLabel
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const labelRegister = row.name ?? row.title ?? row[props.fieldLabel] ?? null
-    return label + ' • ' + labelRegister
+    return '<span class="label-title-dialog-view-form">' + label + '</span>' + (labelRegister ? ` <div class="primary-color only-mobile">${labelRegister}</div><span class="primary-color only-desktop"> • ${labelRegister}</span>` : '')
   }
 }
 

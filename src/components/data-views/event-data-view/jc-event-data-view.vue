@@ -1,8 +1,5 @@
 <template>
-  <div class="ctn-jc-data-view row reverse jc-data-view">
-    <!-- COLUNA DE INFOS -->
-    <div class="col-md-8 col-12 q-pl-none q-pl-md-md">
-
+  <div class="ctn-jc-data-view jc-data-view">
       <!-- TITULOS DAS ABAS -->
       <q-tabs
         v-model="tabDataView"
@@ -100,12 +97,6 @@
 
       </q-tab-panels>
 
-    </div>
-
-    <!-- COLUNA DE FOTO, STATUS E AUDITORIA -->
-    <div class="col-md-4 col-12 q-pa-none q-pt-md q-pa-sm-none only-desktop">
-      <JcEventBanner :row="row" />
-    </div>
   </div>
 </template>
 
@@ -117,8 +108,8 @@ import {
   JcEventLocal,
   JcEventInfo,
   JcEventDescription,
-  JcEventBanner,
-  JcEventLists
+  JcEventLists,
+  JcEventBanner
 } from './components'
 
 // CONSTANTES ---------------------------------------------------

@@ -1,6 +1,6 @@
 <template>
   <q-page style="min-height: auto !important;">
-    <q-form class="row justify-center" @submit.prevent="handleForgotPassowrd">
+    <q-form class="row justify-center">
       <p class="col-12 text-h5 text-bold text-center page-title">Recuperar minha senha</p>
       <div class="col-11 q-gutter-y-md">
 
@@ -43,32 +43,3 @@
     </q-form>
   </q-page>
 </template>
-
-<script>
-import { defineComponent, ref } from 'vue'
-// import useAuthUser from 'src/composables/UseAuthUser'
-import useNotify from 'src/composables/useNotify'
-
-export default defineComponent({
-  setup () {
-    // const { sendPasswordRestEmail } = useAuthUser()
-    const { notifyError, notifySuccess } = useNotify()
-
-    const email = ref('')
-
-    const handleForgotPassowrd = async () => {
-      try {
-        // await sendPasswordRestEmail(email.value)
-        notifySuccess(`Password reset email sent to: ${email.value}`)
-      } catch (error) {
-        notifyError(error.message)
-      }
-    }
-
-    return {
-      email,
-      handleForgotPassowrd
-    }
-  }
-})
-</script>

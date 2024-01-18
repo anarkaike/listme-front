@@ -7,7 +7,7 @@
       <q-item-section avatar><icon icon="icon-park-outline:road-sign" /></q-item-section>
       <q-item-section>
         <q-item-label class="text-caption text-weight-light">Endereço:</q-item-label>
-        <q-item-label class="text-body2 text-weight-medium">{{props.data.address}}</q-item-label>
+        <q-item-label class="text-body2 text-weight-medium">{{props.row.address}}</q-item-label>
       </q-item-section>
     </q-item>
 
@@ -21,7 +21,7 @@
           <q-item-section avatar><icon icon="solar:city-outline" /></q-item-section>
           <q-item-section>
             <q-item-label class="text-caption text-weight-light">Cidade:</q-item-label>
-            <q-item-label class="text-body2 text-weight-medium">{{props.data.city}}</q-item-label>
+            <q-item-label class="text-body2 text-weight-medium">{{props.row.city}}</q-item-label>
           </q-item-section>
         </q-item>
         <q-separator />

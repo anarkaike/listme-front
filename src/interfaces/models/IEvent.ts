@@ -9,7 +9,7 @@ export default interface IEvent extends IModel {
   duration_in_hours?: number | null;
   url_banner?: string | null;
   url_banner_up?: string | null | File;
-  saas_client_id?: string | null;
+  saas_client_id?: number | null;
   saas_client?: ISaasClient | null;
   description?: string | null;
   address?: string | null;

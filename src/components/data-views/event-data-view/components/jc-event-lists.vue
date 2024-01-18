@@ -8,8 +8,8 @@
 </template>
 
 <script lang="ts" setup>
-// import { defineProps, withDefaults } from 'vue'
-// import { IEvent } from '@/interfaces'
+import { defineProps, withDefaults } from 'vue'
+import { IEvent } from '@/interfaces'
 
-// const props = withDefaults(defineProps<{ data: IEvent }>(), {})
+const props = withDefaults(defineProps<{ row: IEvent }>(), {})
 </script>

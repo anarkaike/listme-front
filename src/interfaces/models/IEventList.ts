@@ -7,6 +7,7 @@ export default interface IEventList extends IModel {
   event?: IEvent | null;
   name?: string | null;
   description?: string | null;
+  url_photo_up?: File | string | null;
   url_photo?: string | null;
   saas_client_id?: number | null;
   saas_client?: ISaasClient | null;

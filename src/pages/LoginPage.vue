@@ -96,9 +96,6 @@ import { onBeforeMount, ref } from 'vue'
 import { useFullscreen } from '@vueuse/core'
 import { $stores } from '@/stores/all'
 import { useRouter } from 'vue-router'
-import { colors } from 'quasar'
-
-const { hexToRgb } = colors
 
 const router = useRouter()
 const { isFullscreen, enter } = useFullscreen()
