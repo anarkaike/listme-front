@@ -21,14 +21,7 @@ export const eventsListsItemsStore = defineStore('eventsListsItemsStore', {
     async listAll (params = {}): Promise<IEventListItem[]> {
       try {
         const key = Object.keys(params).length === 0 ? 'all' : JSON.stringify(params)
-
-        // Buscando na store antes deusuarios na API
-        if (!this.eventsListsItemsWithParams[key] || this.eventsListsItemsWithParams[key].length === 0) {
-          this.eventsListsItemsWithParams[key] = await $api.eventsListsItems.listAll(params)
-        }
-        setTimeout(async () => {
-          this.eventsListsItemsWithParams[key] = await $api.eventsListsItems.listAll(params)
-        }, 100)
+        this.eventsListsItemsWithParams[key] = await $api.eventsListsItems.listAll(params)
 
         return this.eventsListsItemsWithParams[key]
       } catch (err) {

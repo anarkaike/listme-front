@@ -16,13 +16,7 @@ export const profilesStore = defineStore('profilesStore', {
   actions: {
     async listAll (): Promise<IProfile[]> {
       try {
-        // Buscando na store antes deusuarios na API
-        if (this.profiles.length === 0) {
-          this.profiles = await $api.profiles.listAll()
-        }
-        setTimeout(async () => {
-          this.profiles = await $api.profiles.listAll()
-        }, 100)
+        this.profiles = await $api.profiles.listAll()
 
         return this.profiles
       } catch (err) {

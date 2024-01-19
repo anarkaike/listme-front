@@ -22,13 +22,7 @@ export const usersStore = defineStore('usersStore', {
     },
     async listAll (): Promise<IUser[]> {
       try {
-        // Buscando na store antes deusuarios na API
-        if (this.users.length === 0) {
-          this.users = this.filterBySaasClient(await $api.users.listAll())
-        }
-        setTimeout(async () => {
-          this.users = this.filterBySaasClient(await $api.users.listAll())
-        }, 100)
+        this.users = this.filterBySaasClient(await $api.users.listAll())
 
         return this.users
       } catch (err) {
