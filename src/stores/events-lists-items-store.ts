@@ -73,9 +73,6 @@ export const eventsListsItemsStore = defineStore('eventsListsItemsStore', {
     async create (eventListItem: IEventListItem): Promise<IEventListItem> {
       $loading.show(`Cadastrando lista de evento "${eventListItem.name}"...`)
       try {
-        if (!eventListItem.saas_client_id) {
-          eventListItem.saas_client_id = $stores.auth.saas_client?.id
-        }
         // Criando lista de evento na API e adicionando ao state
         const eventListItemCreated: IEventList = await $api.eventsListsItems.create(eventListItem)
         this.eventsListsItemsWithParams.all.push(eventListItemCreated)
@@ -95,9 +92,6 @@ export const eventsListsItemsStore = defineStore('eventsListsItemsStore', {
     async update (eventListItem: IEventListItem): Promise<IEventListItem> {
       $loading.show(`Atualizando o nome da lista de evento "${eventListItem.name}"...`)
       try {
-        if (eventListItem.saas_client_id) {
-          delete eventListItem.saas_client_id
-        }
         // Buscando evento na API e state
         const eventListItemUpdated: IEventList = await $api.eventsListsItems.update(eventListItem)
         this.eventsListsItemsWithParams.all[this.eventsListsItemsWithParams.all.findIndex(eventListItemRow => eventListItemRow.id === eventListItem.id)] = eventListItemUpdated

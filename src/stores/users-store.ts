@@ -1,4 +1,4 @@
-import { $stores } from '@/stores/all'
+// import { $stores } from '@/stores/all'
 import { defineStore } from 'pinia'
 import { $loading, $notify } from '@/composables'
 import { $api } from '@/services/api'
@@ -16,9 +16,10 @@ export const usersStore = defineStore('usersStore', {
   },
   actions: {
     filterBySaasClient (rows: IUser[]) {
-      return rows.filter((r: IUser) => {
-        return r.saas_client_ids?.includes($stores.auth.saas_client?.id as number)
-      })
+      return rows
+      // return rows.filter((r: IUser) => {
+      //   return r.saas_client_ids?.includes($stores.auth.saas_client?.id as number)
+      // })
     },
     async listAll (): Promise<IUser[]> {
       try {
