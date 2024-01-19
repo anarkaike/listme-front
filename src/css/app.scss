@@ -281,3 +281,10 @@
 .primary-color {
   color: var(--colors-purple-3);
 }
+
+.q-tabs .q-tab {
+  border: 1px solid #ece1ed;
+  border-bottom: 0px;
+  background: rgb(255,255,255);
+  background: linear-gradient(138deg, rgba(243,235,244,1) 0%, rgba(255,255,255,1) 100%);
+}

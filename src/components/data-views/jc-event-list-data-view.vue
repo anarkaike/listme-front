@@ -1,74 +1,134 @@
 <template>
-  <div class="ctn-jc-data-view row jc-data-view">
+  <div class="ctn-jc-data-view row reverse jc-data-view">
+    <!-- COLUNA DE INFOS -->
+    <div class="col-md-8 col-12 q-pl-none q-pl-md-md">
+      <JcEventListItemList :eventId="row.event_id" :eventListId="row.id" />
+      <div>
+        <q-markup-table>
+          <thead>
+          <tr>
+            <th class="text-left">Nome</th>
+            <th class="text-right">Email</th>
+            <th class="text-right">Telefone</th>
+            <th class="text-right">Adição</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="eventListItem in eventsListsItems" :key="eventListItem.id">
+            <td class="text-left">{{eventsListsItems.name}}</td>
+            <td class="text-right">{{eventsListsItems.email}}</td>
+            <td class="text-right">{{eventsListsItems.phone}}</td>
+            <td class="text-right">{{eventsListsItems.created_at}}</td>
+          </tr>
+          </tbody>
+        </q-markup-table>
+      </div>
+    </div>
+
+    <!-- COLUNA DE FOTO, STATUS E AUDITORIA -->
     <div class="col-md-4 col-12 q-pa-none q-pt-md q-pa-sm-none">
       <q-list bordered >
-        <q-item class="q-pa-sm q-pa-md-md">
+        <!-- INFO NOME -->
+        <q-item class="q-pa-sm q-pa-md-xs">
+          <q-item-section avatar><icon icon="ph:user-thin" /></q-item-section>
           <q-item-section class="q-pa-none">
-            <q-item-label class="text-caption text-weight-light">Nome:</q-item-label>
+            <q-item-label class="text-caption text-weight-light">Nome da lista:</q-item-label>
             <q-item-label class="text-body2 text-weight-medium">{{row.name}}</q-item-label>
           </q-item-section>
         </q-item>
+
         <q-separator />
-        <q-list>
-          <q-item class="q-pa-sm q-pa-md-md">
-            <q-item-section>
-              <q-item-label class="text-caption text-weight-light">Descrição:</q-item-label>
-              <q-item-label class="text-body2 text-weight-medium">{{row.description}}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-        <q-separator />
-        <q-item>
-          <q-item-section avatar><q-icon name="post_add" /></q-item-section>
+
+        <!-- INFO DESCRIÇÃO -->
+        <q-item class="q-pa-sm q-pa-md-xs">
+          <q-item-section avatar><icon icon="iconamoon:email-thin" /></q-item-section>
           <q-item-section>
-            <q-item-label class="text-caption text-weight-light">Criado em:</q-item-label>
-            <q-item-label class="text-body2 text-weight-medium">{{row.created_at}}</q-item-label>
+            <q-item-label class="text-caption text-weight-light">Descrição:</q-item-label>
+            <q-item-label class="text-body2 text-weight-medium">{{row.description}}</q-item-label>
           </q-item-section>
         </q-item>
+
         <q-separator />
+
+        <!-- INFO FOTO -->
+        <q-item class="q-pa-none">
+          <q-item-section v-if="row.url_photo && row.url_photo!=='' && typeof row.url_photo==='string'">
+            <q-img :src="row.url_photo" fit="contain" style="max-height: 200px;" />
+          </q-item-section>
+          <q-item-section v-else class="text-body text-grey-6 text-center">
+            <q-item-label>Nenhuma <strong>foto</strong> cadastrada ainda</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-separator />
+
+        <!-- INFO STATUS -->
+        <q-item :style="{color:(row.status?'green':'gray')}">
+          <q-item-section avatar><q-icon :name="row.status?'toggle_on':'toggle_off'" /></q-item-section>
+          <q-item-section>
+            <q-item-label class="text-caption text-weight-light">Status:</q-item-label>
+            <q-item-label class="text-body2 text-weight-medium">{{toEUserStatusLabels[row.status]}}</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-separator />
+
+        <!-- INFO AUDITORIA - CRIADO EM -->
         <q-item>
-          <q-item-section avatar><q-icon name="save_as" /></q-item-section>
+          <q-item-section avatar><icon icon="ph:calendar-plus-light" /></q-item-section>
+          <q-item-section>
+            <q-item-label class="text-caption text-weight-light">Criado em:</q-item-label>
+            <q-item-label class="text-body2 text-weight-medium">{{humanizeDatetime(row.created_at)}}</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-separator />
+
+        <!-- INFO AUDITORIA - ATUALIZADO EM -->
+        <q-item>
+          <q-item-section avatar><icon icon="material-symbols-light:edit-calendar-outline" /></q-item-section>
           <q-item-section>
             <q-item-label class="text-caption text-weight-light">Atualizado em:</q-item-label>
-            <q-item-label class="text-body2 text-weight-medium">{{row.updated_at}}</q-item-label>
+            <q-item-label class="text-body2 text-weight-medium">{{humanizeDatetime(row.updated_at)}}</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
-    </div>
-    <div class="col-md-8 col-12 q-pl-none q-pl-md-md">
-      <div class="text-h6 q-mb-sm">Permissões atribuídas a este perfil:</div>
-      <div v-if="row">
-        <span v-for="(permission, kPermission) in row.permissions" :key="permission.id">
-            <div v-if="kPermission===0 || row.permissions[kPermission-1].model!==permission.model" class="q-mt-md">
-              <strong>{{ toEModelsLabels[permission.name.split(':')[0]] }}</strong> :
-            </div>
-            <q-chip>
-              {{ toEPermissionsLabels[permission.name.split(':')[1]] }}
-            </q-chip>
-        </span>
-      </div>
-      <div v-else>
-        Nenhuma permissão atribuída a este perfil
-      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { defineProps, withDefaults, ref, watchEffect } from 'vue'
-import type { IProfile } from '@/interfaces'
-import { EModelsLabels, EPermissionsLabels } from '@/enums'
+import { $stores } from '@/stores/all'
+import { defineProps, withDefaults, ref, watchEffect, onBeforeMount } from 'vue'
+import type { IEventList, IEventListItem } from '@/interfaces'
+import { EUserStatusLabels } from '@/enums'
+import { useHumanize } from '@/composables'
+import { JcEventListItemList } from '@/components'
 
 // CONSTANTES ---------------------------------------------------
-const toEModelsLabels = EModelsLabels
-const toEPermissionsLabels = EPermissionsLabels
-const props = withDefaults(defineProps<{ row: IProfile }>(), {})
-const row = ref<IProfile>(props.row)
-const emit = defineEmits<{(e: 'update:row', row: IProfile): void}>()
+const { humanizeDatetime } = useHumanize()
+const toEUserStatusLabels = EUserStatusLabels
+const props = withDefaults(defineProps<{ row: IEventList }>(), {})
+const emit = defineEmits<{(e: 'update:row', row: IEventList): void}>()
+const row = ref<IEventList>(props.row)
+const eventsListsItems = ref([] as IEventList[])
 
 // WATCHS ---------------------------------------------------
 watchEffect(() => {
   emit('update:row', row.value)
+})
+
+// METODOS ---------------------------------------------------
+const methods = {
+  getEventListItem () {
+    $stores.eventsListsItems.listAll({ event_list_id: row.value.id }).then((res: IEventListItem[]) => {
+      eventsListsItems.value = res
+    })
+  }
+}
+
+onBeforeMount(() => {
+  methods.getEventListItem()
 })
 </script>
 

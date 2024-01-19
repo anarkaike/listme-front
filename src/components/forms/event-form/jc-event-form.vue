@@ -114,7 +114,6 @@ const methods = {
       $notify.error('É necessário estar logado como usuário do saas para poder cadastrar um evento.')
       return
     }
-    row.value.saas_client_id = $stores.auth.saas_client.id
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     $stores.events[method](row.value).then((value: IEvent) => {
@@ -149,9 +148,7 @@ const methods = {
     if (step.value === 1) {
       methods.cancel()
     } else {
-      console.log('Junio step antes: ', step.value)
       step.value = step.value - 1
-      console.log('Junio step depois: ', step.value)
     }
   },
   cancel () {

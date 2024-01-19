@@ -6,11 +6,15 @@
     :form-component="JcUserForm"
     :filter-by-columns="['name']"
     :stores="$stores.users"
+    :rows="users"
     :columns="columns"
     :filterData="props.filterData"
     :filterProfilesOptions="props.filterProfilesOptions"
     :title="props.title"
     :styleStatusForColumn="$stylesByStatusOfUser.background"
+    @onUpdate="methods.onUpdate"
+    @onCreate="methods.onCreate"
+    @onDelete="methods.onDelete"
   >
 
     <!-- COLUNA NOME -->
@@ -57,8 +61,9 @@
   </JcGenericList>
 </template>
 <script lang="ts" setup>
-import { defineProps, ref, withDefaults } from 'vue'
+import { defineProps, ref, withDefaults, onBeforeMount } from 'vue'
 import { $stores } from '@/stores/all'
+import { IUser } from '@/interfaces'
 import { JcUserDataView, JcUserForm, JcGenericList } from '@/components'
 import { EUserStatusLabels } from '@/enums'
 import type { IModel, IOption } from '@/interfaces'
@@ -86,6 +91,27 @@ const columns = ref([
   { name: 'auditoria', align: 'center', label: 'Auditoria', field: 'auditoria', sortable: false },
   { name: 'actions', align: 'center', label: 'Ações', field: 'actions', sortable: false }
 ])
+
+const users = ref<IUser[]>([])
+
+const methods = {
+  list () {
+    $stores.users.listAll().then((res: IUser[]) => { users.value = res as IUser[] })
+  },
+  onDelete (event: IUser) {
+    users.value.splice(users.value.findIndex((r: IUser) => r.id === event.id), 1)
+  },
+  onUpdate (event: IUser) {
+    users.value[users.value.findIndex((r: IUser) => r.id === event.id)] = event
+  },
+  onCreate (event: IUser) {
+    users.value.unshift(event)
+  }
+}
+
+onBeforeMount(() => {
+  methods.list()
+})
 </script>
 
 <style scoped lang="scss">

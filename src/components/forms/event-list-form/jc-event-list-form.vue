@@ -1,5 +1,5 @@
 <template>
-  <div class="jc-user-form row jc-form">
+  <div class="jc-user-form jc-form">
     <q-form class="col-grow" ref="myForm" @submit.prevent="methods.save">
       <div class="row">
         <!-- CAMPO NAME -->
@@ -61,32 +61,32 @@
         </div>
 
       </div>
-
     </q-form>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { defineProps, withDefaults, Ref, ref } from 'vue'
-import { QForm } from 'quasar'
-import type { IEvent, IEventList, IOption } from '@/interfaces'
+import { QForm, useQuasar } from 'quasar'
+import type { IEventList, IOption } from '@/interfaces'
 import { $stores } from '@/stores/all'
 
 // CONSTANTES ---------------------------------------------------
+const $q = useQuasar()
 const myForm = ref<QForm|null>(null)
 const urlPhotoModel = ref<File[]>([] as File[])
 const eventList: Ref<IEventList> = ref({} as IEventList)
 const props = withDefaults(defineProps<{
-  // Geral
-  row?: IEvent|null,
-  filterProfilesOptions?:(options: IOption[]) => IOption[]
+  row?: IEventList|null,
+  filterProfilesOptions?:(options: IOption[]) => IOption[],
+  additionalData?: object
 }>(), {
   filterProfilesOptions: (options: IOption[]) => options
 })
-// const originalUser : Ref<IEvent> = ref<IEvent>(props.row as IEvent)
-const row: Ref<IEvent> = ref<IEvent>(props.row ?? {
+const row: Ref<IEventList> = ref<IEventList>(props.row ?? {
   status: 'active'
-} as IEvent)
+} as IEventList)
+const eventsLists = ref([] as IEventList[])
 
 const emit = defineEmits([
   'on-cancel',
@@ -99,15 +99,20 @@ const emit = defineEmits([
 // METODOS ------------------------------------------------------
 const methods = {
   save () {
-    const method = eventList.value.id ? 'update' : 'create'
+    const method = row.value.id ? 'update' : 'create'
     if ('name' in urlPhotoModel.value) {
-      eventList.value.url_photo_up = urlPhotoModel.value as unknown as File
+      row.value.url_photo_up = urlPhotoModel.value as unknown as File
     }
-    eventList.value.event_id = row.value.id
-    $stores.eventsLists[method](eventList.value).then((value: IEventList) => {
+    if (props.additionalData) {
+      row.value = {
+        ...row.value,
+        ...props.additionalData
+      }
+    }
+    $stores.eventsLists[method](row.value).then((value: IEventList) => {
       emit('on-submit', value)
-      emit(eventList.value.id ? 'on-update' : 'on-create', value)
-      eventList.value.url_photo = value.url_photo
+      emit(row.value.id ? 'on-update' : 'on-create', value)
+      row.value.url_photo = value.url_photo
       methods.closeDialog()
     })
   },
@@ -116,15 +121,14 @@ const methods = {
   },
   closeDialog () {
     emit('close-dialog')
+  },
+  onCreate () {
+    console.log('Junio onCreate')
+  },
+  toogleDialogForm () {
+    console.log('Junio toogleDialogForm')
   }
 }
-
-// onBeforeMount(() => {
-//   $stores.profiles.getOptions().then((options) => {
-//     optionsValues.value.profiles = props.filterProfilesOptions(options)
-//   })
-//   $stores.saasClients.getOptions().then((options) => { optionsValues.value.saasClients = options })
-// })
 </script>
 
 <style lang="scss" scoped>

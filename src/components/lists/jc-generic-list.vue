@@ -12,7 +12,7 @@
   >
 
     <!-- TITULO DA TABELA -->
-    <template v-slot:top>
+    <template v-slot:top v-if="!props.noHeader">
       <div class="fit row wrap justify-between items-start content-start">
         <div class="text-h6 col-grow">{{props.title}}</div>
         <div style="min-width: 100px; margin-top: -3px;" class="q-pr-sm ctn-filter col-12 q-mb-sm col-md-5">
@@ -54,13 +54,15 @@
 
     <!-- TEMPLATE SLOT LOADING -->
     <template #loading>
-      Carregando {{props.pluralLabel.toLowerCase()}}
+      <QSpinnerPuff size="100" />
+      <br />
+      Carregando dados
     </template>
 
     <!-- TEMPLATE SLOT SEM REGISTRO -->
     <template #no-data>
       <div style="padding-top: 20px; padding-bottom: 20px; text-align: center; width: 100%;">
-        <div v-if="loadingData">
+        <div v-if="props.loading">
           <QSpinnerPuff size="100" />
           <br />
           Carregando dados
@@ -93,9 +95,10 @@
       :plural-label="props.pluralLabel"
       :filterProfilesOptions="props.filterProfilesOptions"
       @on-create="methods.onCreate"
+      @on-update="methods.onUpdate"
       @on-cancel="methods.toogleDialogForm"
       @close-dialog="methods.toogleDialogForm"
-      class="q-ma-sm q-ma-md-none"
+      :additionalData="props.additionalData"
     />
   </JcDialog>
 </template>
@@ -114,6 +117,7 @@ import { defineProps, withDefaults } from 'vue/dist/vue'
 
 // PROPS ----------------------------------------
 const props = withDefaults(defineProps<{
+  rows?: IModel[],
   fieldLabel?: string,
   dataViewComponent: null,
   formComponent: null,
@@ -125,15 +129,23 @@ const props = withDefaults(defineProps<{
   stores?:null,
   styleStatusForColumn?:(status: string) => string,
   filterData?:(rows: IModel[]) => IModel[]
-  filterProfilesOptions?:(rows: IOption[]) => IOption[]
+  filterProfilesOptions?:(rows: IOption[]) => IOption[],
+  noHeader?: boolean,
+  noHashUpdate?: boolean,
+  loading?: boolean,
+  additionalData?: object
 }>(), {
+  rows: () => [] as IModel[],
   title: 'Listagem',
   fieldLabel: 'name',
   singularLabel: 'Registro',
   pluralLabel: 'Registros',
   styleStatusForColumn: () => '',
   filterData: (rows: IModel[]) => rows,
-  filterProfilesOptions: (rows: IOption[]) => rows
+  filterProfilesOptions: (rows: IOption[]) => rows,
+  noHeader: false,
+  noHashUpdate: false,
+  loading: true
 })
 const route = useRoute()
 const router = useRouter()
@@ -141,9 +153,9 @@ const filterForm = ref<{filter: string}>({
   filter: ''
 })
 const rowsFiltered = computed(() => {
-  if (!filterForm.value.filter) return rows.value
+  if (!filterForm.value.filter) return props.rows
   const key = filterForm.value.filter.toLowerCase().split(' ')
-  return rows.value.filter((row) => {
+  return props.rows.filter((row) => {
     let encontrado = false
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -158,10 +170,9 @@ const rowsFiltered = computed(() => {
     return encontrado
   })
 })
-const loadingData = ref(true)
 const $q = useQuasar()
 const selected = ref([])
-const rows = ref<IModel[]>([])
+// const rows = ref<IModel[]>([])
 
 // BOTÃO DE VISUALIZAR
 const openDialogView = ref(false)
@@ -172,12 +183,22 @@ const openDialogForm = ref(false)
 const rowForEdit = ref<IModel|null>()
 const columns = ref(props.columns)
 
+const emit = defineEmits([
+  'on-create',
+  'on-update',
+  'on-delete'
+])
+
 const methods = {
   onView (row: IModel) {
     rowForView.value = row
-    router.replace({ query: { ...route.query, action: 'view', id: row?.id } }).then(() => {
+    if (!props.noHashUpdate) {
+      router.replace({ query: { ...route.query, action: 'view', id: row?.id } }).then(() => {
+        methods.toogleDialogView()
+      })
+    } else {
       methods.toogleDialogView()
-    })
+    }
   },
   toogleDialogView (): void {
     openDialogView.value = !openDialogView.value
@@ -187,13 +208,17 @@ const methods = {
     const query = route.query
     delete query.action
     delete query.id
-    router.push({ query })
+    if (!props.noHashUpdate) router.push({ query })
   },
   onEdit (row: IModel) {
     rowForEdit.value = { ...row } as IModel
-    router.replace({ query: { ...route.query, action: 'edit', id: row?.id } }).then(() => {
+    if (!props.noHashUpdate) {
+      router.replace({ query: { ...route.query, action: 'edit', id: row?.id } }).then(() => {
+        methods.toogleDialogForm()
+      })
+    } else {
       methods.toogleDialogForm()
-    })
+    }
   },
   toogleDialogForm (reset = false): void {
     if (reset) rowForEdit.value = {}
@@ -204,12 +229,7 @@ const methods = {
     const query = route.query
     delete query.action
     delete query.id
-    router.push({ query })
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    props.stores.listAll().then((data: IModel[]) => {
-      rows.value = props.filterData(data)
-    })
+    if (!props.noHashUpdate) router.push({ query })
   },
   onDelete (row: IModel) {
     $q.dialog({
@@ -221,28 +241,15 @@ const methods = {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       props.stores.delete(row.id as number).then(() => {
-        $notify.success('Registro excluido com sucesso!')
+        emit('on-delete', row)
       })
     })
   },
   onCreate (row: IModel) {
-    rows.value = [
-      row,
-      ...rows.value
-    ]
+    emit('on-create', row)
   },
-  list () {
-    if (props.stores) {
-      // $loading.show('Buscando dados...')
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      props.stores.listAll().then((data: IModel[]) => {
-        // $loading.hide()
-        const r = props.filterData(data)
-        rows.value = r
-        loadingData.value = false
-      })
-    }
+  onUpdate (row: IModel) {
+    emit('on-update', row)
   },
   styleStatusForColumn (status: string) {
     if (props.styleStatusForColumn) {
@@ -265,10 +272,8 @@ const methods = {
 }
 
 onBeforeMount(() => {
-  methods.list()
-
   // Verificando se na URL existe parametro ID para carregar dialog de view/edit
-  if (route.query?.id) {
+  if (!props.noHashUpdate && route.query?.id) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     props.stores.getById(route.query?.id as unknown as number).then((row: IModel) => {

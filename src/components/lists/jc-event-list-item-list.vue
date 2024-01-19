@@ -2,10 +2,18 @@
   <JcGenericList
     :data-view-component="JcEventListItemDataView"
     :form-component="JcEventListItemForm"
-    :filter-by-columns="['name', 'description']"
+    :filter-by-columns="['name']"
     :stores="$stores.eventsLists"
     :columns="columns"
-    title="Perfis de Usuários"
+    singular-label="Nome de Lista de Evento"
+    plural-label="NOmes de Lista de Evento"
+    title="Nomes da Lista de Eventos"
+    :rows="eventsListsItems"
+    @onUpdate="methods.onUpdate"
+    @onCreate="methods.onCreate"
+    @onDelete="methods.onDelete"
+    :additionalData="{event_id: props.eventId, event_list_id: props.eventListId}"
+    :loading="loading"
   >
 
     <!-- COLUNA NOME -->
@@ -27,22 +35,45 @@ import { ref, onBeforeMount } from 'vue'
 import { $stores } from '@/stores/all'
 import { JcGenericList, JcEventListItemDataView, JcEventListItemForm } from '@/components'
 import type { IEventListItem } from '@/interfaces'
+import { defineProps, withDefaults } from 'vue/dist/vue'
 
+const props = withDefaults(defineProps<{
+  eventListId?: number|null,
+  eventId?: number|null,
+}>(), {
+  eventListId: null,
+  eventId: null
+})
 const columns = ref([
   { name: 'name', align: 'left', label: 'Nome', field: 'name', sortable: true },
   { name: 'auditoria', align: 'center', label: 'Auditoria', field: 'auditoria', sortable: false },
   { name: 'actions', align: 'center', label: 'Ações', field: 'actions', sortable: false }
 ])
-const profiles = ref<IEventListItem[]>([])
+
+const eventsListsItems = ref<IEventListItem[]>([])
+const loading = ref(true)
 
 const methods = {
-  listEventListItems () {
-    $stores.profiles.listAll().then((data: IEventListItem[]) => { profiles.value = data })
+  list () {
+    loading.value = true
+    $stores.eventsListsItems.listAll({ event_list_id: props.eventListId }).then((res: IEventListItem[]) => {
+      eventsListsItems.value = res as IEventListItem[]
+      loading.value = false
+    })
+  },
+  onDelete (eventListItem: IEventListItem) {
+    eventsListsItems.value.splice(eventsListsItems.value.findIndex((r: IEventListItem) => r.id === eventListItem.id), 1)
+  },
+  onUpdate (eventListItem: IEventListItem) {
+    eventsListsItems.value[eventsListsItems.value.findIndex((r: IEventListItem) => r.id === eventListItem.id)] = eventListItem
+  },
+  onCreate (eventListItem: IEventListItem) {
+    eventsListsItems.value.unshift(eventListItem)
   }
 }
 
 onBeforeMount(() => {
-  methods.listEventListItems()
+  methods.list()
 })
 </script>
 

@@ -8,11 +8,11 @@ export const saasClientsStore = defineStore('saasClientsStore', {
     saasClients: [] as ISaasClient[],
     saasClientEdit: null as ISaasClient|null
   }),
-  // getters: {
-  // isLoggedIn: (state) => {
-  //   return !!state.token
-  // }
-  // },
+  getters: {
+    list: (state) => {
+      return state.saasClients
+    }
+  },
   actions: {
     async listAll (): Promise<ISaasClient[]> {
       try {
@@ -29,7 +29,7 @@ export const saasClientsStore = defineStore('saasClientsStore', {
         console.error('Erro ao listar os clientes saas: ', err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? 'Erro ao listar os clientes saas')
+        $notify.error(err.response?.data?.message ?? err.message ?? 'Erro ao listar os clientes saas')
         throw err
       }
     },
@@ -43,7 +43,7 @@ export const saasClientsStore = defineStore('saasClientsStore', {
         console.error('Erro ao listar os clientes saas para options: ', err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? 'Erro ao listar os clientes saas para preencher campo de opções')
+        $notify.error(err.response?.data?.message ?? err.message ?? 'Erro ao listar os clientes saas para preencher campo de opções')
         throw err
       }
     },
@@ -67,7 +67,7 @@ export const saasClientsStore = defineStore('saasClientsStore', {
         console.error(`Erro ao carregar os dados do cliente saas de ID "${id}": `, err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? `Erro ao carregar os dados do cliente saas de ID ${id}`)
+        $notify.error(err.response?.data?.message ?? err.message ?? `Erro ao carregar os dados do cliente saas de ID ${id}`)
         throw err
       }
     },
@@ -92,7 +92,7 @@ export const saasClientsStore = defineStore('saasClientsStore', {
         $loading.hide()
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? `Erro ao cadastrar o cliente saas ${saasClient.company_name}`)
+        $notify.error(err.response?.data?.message ?? err.message ?? `Erro ao cadastrar o cliente saas ${saasClient.company_name}`)
         throw err
       }
     },
@@ -115,7 +115,7 @@ export const saasClientsStore = defineStore('saasClientsStore', {
         console.error('Erro ao atualizar client saas: ', saasClient, err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? `Erro ao atualizar o usuário ${saasClient.company_name}`)
+        $notify.error(err.response?.data?.message ?? err.message ?? `Erro ao atualizar o usuário ${saasClient.company_name}`)
         throw err
       }
     },
@@ -135,7 +135,7 @@ export const saasClientsStore = defineStore('saasClientsStore', {
         console.error(`Erro ao deletar cliente saas de ID ${id}: `, err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? `Erro ao deletar o cliente saas de ID "${id}"`)
+        $notify.error(err.response?.data?.message ?? err.message ?? `Erro ao deletar o cliente saas de ID "${id}"`)
         throw err
       }
     }

@@ -1,6 +1,6 @@
 <template>
   <div class="jc-event-form-lists">
-    <JcEventListForm />
+    <JcEventListList noHashUpdate ref="eventListListRef" :eventId="row.id"  />
 
     <q-stepper-navigation class="row">
       <q-space class="col-grow" />
@@ -37,13 +37,15 @@
 <script lang="ts" setup>
 import { defineProps, ref, Ref, watchEffect, withDefaults } from 'vue'
 import { IEvent } from '@/interfaces'
-import { JcEventListForm } from '@/components'
+import { JcEventListList } from '@/components'
 
+const eventListListRef = ref()
 const props = withDefaults(defineProps<{
   row: IEvent
 }>(), {
 
 })
+const eventsLists = ref([] as IEvent[])
 const row: Ref<IEvent> = ref<IEvent>(props.row)
 const emit = defineEmits([
   'update:row',
@@ -55,6 +57,9 @@ const emit = defineEmits([
 watchEffect(() => {
   row.value = props.row
 })
+
+// const eventsLists = ref<IEvent[]>([])
+
 const methods = {
   next () {
     emit('on-next')
@@ -64,6 +69,9 @@ const methods = {
   },
   cancel () {
     emit('on-cancel')
+  },
+  updateList () {
+    eventListListRef.value.methods.list()
   }
 }
 </script>

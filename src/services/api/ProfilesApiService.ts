@@ -6,8 +6,8 @@ export default class ProfilesApiService extends ModelApiService {
     super('profiles')
   }
 
-  async listAll (): Promise<IProfile[]> {
-    const res: IResponse<IProfile[]> = await super.listAll()
+  async listAll (params = {}): Promise<IProfile[]> {
+    const res: IResponse<IProfile[]> = await super.listAll(params)
     return res.data
   }
 

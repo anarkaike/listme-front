@@ -1,3 +1,4 @@
+import { $stores } from '@/stores/all'
 import { defineStore } from 'pinia'
 import { $loading, $notify } from '@/composables'
 import { $api } from '@/services/api'
@@ -8,20 +9,25 @@ export const usersStore = defineStore('usersStore', {
     users: [] as IUser[],
     userEdit: null as IUser|null
   }),
-  // getters: {
-  // isLoggedIn: (state) => {
-  //   return !!state.token
-  // }
-  // },
+  getters: {
+    list: (state) => {
+      return state.users
+    }
+  },
   actions: {
+    filterBySaasClient (rows: IUser[]) {
+      return rows.filter((r: IUser) => {
+        return r.saas_client_ids?.includes($stores.auth.saas_client?.id as number)
+      })
+    },
     async listAll (): Promise<IUser[]> {
       try {
         // Buscando na store antes deusuarios na API
         if (this.users.length === 0) {
-          this.users = await $api.users.listAll()
+          this.users = this.filterBySaasClient(await $api.users.listAll())
         }
         setTimeout(async () => {
-          this.users = await $api.users.listAll()
+          this.users = this.filterBySaasClient(await $api.users.listAll())
         }, 100)
 
         return this.users
@@ -29,7 +35,7 @@ export const usersStore = defineStore('usersStore', {
         console.error('Erro ao listar os usuários: ', err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? 'Erro ao listar os usuários')
+        $notify.error(err.response?.data?.message ?? err.message ?? 'Erro ao listar os usuários')
         throw err
       }
     },
@@ -43,7 +49,7 @@ export const usersStore = defineStore('usersStore', {
         console.error('Erro ao listar os usuários para options: ', err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? 'Erro ao listar os usuários para preencher campo de opções')
+        $notify.error(err.response?.data?.message ?? err.message ?? 'Erro ao listar os usuários para preencher campo de opções')
         throw err
       }
     },
@@ -67,7 +73,7 @@ export const usersStore = defineStore('usersStore', {
         console.error(`Erro ao carregar os dados do usuário de ID "${id}": `, err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? `Erro ao carregar os dados do usuário de ID ${id}`)
+        $notify.error(err.response?.data?.message ?? err.message ?? `Erro ao carregar os dados do usuário de ID ${id}`)
         throw err
       }
     },
@@ -89,10 +95,20 @@ export const usersStore = defineStore('usersStore', {
         return userCreated
       } catch (err) {
         console.error('Erro ao cadastrar o usuário:', user, err)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const messages = JSON.parse(err.message)
+        const keys = Object.keys(messages)
+        keys.forEach((k) => {
+          const keys2 = Object.keys(messages[k])
+          keys2.forEach((k2) => {
+            $notify.error('Erro: ' + messages[k][k2])
+          })
+        })
         $loading.hide()
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? `Erro ao cadastrar o usuário ${user.name}`)
+        // $notify.error(err.response?.data?.message ?? err.message ?? `Erro ao cadastrar o usuário ${user.name}`)
         throw err
       }
     },
@@ -114,7 +130,7 @@ export const usersStore = defineStore('usersStore', {
         console.error('Erro ao atualizar usuário: ', user, err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? `Erro ao atualizar o usuário "${user.name}"`)
+        // $notify.error(err.response?.data?.message ?? err.message ?? `Erro ao atualizar o usuário "${user.name}"`)
         throw err
       }
     },
@@ -135,7 +151,7 @@ export const usersStore = defineStore('usersStore', {
         console.error(`Erro ao deletar usuario de ID ${id}`, err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? `Erro ao deletar o usuário de ID ${id}`)
+        $notify.error(err.response?.data?.message ?? err.message ?? `Erro ao deletar o usuário de ID ${id}`)
         throw err
       }
     }

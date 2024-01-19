@@ -7,13 +7,18 @@
     :columns="columns"
     singular-label="Evento"
     plural-label="Eventos"
+    :rows="events"
+    @onUpdate="methods.onUpdate"
+    @onCreate="methods.onCreate"
+    @onDelete="methods.onDelete"
+    :loading="loadingEvents"
   >
 
     <!-- COLUNA NOME -->
     <template #columns="scope">
 
       <!-- TEMPLATE COLUNA NAME -->
-      <q-td class="col-auto" key="banner" :props="scope.props" @click="scope.onView(scope.props.row)" style="width: 120px; text-align: left; cursor: pointer;">
+      <q-td class="col-auto" key="banner" :props="scope.props" @click="scope.onView(scope.props.row);methods.pinEvent(scope.props.row);" style="width: 120px; text-align: left; cursor: pointer;">
         <div v-if="scope.props.row.url_banner && scope.props.row.url_banner!=='' && typeof scope.props.row.url_banner === 'string'">
           <q-img :src="scope.props.row.url_banner" style="max-height: 100px; width: 100px; border-radius: 10px;" fit="contain" />
         </div>
@@ -23,7 +28,7 @@
       </q-td>
 
       <!-- TEMPLATE COLUNA NAME -->
-      <q-td key="name" :props="scope.props" style="cursor: pointer;" @click="scope.onView(scope.props.row)">
+      <q-td key="name" :props="scope.props" style="cursor: pointer;" @click="scope.onView(scope.props.row);methods.pinEvent(scope.props.row)">
         <strong>
           {{ scope.props.row.name }}
         </strong>
@@ -45,11 +50,26 @@ const columns = ref([
   { name: 'auditoria', align: 'center', label: 'Auditoria', field: 'auditoria', sortable: false },
   { name: 'actions', align: 'center', label: 'Ações', field: 'actions', sortable: false }
 ])
-const profiles = ref<IEvent[]>([])
+
+const events = ref<IEvent[]>([])
+const loadingEvents = ref(true)
 
 const methods = {
   listEvents () {
-    $stores.profiles.listAll().then((data: IEvent[]) => { profiles.value = data })
+    $stores.events.listAll().then((res: IEvent[]) => { events.value = res as IEvent[] })
+    loadingEvents.value = false
+  },
+  pinEvent (event: IEvent) {
+    $stores.events.fixedEvent = event
+  },
+  onDelete (event: IEvent) {
+    events.value.splice(events.value.findIndex((r: IEvent) => r.id === event.id), 1)
+  },
+  onUpdate (event: IEvent) {
+    events.value[events.value.findIndex((r: IEvent) => r.id === event.id)] = event
+  },
+  onCreate (event: IEvent) {
+    events.value.unshift(event)
   }
 }
 

@@ -1,3 +1,4 @@
+import { $stores } from '@/stores/all'
 import { defineStore } from 'pinia'
 import { $loading, $notify } from '@/composables'
 import { $api } from '@/services/api'
@@ -6,30 +7,26 @@ import { IEvent, IOption } from '@/interfaces'
 export const eventsStore = defineStore('eventsStore', {
   state: () => ({
     events: [] as IEvent[],
-    eventEdit: null as IEvent|null
+    eventEdit: null as IEvent|null,
+    fixedEvent: {} as IEvent
   }),
-  // getters: {
-  // isLoggedIn: (state) => {
-  //   return !!state.token
-  // }
-  // },
+  getters: {
+    list: (state) => {
+      return state.events
+    }
+  },
   actions: {
     async listAll (): Promise<IEvent[]> {
       try {
         // Buscando na store antes deusuarios na API
-        if (this.events.length === 0) {
-          this.events = await $api.events.listAll()
-        }
-        setTimeout(async () => {
-          this.events = await $api.events.listAll()
-        }, 100)
+        this.events = await $api.events.listAll()
 
         return this.events
       } catch (err) {
         console.error('Erro ao listar os eventos: ', err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? 'Erro ao listar os eventos')
+        $notify.error(err.response?.data?.message ?? err.message ?? 'Erro ao listar os eventos')
         throw err
       }
     },
@@ -43,7 +40,7 @@ export const eventsStore = defineStore('eventsStore', {
         console.error('Erro ao listar os eventos para options: ', err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? 'Erro ao listar os eventos para preencher campo de opções')
+        $notify.error(err.response?.data?.message ?? err.message ?? 'Erro ao listar os eventos para preencher campo de opções')
         throw err
       }
     },
@@ -67,13 +64,16 @@ export const eventsStore = defineStore('eventsStore', {
         console.error(`Erro ao carregar os dados do evento de ID "${id}": `, err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? `Erro ao carregar os dados do evento de ID ${id}`)
+        $notify.error(err.response?.data?.message ?? err.message ?? `Erro ao carregar os dados do evento de ID ${id}`)
         throw err
       }
     },
     async create (event: IEvent): Promise<IEvent> {
       $loading.show(`Cadastrando evento "${event.name}"...`)
       try {
+        if (!event.saas_client_id) {
+          event.saas_client_id = $stores.auth.saas_client?.id
+        }
         // Criando evento na API e adicionando ao state
         const eventCreated: IEvent = await $api.events.create(event)
         this.$patch({
@@ -91,13 +91,16 @@ export const eventsStore = defineStore('eventsStore', {
         $loading.hide()
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? `Erro ao cadastrar o evento ${event.name}`)
+        $notify.error(err.response?.data?.message ?? err.message ?? `Erro ao cadastrar o evento ${event.name}`)
         throw err
       }
     },
     async update (event: IEvent): Promise<IEvent> {
       $loading.show(`Atualizando evento "${event.name}"...`)
       try {
+        if (event.saas_client_id) {
+          delete event.saas_client_id
+        }
         // Buscando evento na API e state
         const eventUpdated: IEvent = await $api.events.update(event)
         const events = this.$state.events
@@ -111,7 +114,7 @@ export const eventsStore = defineStore('eventsStore', {
         console.error('Erro ao atualizar evento: ', event, err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? `Erro ao atualizar o evento ${event.name}`)
+        $notify.error(err.response?.data?.message ?? err.message ?? `Erro ao atualizar o evento ${event.name}`)
         throw err
       }
     },
@@ -131,7 +134,7 @@ export const eventsStore = defineStore('eventsStore', {
         console.error(`Erro ao deletar evento de ID ${id}: `, err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? `Erro ao deletar o evento de ID "${id}"`)
+        $notify.error(err.response?.data?.message ?? err.message ?? `Erro ao deletar o evento de ID "${id}"`)
         throw err
       }
     }

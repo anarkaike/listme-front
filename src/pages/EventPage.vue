@@ -9,17 +9,17 @@
   </q-layout>
 </template>
 <script lang="ts" setup>
-import { IOption, IEvent } from '@/interfaces'
+import { IEvent } from '@/interfaces'
 import { JcEventList } from '@/components'
+import { ref } from 'vue'
+
+const events = ref<IEvent[]>([])
 
 const methods = {
   filterEvents (events: IEvent[]) {
     return events.filter((event: IEvent) => {
       return event
     })
-  },
-  filterProfilesOptions (options: IOption[]) {
-    return options
   }
 }
 </script>

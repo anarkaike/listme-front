@@ -6,8 +6,8 @@ export default class SaasClientsApiService extends ModelApiService {
     super('saas-clients')
   }
 
-  async listAll (): Promise<ISaasClient[]> {
-    const res: IResponse<ISaasClient[]> = await super.listAll()
+  async listAll (params = {}): Promise<ISaasClient[]> {
+    const res: IResponse<ISaasClient[]> = await super.listAll(params)
     return res.data
   }
 

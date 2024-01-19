@@ -3,7 +3,7 @@
     <q-form class="col-grow" ref="myForm" @submit.prevent="methods.save">
       <div class="row">
         <!-- CAMPO NAME -->
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-md-4">
           <q-input
             filled
             v-model="row.name"
@@ -15,6 +15,45 @@
           >
             <template #prepend>
               <q-icon name="badge" />
+            </template>
+          </q-input>
+        </div>
+
+        <!-- CAMPO EMAIL -->
+        <div class="col-12 col-md-4">
+          <q-input
+            filled
+            v-model="row.email"
+            label="Email"
+            class="q-mr-md-sm q-mb-none q-mb-md-none"
+            lazy-rules
+            dense
+            :rules="[
+              val => (val && val.length > 0) || 'Digite seu email',
+              val => (/^[A-Za-z0-9+_.-]+@([A-Za-z0-9+_-])+\.([A-Za-z0-9+_-])+$/.test(val)) || 'Email digitado é inválido!'
+            ]"
+            type="email"
+          >
+            <template #prepend>
+              <q-icon name="alternate_email" />
+            </template>
+          </q-input>
+        </div>
+
+        <!-- CAMPO TELEFONE -->
+        <div class="col-12 col-md-4">
+          <q-input
+            filled
+            v-model="row.phone"
+            label="Celular"
+            lazy-rules
+            dense
+            mask="(##) ##### - ####"
+            class="q-mr-md-sm"
+            :rules="[ val => val && val.length > 0 || 'Digite o nome']"
+          >
+            <template #prepend>
+              <q-icon name="smartphone" />
             </template>
           </q-input>
         </div>
@@ -33,7 +72,7 @@
 <script lang="ts" setup>
 import { defineProps, withDefaults, Ref, ref } from 'vue'
 import { QForm } from 'quasar'
-import type { IEvent, IOption } from '@/interfaces'
+import type { IEventListItem, IOption } from '@/interfaces'
 import { $stores } from '@/stores/all'
 
 // CONSTANTES ---------------------------------------------------
@@ -41,15 +80,16 @@ const myForm = ref<QForm|null>(null)
 const urlPhotoModel = ref<File[]>([] as File[])
 const props = withDefaults(defineProps<{
   // Geral
-  row?: IEvent|null,
-  filterProfilesOptions?:(options: IOption[]) => IOption[]
+  row?: IEventListItem|null,
+  filterProfilesOptions?:(options: IOption[]) => IOption[],
+  additionalData?: object
 }>(), {
   filterProfilesOptions: (options: IOption[]) => options
 })
-// const originalUser : Ref<IEvent> = ref<IEvent>(props.row as IEvent)
-const row: Ref<IEvent> = ref<IEvent>(props.row ?? {
+// const originalUser : Ref<IEventListItem> = ref<IEventListItem>(props.row as IEventListItem)
+const row: Ref<IEventListItem> = ref<IEventListItem>(props.row ?? {
   status: 'active'
-} as IEvent)
+} as IEventListItem)
 
 // const optionsValues = ref({
 //   profiles: [] as IOption[],
@@ -77,7 +117,13 @@ const methods = {
     if ('name' in urlPhotoModel.value) {
       row.value.url_banner_up = urlPhotoModel.value as unknown as File
     }
-    $stores.users[method](row.value).then((value: IEvent) => {
+    if (props.additionalData) {
+      row.value = {
+        ...row.value,
+        ...props.additionalData
+      }
+    }
+    $stores.eventsListsItems[method](row.value).then((value: IEventListItem) => {
       emit('on-submit', value)
       emit(row.value.id ? 'on-update' : 'on-create', value)
       row.value.url_banner = value.url_banner
@@ -85,11 +131,11 @@ const methods = {
     })
   },
   cancel () {
-    row.value = {} as IEvent
+    row.value = {} as IEventListItem
     emit('on-cancel')
   },
   closeDialog () {
-    row.value = {} as IEvent
+    row.value = {} as IEventListItem
     emit('close-dialog')
   }
 }

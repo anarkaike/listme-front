@@ -8,6 +8,10 @@
     field-label="company_name"
     title="Clientes do SaaS"
     :styleStatusForColumn="$stylesByStatusOfSaasClient.background"
+    :rows="saasClients"
+    @onUpdate="methods.onUpdate"
+    @onCreate="methods.onCreate"
+    @onDelete="methods.onDelete"
   >
 
     <!-- COLUNA NOME -->
@@ -46,7 +50,8 @@
   </JcGenericList>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, onBeforeMount } from 'vue'
+import { ISaasClient } from '@/interfaces'
 import { $stores } from '@/stores/all'
 import { ESaasClientStatusLabels } from '@/enums'
 import { JcGenericList, JcSaasClientDataView, JcSaasClientForm } from '@/components'
@@ -60,6 +65,27 @@ const columns = ref([
   { name: 'auditoria', align: 'center', label: 'Auditoria', field: 'auditoria', sortable: false },
   { name: 'actions', align: 'center', label: 'Ações', field: 'actions', sortable: false }
 ])
+
+const saasClients = ref<ISaasClient[]>([])
+
+const methods = {
+  list () {
+    $stores.saasClients.listAll().then((res: ISaasClient[]) => { saasClients.value = res as ISaasClient[] })
+  },
+  onDelete (event: ISaasClient) {
+    saasClients.value.splice(saasClients.value.findIndex((r: ISaasClient) => r.id === event.id), 1)
+  },
+  onUpdate (event: ISaasClient) {
+    saasClients.value[saasClients.value.findIndex((r: ISaasClient) => r.id === event.id)] = event
+  },
+  onCreate (event: ISaasClient) {
+    saasClients.value.unshift(event)
+  }
+}
+
+onBeforeMount(() => {
+  methods.list()
+})
 </script>
 
 <style scoped lang="scss">

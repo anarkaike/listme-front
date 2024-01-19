@@ -29,7 +29,7 @@ export const permissionsStore = defineStore('permissionsStore', {
         console.error('Erro ao listar as permissões: ', err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? 'Erro ao listar permissões')
+        $notify.error(err.response?.data?.message ?? err.message ?? 'Erro ao listar permissões')
         throw err
       }
     },
@@ -49,7 +49,7 @@ export const permissionsStore = defineStore('permissionsStore', {
         console.error('Erro ao listar as permissões: ', err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? 'Erro ao listar permissões')
+        $notify.error(err.response?.data?.message ?? err.message ?? 'Erro ao listar permissões')
         throw err
       }
     },
@@ -63,7 +63,7 @@ export const permissionsStore = defineStore('permissionsStore', {
         console.error('Erro ao listar as permissões para options: ', err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? 'Erro ao listar as permissões para preencher campo de opções')
+        $notify.error(err.response?.data?.message ?? err.message ?? 'Erro ao listar as permissões para preencher campo de opções')
         throw err
       }
     },
@@ -87,7 +87,7 @@ export const permissionsStore = defineStore('permissionsStore', {
         console.error(`Erro ao carregar os dados da permissão de ID "${id}": `, err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? `Erro ao carregar os dados da permissão de ID ${id}`)
+        $notify.error(err.response?.data?.message ?? err.message ?? `Erro ao carregar os dados da permissão de ID ${id}`)
         throw err
       }
     }

@@ -51,7 +51,7 @@ export const authStore = defineStore('authStore', {
         $loading.hide()
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? 'Erro ao acessar o sistema')
+        $notify.error(err.response?.data?.message ?? err.message ?? 'Erro ao acessar o sistema')
         console.error('Erro no login no catch:  ', err)
         throw err
       }
@@ -91,7 +91,7 @@ export const authStore = defineStore('authStore', {
         if (err?.response?.data?.message === 'denied_access') this.router.push({ name: 'login' })
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? 'Erro ao realizar o cadastro')
+        $notify.error(err.response?.data?.message ?? err.message ?? 'Erro ao realizar o cadastro')
         console.error('Erro no autoRegister: ', err)
         throw err
       }
@@ -133,7 +133,7 @@ export const authStore = defineStore('authStore', {
       } catch (err) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? 'Erro ao encerrar o sistema')
+        $notify.error(err.response?.data?.message ?? err.message ?? 'Erro ao encerrar o sistema')
         $loading.hide()
         console.error('Erro no logou no catch: ', err)
         throw err
@@ -155,7 +155,7 @@ export const authStore = defineStore('authStore', {
         console.error('Erro ao carregar os dados do cliente saas": ', err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? 'Erro ao carregar os dados do cliente saas')
+        $notify.error(err.response?.data?.message ?? err.message ?? 'Erro ao carregar os dados do cliente saas')
         throw err
       }
     }

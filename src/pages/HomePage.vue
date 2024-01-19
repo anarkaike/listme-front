@@ -4,17 +4,9 @@
       Dashboard
     </div>
     <q-page>
-
-      <q-rating
-        v-model="ratingModel"
-        size="3.5em"
-        color="blue"
-        icon="star_border"
-        icon-selected="star"
-      />
       <div class="row ctn-box-links">
-        <div class="col-6 col-md-4 col-lg-4 q-pa-xs-none">
-          <q-card class="q-ma-sm" style="cursor: pointer;" @click="router.push({ name: 'admin' })">
+        <div class="col-4 col-md-3 col-lg-3 q-pa-xs-none">
+          <q-card class="q-ma-sm" style="cursor: pointer;" @click="router.push({ name: 'events' })">
             <q-img src="~assets/img-eventos.png">
               <div class="absolute-bottom text-subtitle1 text-center q-pa-xs q-ma-xs label-button-home-page">
                 Eventos
@@ -22,7 +14,7 @@
             </q-img>
           </q-card>
         </div>
-        <div class="col-6 col-md-4 col-lg-4 q-pa-xs-none">
+        <div class="col-4 col-md-3 col-lg-3 q-pa-xs-none" style="display: none;">
            <q-card class="q-ma-sm" style="cursor: pointer;" @click="router.push({ name: 'admin' })">
             <q-img src="~assets/img-listas.png">
               <div class="absolute-bottom text-subtitle1 text-center q-ma-xs label-button-home-page">
@@ -31,7 +23,7 @@
             </q-img>
           </q-card>
         </div>
-        <div class="col-6 col-md-4 col-lg-4 q-pa-xs-none">
+        <div class="col-4 col-md-3 col-lg-3 q-pa-xs-none" style="display: none;">
            <q-card class="q-ma-sm" style="cursor: pointer;" @click="router.push({ name: 'admin' })">
             <q-img src="~assets/img-convidados.png">
               <div class="absolute-bottom text-subtitle1 text-center q-ma-xs label-button-home-page">
@@ -40,8 +32,8 @@
             </q-img>
           </q-card>
         </div>
-        <div class="col-6 col-md-4 col-lg-4 q-pa-xs-none">
-           <q-card class="q-ma-sm" style="cursor: pointer;" @click="router.push({ name: 'admin' })">
+        <div class="col-4 col-md-3 col-lg-3 q-pa-xs-none">
+           <q-card class="q-ma-sm" style="cursor: pointer;" @click="router.push({ name: 'receptionists' })">
             <q-img src="~assets/img-recepcionistas.png">
               <div class="absolute-bottom text-subtitle1 text-center q-ma-xs label-button-home-page">
                 Recepcionistas
@@ -49,8 +41,8 @@
             </q-img>
           </q-card>
         </div>
-        <div class="col-6 col-md-4 col-lg-4 q-pa-xs-none">
-           <q-card class="q-ma-sm" style="cursor: pointer;" @click="router.push({ name: 'admin' })">
+        <div class="col-4 col-md-3 col-lg-3 q-pa-xs-none">
+           <q-card class="q-ma-sm" style="cursor: pointer;" @click="router.push({ name: 'promoters' })">
             <q-img src="~assets/img-promoters.png">
               <div class="absolute-bottom text-subtitle1 text-center q-ma-xs label-button-home-page">
                 Promoters
@@ -58,8 +50,8 @@
             </q-img>
           </q-card>
         </div>
-        <div class="col-6 col-md-4 col-lg-4 q-pa-xs-none">
-           <q-card class="q-ma-sm" style="cursor: pointer;" @click="router.push({ name: 'admin' })">
+        <div class="col-4 col-md-3 col-lg-3 q-pa-xs-none">
+           <q-card class="q-ma-sm" style="cursor: pointer;" @click="router.push({ name: 'users' })">
             <q-img src="~assets/img-usuarios.png">
               <div class="absolute-bottom text-subtitle1 text-center q-ma-xs label-button-home-page">
                 Usuários
@@ -78,20 +70,14 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, ref } from 'vue'
-// import { $stores } from '@/stores/all'
+import { ref } from 'vue'
 import { IEvent } from '@/interfaces'
 import { JcDialog, JcEventDataView } from '@/components'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const openDialog = ref(false)
 const data = ref<IEvent|null>(null)
-
-onBeforeMount(() => {
-  // $stores.events.getById(1).then((res) => {
-  //   data.value = res as IEvent
-  // })
-})
-
 </script>
 
 <style lang="scss" scoped>

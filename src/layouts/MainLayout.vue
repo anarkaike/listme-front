@@ -53,7 +53,7 @@ import {
     > div {
       margin: 10px 10px;
       padding: 16px;
-      background-color: var(--bg-transparent-4) !important;
+      background-color: var(--bg-transparent-5) !important;
       -webkit-border-radius: 10px;
       -moz-border-radius: 10px;
       border-radius: 10px;

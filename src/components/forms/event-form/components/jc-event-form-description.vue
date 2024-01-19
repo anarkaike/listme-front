@@ -163,7 +163,7 @@ const emit = defineEmits([
 ])
 
 watchEffect(() => {
-  if (typeof row.value.description === 'undefined') {
+  if (!row.value.description || typeof row.value.description === 'undefined') {
     row.value.description = ''
   }
 })

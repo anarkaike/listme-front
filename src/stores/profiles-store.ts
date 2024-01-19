@@ -8,11 +8,11 @@ export const profilesStore = defineStore('profilesStore', {
     profiles: [] as IProfile[],
     profileEdit: null as IProfile|null
   }),
-  // getters: {
-  // isLoggedIn: (state) => {
-  //   return !!state.token
-  // }
-  // },
+  getters: {
+    list: (state) => {
+      return state.profiles
+    }
+  },
   actions: {
     async listAll (): Promise<IProfile[]> {
       try {
@@ -29,7 +29,7 @@ export const profilesStore = defineStore('profilesStore', {
         console.error('Erro ao listar os perfis: ', err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? 'Erro ao listar os perfis')
+        $notify.error(err.response?.data?.message ?? err.message ?? 'Erro ao listar os perfis')
         throw err
       }
     },
@@ -43,7 +43,7 @@ export const profilesStore = defineStore('profilesStore', {
         console.error('Erro ao listar os perfis para options: ', err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? 'Erro ao listar os perfis para preencher campo de opções')
+        $notify.error(err.response?.data?.message ?? err.message ?? 'Erro ao listar os perfis para preencher campo de opções')
         throw err
       }
     },
@@ -67,7 +67,7 @@ export const profilesStore = defineStore('profilesStore', {
         console.error(`Erro ao carregar os dados do perfil de ID "${id}": `, err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? `Erro ao carregar os dados do perfil de ID ${id}`)
+        $notify.error(err.response?.data?.message ?? err.message ?? `Erro ao carregar os dados do perfil de ID ${id}`)
         throw err
       }
     },
@@ -92,7 +92,7 @@ export const profilesStore = defineStore('profilesStore', {
         $loading.hide()
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? `Erro ao cadastrar o perfil ${profile.name}`)
+        $notify.error(err.response?.data?.message ?? err.message ?? `Erro ao cadastrar o perfil ${profile.name}`)
         throw err
       }
     },
@@ -113,7 +113,7 @@ export const profilesStore = defineStore('profilesStore', {
         console.error('Erro ao atualizar perfil: ', profile, err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? `Erro ao atualizar o perfil ${profile.name}`)
+        $notify.error(err.response?.data?.message ?? err.message ?? `Erro ao atualizar o perfil ${profile.name}`)
         throw err
       }
     },
@@ -133,7 +133,7 @@ export const profilesStore = defineStore('profilesStore', {
         console.error(`Erro ao deletar perfil de ID ${id}: `, err)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        $notify.error(err.response.data.message ?? err.message ?? `Erro ao deletar o perfil de ID "${id}"`)
+        $notify.error(err.response?.data?.message ?? err.message ?? `Erro ao deletar o perfil de ID "${id}"`)
         throw err
       }
     }

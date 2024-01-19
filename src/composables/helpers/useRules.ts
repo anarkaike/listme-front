@@ -39,7 +39,7 @@ export default function useRules () {
     }
 
     // Se minutos é maior que 60 ou menor que 0
-    if (Number(arrTime[1]) > 24 || Number(Number(arrTime[1])) < 0) {
+    if (Number(arrTime[1]) > 60 || Number(Number(arrTime[1])) < 0) {
       return false
     }
 

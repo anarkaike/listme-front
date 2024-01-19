@@ -6,6 +6,10 @@
     :stores="$stores.profiles"
     :columns="columns"
     title="Perfis de Usuários"
+    :rows="profiles"
+    @onUpdate="methods.onUpdate"
+    @onCreate="methods.onCreate"
+    @onDelete="methods.onDelete"
   >
 
     <!-- COLUNA NOME -->
@@ -33,16 +37,26 @@ const columns = ref([
   { name: 'auditoria', align: 'center', label: 'Auditoria', field: 'auditoria', sortable: false },
   { name: 'actions', align: 'center', label: 'Ações', field: 'actions', sortable: false }
 ])
+
 const profiles = ref<IProfile[]>([])
 
 const methods = {
-  listProfiles () {
-    $stores.profiles.listAll().then((data: IProfile[]) => { profiles.value = data })
+  list () {
+    $stores.profiles.listAll().then((res: IProfile[]) => { profiles.value = res as IProfile[] })
+  },
+  onDelete (event: IProfile) {
+    profiles.value.splice(profiles.value.findIndex((r: IProfile) => r.id === event.id), 1)
+  },
+  onUpdate (event: IProfile) {
+    profiles.value[profiles.value.findIndex((r: IProfile) => r.id === event.id)] = event
+  },
+  onCreate (event: IProfile) {
+    profiles.value.unshift(event)
   }
 }
 
 onBeforeMount(() => {
-  methods.listProfiles()
+  methods.list()
 })
 </script>
 

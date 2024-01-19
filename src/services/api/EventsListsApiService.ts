@@ -6,8 +6,8 @@ export default class EventsListsApiService extends ModelApiService {
     super('events-lists')
   }
 
-  async listAll (): Promise<IEventList[]> {
-    const res: IResponse<IEventList[]> = await super.listAll()
+  async listAll (params = {}): Promise<IEventList[]> {
+    const res: IResponse<IEventList[]> = await super.listAll(params)
     return res.data
   }
 

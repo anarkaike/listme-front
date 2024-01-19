@@ -1,13 +1,20 @@
 <template>
   <q-footer>
     <q-toolbar>
-      <q-toolbar-title></q-toolbar-title>
+      <q-toolbar-title class="text-center">
+        Evento Fixado: {{$stores.events.fixedEvent.name}}
+      </q-toolbar-title>
     </q-toolbar>
   </q-footer>
 </template>
+<script lang="ts" setup>
+import { $stores } from '@/stores/all'
 
+</script>
 <style lang="scss" scoped>
 .q-footer {
+  position: sticky;
+  bottom: 0px;
   left: 0px !important;
 
   $border-radius: 100%;

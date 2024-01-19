@@ -6,7 +6,6 @@
     <q-page>
       <q-tabs
         v-model="pageTab"
-        dense
         class="text-grey"
         active-color="primary"
         indicator-color="primary"
