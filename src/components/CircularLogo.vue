@@ -12,6 +12,7 @@ import { $stores } from '@/stores/all'
 </script>
 <style lang="scss" scoped>
   .ctn-circular-logo {
+    background-color: #FFF;
     background-image: url('imgs/fundo-circular-colorido.png');
     background-repeat: no-repeat;
     background-position: center center;

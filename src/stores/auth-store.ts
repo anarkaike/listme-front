@@ -39,7 +39,7 @@ export const authStore = defineStore('authStore', {
         LocalStorage.set('LmToken', res.data.token.plainTextToken)
         this.$patch({
           user: res.data.user,
-          saas_client: res.data.saasClient,
+          saas_client: this.saas_client ?? res.data.saasClient,
           token: res.data.token.plainTextToken
         })
 

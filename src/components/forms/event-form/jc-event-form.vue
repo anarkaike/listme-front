@@ -110,10 +110,6 @@ const methods = {
     if ('name' in urlBannerModel.value) {
       row.value.url_banner_up = urlBannerModel.value as unknown as File
     }
-    if (!$stores.auth.saas_client?.id) {
-      $notify.error('É necessário estar logado como usuário do saas para poder cadastrar um evento.')
-      return
-    }
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     $stores.events[method](row.value).then((value: IEvent) => {
