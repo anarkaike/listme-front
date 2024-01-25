@@ -12,6 +12,7 @@
     @onUpdate="methods.onUpdate"
     @onCreate="methods.onCreate"
     @onDelete="methods.onDelete"
+    noHashUpdate
     :additionalData="{event_id: props.eventId, event_list_id: props.eventListId}"
     :loading="loading"
   >

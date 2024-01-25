@@ -1,12 +1,12 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <div class="page-title">
+  <div>
+    <h1 class="page-title">
       Eventos
-    </div>
-    <q-page>
+    </h1>
+    <div>
       <JcEventListList :filter-data="methods.filterEvents" />
-    </q-page>
-  </q-layout>
+    </div>
+  </div>
 </template>
 <script lang="ts" setup>
 import { IOption, IEvent } from '@/interfaces'

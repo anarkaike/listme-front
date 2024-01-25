@@ -1,5 +1,5 @@
 <template>
-  <q-page style="min-height: auto !important;">
+  <div style="min-height: auto !important;">
     <q-form class="row justify-center">
       <p class="col-12 text-h5 text-bold text-center page-title">Recuperar minha senha</p>
       <div class="col-11 q-gutter-y-md">
@@ -41,5 +41,5 @@
         </div>
       </div>
     </q-form>
-  </q-page>
+  </div>
 </template>

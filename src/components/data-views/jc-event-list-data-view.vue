@@ -3,26 +3,6 @@
     <!-- COLUNA DE INFOS -->
     <div class="col-md-8 col-12 q-pl-none q-pl-md-md">
       <JcEventListItemList :eventId="row.event_id" :eventListId="row.id" />
-      <div>
-        <q-markup-table>
-          <thead>
-          <tr>
-            <th class="text-left">Nome</th>
-            <th class="text-right">Email</th>
-            <th class="text-right">Telefone</th>
-            <th class="text-right">Adição</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="eventListItem in eventsListsItems" :key="eventListItem.id">
-            <td class="text-left">{{eventsListsItems.name}}</td>
-            <td class="text-right">{{eventsListsItems.email}}</td>
-            <td class="text-right">{{eventsListsItems.phone}}</td>
-            <td class="text-right">{{eventsListsItems.created_at}}</td>
-          </tr>
-          </tbody>
-        </q-markup-table>
-      </div>
     </div>
 
     <!-- COLUNA DE FOTO, STATUS E AUDITORIA -->

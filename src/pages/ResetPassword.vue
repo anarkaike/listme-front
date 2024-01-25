@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <div padding>
     <q-form class="row justify-center">
       <p class="col-12 text-h5 text-center"> Reset Password </p>
       <div class="col-md-4 col-sm-6 col-xs-10 q-gutter-y-md">
@@ -23,5 +23,5 @@
         </div>
       </div>
     </q-form>
-  </q-page>
+  </div>
 </template>

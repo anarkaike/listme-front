@@ -1,15 +1,11 @@
 <template>
-  <div class="text-h6">Listas e nomes</div>
-  <q-list>
-
-    Informações sobre as listas e convidados deste evento
-
-  </q-list>
+  <JcEventListList noHashUpdate ref="eventListListRef" :eventId="row.id"  />
 </template>
 
 <script lang="ts" setup>
 import { defineProps, withDefaults } from 'vue'
 import { IEvent } from '@/interfaces'
+import { JcEventListList } from '@/components'
 
 const props = withDefaults(defineProps<{ row: IEvent }>(), {})
 </script>

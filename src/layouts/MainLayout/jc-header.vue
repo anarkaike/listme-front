@@ -67,43 +67,4 @@ const router = useRouter()
 </script>
 
 <style lang="scss" scoped>
-
-// TOPO
-.q-header {
-  left: 0px !important;
-
-  $border-radius: 100%;
-  -webkit-border-bottom-right-radius: $border-radius;
-  -webkit-border-bottom-left-radius: $border-radius;
-  -moz-border-radius-bottomright: $border-radius;
-  -moz-border-radius-bottomleft: $border-radius;
-  border-bottom-right-radius: $border-radius;
-  border-bottom-left-radius: $border-radius;
-  .q-toolbar {
-    margin-bottom: 15px;
-    margin-top: -5px;
-  }
-  .ctn-circular-logo {
-    position: absolute;
-    left: 50%;
-    margin-left: -50px;
-    top: -15px;
-    transition: all 0.1s linear;
-
-    &:hover {
-      width: 120px;
-      height: 120px;
-      margin-left: -60px;
-      padding: 20px 13px 10px 10px;
-      opacity: 0.8;
-      top: 3px;
-    }
-  }
-  .btn-left-top-menu {
-    padding:  0px 6px;
-    .q-btn-dropdown__arrow {
-      display: none;
-    }
-  }
-}
 </style>

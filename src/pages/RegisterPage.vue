@@ -1,5 +1,5 @@
 <template>
-  <q-page style="min-height: auto !important;">
+  <div style="min-height: auto !important;">
 
     <!-- FORMULÁRIO DE AUTO REGISTRO -->
     <q-form ref="myForm" class="row justify-center" @submit.prevent="methods.autoRegister">
@@ -200,7 +200,7 @@
           </q-step>
         </q-stepper>
     </q-form>
-  </q-page>
+  </div>
 </template>
 
 <script lang="ts" setup>

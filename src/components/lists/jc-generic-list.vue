@@ -3,7 +3,7 @@
   <!-- TABELA GENERICA -->
   <q-table
     class="my-sticky-last-column-table"
-    flat bordered
+    flat
     :rows="rowsFiltered"
     compact
     :columns="columns"
@@ -42,7 +42,8 @@
         </q-td>
 
         <!-- TEMPLATE COLUNA ACTIONS -->
-        <q-td auto-width key="actions" :props="props">
+        <q-td auto-width key="actions" :props="props" style="no-wra">
+          <slot :props="props" name="actions" />
           <JcGroupBtnForTables
             @on-view="methods.onView(props.row)"
             @on-edit="methods.onEdit(props.row)"

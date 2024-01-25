@@ -1,5 +1,5 @@
 <template>
-  <div v-bind="$attrs">
+  <span v-bind="$attrs">
     <span v-if="$q.screen.md || $q.screen.lg || $q.screen.xl">
       <jc-btn-view @on-click="methods.onView" class="d-none" />
       <jc-btn-edit @on-click="methods.onEdit" class="md-lg-xl" />
@@ -10,7 +10,7 @@
       <q-fab-action color="secondary" @click="methods.onEdit" icon="edit" />
       <q-fab-action color="info" @click="methods.onView" icon="preview" />
     </q-fab>
-  </div>
+  </span>
 </template>
 
 <script lang="ts" setup>

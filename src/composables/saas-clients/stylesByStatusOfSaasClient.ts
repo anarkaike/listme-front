@@ -6,12 +6,12 @@ export default function stylesByStatusOfSaasClient () {
       case ESaasClientStatusValues.active:
       case ESaasClientStatusValues.active_testing:
       case ESaasClientStatusValues.active_pending_payment:
-        return 'color: green; background-color: #f8fcf4; background: linear-gradient(150deg, #f8fcf4 20%, #FFF 100%);'
+        return 'color: green; background-color: rgba(148, 224, 136, 0.2); background: linear-gradient(150deg, rgba(148, 224, 136, 0.2) 20%, rgba(255, 255, 255, 0) 100%);'
       case ESaasClientStatusValues.archived:
-        return 'color: gray; background-color: #f4f4f4; background: linear-gradient(150deg, #f4f4f4 20%, #FFF 100%)'
+        return 'color: gray; background-color: rgba(173, 173, 173, 0.2); background: linear-gradient(150deg, rgba(173, 173, 173, 0.2) 20%, rgba(255, 255, 255, 0) 100%)'
       case ESaasClientStatusValues.blocked:
       case ESaasClientStatusValues.blocked_pending_payment:
-        return 'color: red; background-color: #f9f2f2; background: linear-gradient(150deg, #f9f2f2 20%, #FFF 100%)'
+        return 'color: red; background-color: rgba(214, 130, 130, 0.2); background: linear-gradient(150deg, rgba(214, 130, 130, 0.2) 20%, rgba(255, 255, 255, 0) 100%)'
     }
     return ''
   }

@@ -1,12 +1,12 @@
 <template>
-  <div class="page-title">
+  <h1 class="page-title">
     Administradores
   </div>
-  <q-page>
+  <div>
 
     <div></div>
 
     <q-input v-model="text" label="Standard" />
 
-  </q-page>
+  </div>
 </template>

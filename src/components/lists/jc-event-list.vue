@@ -35,6 +35,12 @@
       </q-td>
     </template>
 
+    <template #actions>
+      <q-btn unelevated color="primary" round dense class="q-ml-xs" @click="methods.onClick">
+        <icon icon="icon-park-outline:scan-setting" />
+      </q-btn>
+    </template>
+
   </JcGenericList>
 </template>
 

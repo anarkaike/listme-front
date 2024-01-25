@@ -1,14 +1,14 @@
 <template>
-  <div class="jc-right-sidebar">
-    <q-drawer v-model="$stores.sidebar.right.open" bordered :width="250" side="right">
+  <q-drawer v-model="$stores.sidebar.right.open" :width="250" side="right">
+    <div class="jc-sidebar-content">
       <!-- TITULO -->
       <q-list>
         <q-item-label class="title" header>
           Informações & Ajuda
         </q-item-label>
       </q-list>
-    </q-drawer>
-  </div>
+    </div>
+  </q-drawer>
 </template>
 
 <script lang="ts" setup>

@@ -1,9 +1,9 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <div class="page-title">
+  <div>
+    <h1 class="page-title">
       Painel Administrativo
-    </div>
-    <q-page>
+    </h1>
+    <div>
       <q-tabs
         v-model="pageTab"
         class="text-grey"
@@ -42,8 +42,8 @@
           />
         </q-tab-panel>
       </q-tab-panels>
-    </q-page>
-  </q-layout>
+    </div>
+  </div>
 </template>
 <script lang="ts" setup>
 import { IOption, IUser } from '@/interfaces'
@@ -80,7 +80,6 @@ const methods = {
 </script>
 <style lang="scss" scoped>
 .q-tab-panels {
-  background-color: var(--bg-transparent-4);
   .q-tab-panel {
     padding: 0px;
   }

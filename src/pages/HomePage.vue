@@ -1,9 +1,9 @@
 <template>
-  <div view="lHh Lpr lFf">
-    <div class="page-title">
+  <div>
+    <h1 class="page-title">
       Dashboard
-    </div>
-    <q-page>
+    </h1>
+    <div>
       <div class="row ctn-box-links">
         <div class="col-4 col-md-3 col-lg-3 q-pa-xs-none">
           <q-card class="q-ma-sm" style="cursor: pointer;" @click="router.push({ name: 'events' })">
@@ -60,7 +60,7 @@
           </q-card>
         </div>
       </div>
-    </q-page>
+    </div>
     <!-- DIALOG EVENT VIEW -->
     <JcDialog v-model:openDialog="openDialog" v-if="data && openDialog">
       <template #title>Data View Event</template>
@@ -90,8 +90,8 @@ const data = ref<IEvent|null>(null)
 // mobile
 @media (max-width: 1024px) {
   .ctn-box-links {
-    margin-left: -15px;
-    margin-right: -15px;
+    //margin-left: -15px;
+    //margin-right: -15px;
   }
 }
 

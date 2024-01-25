@@ -1,10 +1,10 @@
 <template>
-  <div view="lHh Lpr lFf">
+  <div>
     <div class="box-title no-bg">
       <div class="q-pt-md" style="font-weight: lighter; font-size: 15px;">Bem vindo ao Sistema</div>
       <div style="font-weight: bold; font-size: 20px;">{{$stores.auth.saas_client?.company_name}}</div>
     </div>
-    <q-page style="min-height: auto;">
+    <div style="min-height: auto;">
       <!-- FORMULARIO DE LOGIN -->
       <q-form class="row justify-center" @submit.prevent="methods.login">
         <div class="col-11 q-gutter-y-sm">
@@ -87,7 +87,7 @@
           </div>
         </div>
       </q-form>
-    </q-page>
+    </div>
   </div>
 </template>
 

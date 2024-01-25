@@ -1,5 +1,5 @@
 <template>
-  <q-layout class="ctn-main-layout">
+  <q-layout class="jc-layout-main" view="hHh lpR fFf">
 
     <!-- LATERAIS DIREITA E ESQUERDA -->
     <JcLeftSidebar />
@@ -10,13 +10,15 @@
 
     <!-- CONTEUDO -->
     <q-page-container>
-      <div>
-        <router-view v-slot="{ Component }">
-          <transition appear enter-active-class="animated fadeInUp" leave-active-class="animated fadeOutDown">
-            <component :is="Component" />
-          </transition>
-        </router-view>
-      </div>
+      <router-view v-slot="{ Component }">
+        <transition appear enter-active-class="animated fadeInUp" leave-active-class="animated fadeOutDown">
+          <q-page>
+            <div class="jc-layout-content q-ma-xs q-mt-lg q-ma-sm-md">
+              <component :is="Component" />
+            </div>
+          </q-page>
+        </transition>
+      </router-view>
     </q-page-container>
 
     <!-- RODAPE -->
@@ -39,7 +41,7 @@ import {
 // const methods = {}
 </script>
 <style lang="scss">
-.ctn-main-layout {
+.qqjc-layout-main {
   background-image: url('/imgs/bg.jpg');
   background-size: cover;
   background-repeat: no-repeat;
@@ -47,17 +49,15 @@ import {
   $border-radius: 100%;
 
   // CONTEUDO
-  .q-page-container {
+  .qqq-page-container {
     //margin: 10px 20px;
     //margin-left: 210px;
-    > div {
-      margin: 10px 10px;
-      padding: 16px;
+    .q-page {
       background-color: var(--bg-transparent-5) !important;
       -webkit-border-radius: 10px;
       -moz-border-radius: 10px;
       border-radius: 10px;
-      .q-page {
+      > div {
         min-height: calc(100vh - 224px) !important;
       }
     }

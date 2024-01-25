@@ -1,12 +1,10 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <div class="page-title">
+  <div>
+    <h1 class="page-title">
       Usuários
-    </div>
-    <q-page>
-      <JcUserList :filter-profiles-options="methods.filterProfilesOptions" :filter-data="methods.filterUsers" />
-    </q-page>
-  </q-layout>
+    </h1>
+    <JcUserList :filter-profiles-options="methods.filterProfilesOptions" :filter-data="methods.filterUsers" />
+  </div>
 </template>
 <script lang="ts" setup>
 import { IOption, IUser } from '@/interfaces'
